@@ -1,0 +1,38 @@
+{
+  "name": "carrousel",
+  "version": "1.0.0",
+  "description": "Atelier motion design Remotion — éléments isolés pour Premiere Pro",
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "studio": "remotion studio src/index.ts",
+    "typecheck": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheodoreBro/carrousel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheodoreBro/carrousel/issues"
+  },
+  "homepage": "https://github.com/TheodoreBro/carrousel#readme",
+  "dependencies": {
+    "@remotion/bundler": "4.0.521",
+    "@remotion/cli": "4.0.521",
+    "@remotion/google-fonts": "4.0.521",
+    "@remotion/renderer": "4.0.521",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "remotion": "4.0.521"
+  },
+  "devDependencies": {
+    "@types/node": "26.4.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "tsx": "4.23.13",
+    "typescript": "7.0.2"
+  },
+  "private": true
+}
