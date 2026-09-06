@@ -1,6 +1,7 @@
 import type React from 'react';
 import {Carton} from './Carton';
 import {CarteEurope} from './CarteEurope';
+import {DrapeauOnu} from './DrapeauOnu';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -26,6 +27,13 @@ export const ELEMENTS: ElementDef[] = [
     component: CarteEurope,
     props: {drawFrames: 25, fillAt: 30},
     durationInFrames: 75,
+    alpha: true,
+  },
+  {
+    id: 'drapeau-onu',
+    component: DrapeauOnu,
+    props: {recolorAt: 50},
+    durationInFrames: 100,
     alpha: true,
   },
 ];

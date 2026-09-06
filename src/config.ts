@@ -12,6 +12,12 @@ export const EU_COLORS = {
   yellow: '#FFCC00',
 } as const;
 
+// Drapeaux (sur demande explicite).
+export const FLAG_COLORS = {
+  onuBlue: '#5B92E5',
+  chinaRed: '#EE1C25',
+} as const;
+
 export const FONT = {
   family: 'Anton',
   letterSpacing: '-0.02em',
