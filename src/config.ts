@@ -6,6 +6,12 @@ export const COLORS = {
   accent: '#FF3B00',
 } as const;
 
+// Couleurs officielles de l'Union européenne (hors DA par défaut, sur demande explicite).
+export const EU_COLORS = {
+  blue: '#003399',
+  yellow: '#FFCC00',
+} as const;
+
 export const FONT = {
   family: 'Anton',
   letterSpacing: '-0.02em',
