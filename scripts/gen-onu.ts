@@ -7,7 +7,7 @@ import {feature} from 'topojson-client';
 import type {Topology, GeometryCollection} from 'topojson-specification';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const topo = require('world-atlas/land-50m.json') as Topology<{land: GeometryCollection}>;
+const topo = require('world-atlas/land-110m.json') as Topology<{land: GeometryCollection}>;
 
 const R = 200;
 // Le méridien de Greenwich pointe vers le bas (Afrique en bas, Amériques à gauche), comme sur l'emblème.
@@ -19,8 +19,14 @@ const projection = geoAzimuthalEquidistant()
 const path = geoPath(projection).digits(1);
 
 const land = path(feature(topo, topo.objects.land) as GeoJSON.FeatureCollection);
-// 8 méridiens (tous les 45°) et parallèles tous les 30° : 60°N, 30°N, équateur, 30°S, 60°S (bord).
-const graticule = path(geoGraticule().step([45, 30]).extentMinor([[-180, -59.9], [180, 90]])());
+// 8 méridiens (tous les 45°) et parallèles 60°N, 30°N, équateur, 30°S. Le parallèle 60°S est retiré :
+// il coïncide avec le cercle extérieur et le hacherait.
+const lines = geoGraticule()
+  .step([45, 30])
+  .extentMinor([[-180, -60], [180, 90]])
+  .lines()
+  .filter((l) => !(l.coordinates[0][1] === -60 && l.coordinates[1][1] === -60));
+const graticule = path({type: 'MultiLineString', coordinates: lines.map((l) => l.coordinates)});
 
 const out = `// Généré par scripts/gen-onu.ts — ne pas éditer à la main.
 export const ONU_R = ${R};
