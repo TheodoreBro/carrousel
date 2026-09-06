@@ -72,8 +72,12 @@ for (const g of geoms) {
 const missing = [...EU, ...OTHERS].filter((n) => !entries.some((e) => e.name === n));
 if (missing.length) throw new Error('Pays introuvables : ' + missing.join(', '));
 
+// Centre du cercle d'étoiles : cœur continental des 27 (Bavière), projeté en coordonnées écran.
+const euCenter = (projection([11, 48.5]) as [number, number]).map(Math.round);
+
 const out = `// Généré par scripts/gen-europe.ts — ne pas éditer à la main.
 export type Country = {name: string; eu: boolean; d: string};
+export const EU_CENTER: [number, number] = ${JSON.stringify(euCenter)};
 export const EUROPE: Country[] = ${JSON.stringify(entries, null, 0).replace(/\},\{/g, '},\n{')};
 `;
 writeFileSync('src/data/europe.ts', out);
