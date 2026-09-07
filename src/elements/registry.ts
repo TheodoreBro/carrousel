@@ -5,6 +5,7 @@ import {CarteEurope} from './CarteEurope';
 import {DrapeauOnu} from './DrapeauOnu';
 import {Diptyque} from './Diptyque';
 import {Cascade} from './Cascade';
+import {Appel} from './Appel';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -93,6 +94,13 @@ export const ELEMENTS: ElementDef[] = [
       shadow: true,
     },
     durationInFrames: 125,
+    alpha: true,
+  },
+  {
+    id: 'abonnez-vous',
+    component: Appel,
+    props: {text: 'Abonnez-vous', x: 240, y: 700, arrowAt: 6},
+    durationInFrames: 100,
     alpha: true,
   },
 ];
