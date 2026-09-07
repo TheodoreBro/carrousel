@@ -1,8 +1,10 @@
 import type React from 'react';
+import {EU_COLORS} from '../config';
 import {Carton} from './Carton';
 import {CarteEurope} from './CarteEurope';
 import {DrapeauOnu} from './DrapeauOnu';
 import {Diptyque} from './Diptyque';
+import {Cascade} from './Cascade';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -51,6 +53,23 @@ export const ELEMENTS: ElementDef[] = [
       droiteIndent: 70,
     },
     durationInFrames: 138,
+    alpha: true,
+  },
+  {
+    id: 'europe-invente',
+    component: Cascade,
+    props: {
+      lignes: [
+        [{text: 'il faut'}],
+        [{text: 'que l’'}, {text: 'Europe', size: 220, color: EU_COLORS.blue}],
+        [{text: 'invente un ...'}],
+      ],
+      startAt: 0,
+      stagger: 5,
+      indent: 70,
+      gap: 30,
+    },
+    durationInFrames: 100,
     alpha: true,
   },
 ];
