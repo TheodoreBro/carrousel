@@ -72,4 +72,26 @@ export const ELEMENTS: ElementDef[] = [
     durationInFrames: 100,
     alpha: true,
   },
+  {
+    id: 'etat-chinois',
+    component: Diptyque,
+    props: {
+      gauche: [{text: 'l’État'}, {text: 'chinois', size: 260, color: '#6A020C'}],
+      gaucheAt: 0,
+      gaucheX: 120,
+      droite: [
+        {text: 'un'},
+        {text: 'état', size: 200, color: '#6A020C', gap: 40},
+        {text: 'de'},
+        {text: 'droit', size: 200, color: '#6A020C'},
+        {text: 'mondial'},
+      ],
+      droiteAt: 38,
+      droiteStagger: 5,
+      droiteX: 1000,
+      droiteIndent: 70,
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
 ];
