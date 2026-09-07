@@ -41,7 +41,7 @@ export const Carton: React.FC<CartonProps> = ({
           textTransform: FONT.textTransform,
           textAlign: 'center',
           whiteSpace: 'pre-wrap',
-          clipPath: `inset(0 0 ${hidden}% 0)`,
+          clipPath: `inset(-40% 0 ${hidden}% 0)`, // marge haute : accents et ascendantes
         }}
       >
         {text}
