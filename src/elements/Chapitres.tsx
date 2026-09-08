@@ -1,6 +1,6 @@
 import {AbsoluteFill, useCurrentFrame, useVideoConfig} from 'remotion';
-import {COLORS, CUT_FRAMES, FONT} from '../config';
-import {fontFamily} from '../fonts';
+import {COLORS, CUT_FRAMES, FONT_SECONDARY} from '../config';
+import {fontFamilySecondary} from '../fonts';
 
 export type ChapitresProps = {
   chapitres: string[];
@@ -31,8 +31,8 @@ export const Chapitres: React.FC<ChapitresProps> = ({
   exitAt,
   exitOrder,
   barExitAt,
-  labelSize = 34,
-  titleSize = 42,
+  labelSize = 28,
+  titleSize = 36,
   color = COLORS.white,
 }) => {
   const frame = useCurrentFrame();
@@ -76,17 +76,16 @@ export const Chapitres: React.FC<ChapitresProps> = ({
               left: i * seg + 48,
               top,
               width: seg - 70,
-              fontFamily,
+              fontFamily: fontFamilySecondary,
               color,
-              letterSpacing: FONT.letterSpacing,
-              lineHeight: 1.05,
-              textTransform: FONT.textTransform,
+              letterSpacing: FONT_SECONDARY.letterSpacing,
+              lineHeight: FONT_SECONDARY.lineHeight,
             }}
           >
-            <div style={{fontSize: labelSize, opacity: 0.7}}>
+            <div style={{fontSize: labelSize, fontWeight: 500, opacity: 0.7}}>
               {label} {i + 1}
             </div>
-            <div style={{fontSize: titleSize, marginTop: 6}}>{titre}</div>
+            <div style={{fontSize: titleSize, fontWeight: 600, marginTop: 6}}>{titre}</div>
           </div>
         );
       })}

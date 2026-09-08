@@ -25,6 +25,13 @@ export const FONT = {
   textTransform: 'uppercase',
 } as const;
 
+// Police secondaire (textes courants, bas de casse, graisse fine).
+export const FONT_SECONDARY = {
+  family: 'Inter',
+  letterSpacing: '0',
+  lineHeight: 1.15,
+} as const;
+
 export const VIDEO = {
   width: 1920,
   height: 1080,
