@@ -6,6 +6,7 @@ import {DrapeauOnu} from './DrapeauOnu';
 import {Diptyque} from './Diptyque';
 import {Cascade} from './Cascade';
 import {Appel} from './Appel';
+import {Chapitres} from './Chapitres';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -101,6 +102,26 @@ export const ELEMENTS: ElementDef[] = [
     component: Appel,
     props: {text: 'Abonnez-vous', x: 240, y: 700, arrowAt: 6},
     durationInFrames: 100,
+    alpha: true,
+  },
+  {
+    id: 'chapitres',
+    component: Chapitres,
+    props: {
+      chapitres: [
+        'Le monde a perdu son gendarme',
+        'La mondialisation des rapports de force',
+        'Pourquoi l’Europe doit devenir une puissance',
+        'Le plan pour l’UE : commerce, industrie, finance',
+      ],
+      barAt: 0,
+      chaptersAt: 6,
+      stagger: 5,
+      exitAt: 100,
+      exitOrder: [2, 0, 3, 1],
+      barExitAt: 125,
+    },
+    durationInFrames: 130,
     alpha: true,
   },
 ];
