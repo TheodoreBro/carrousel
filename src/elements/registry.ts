@@ -133,13 +133,13 @@ export const ELEMENTS: ElementDef[] = [
       gaucheX: 120,
       gaucheY: 100,
       droite: [{text: 'très bonne'}, {text: 'nouvelle', size: 200, color: '#138800'}],
-      droiteAt: 68, // « très bonne » 2,7 s après la fin de « dénatalité »
+      droiteAt: 88, // 0,8 s (durée du mot « dénatalité » prononcé) + 2,7 s
       droiteStagger: 12, // « nouvelle » au rythme de la parole (0,48 s après « très »)
       droiteX: 1100,
       droiteY: 680,
       droiteIndent: 0,
     },
-    durationInFrames: 130,
+    durationInFrames: 150,
     alpha: true,
   },
 ];
