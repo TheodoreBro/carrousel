@@ -133,13 +133,13 @@ export const ELEMENTS: ElementDef[] = [
       gaucheX: 120,
       gaucheY: 100,
       droite: [{text: 'très bonne'}, {text: 'nouvelle', size: 200, color: '#138800'}],
-      droiteAt: 75,
+      droiteAt: 63, // « nouvelle » à 2,7 s (63 + 5 images)
       droiteStagger: 5,
       droiteX: 1100,
       droiteY: 680,
       droiteIndent: 0,
     },
-    durationInFrames: 133,
+    durationInFrames: 125,
     alpha: true,
   },
 ];
