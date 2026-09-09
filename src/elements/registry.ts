@@ -124,4 +124,22 @@ export const ELEMENTS: ElementDef[] = [
     durationInFrames: 130,
     alpha: true,
   },
+  {
+    id: 'denatalite',
+    component: Diptyque,
+    props: {
+      gauche: [{text: 'la'}, {text: 'dénatalité', size: 200, color: '#138800'}],
+      gaucheAt: 0,
+      gaucheX: 120,
+      gaucheY: 100,
+      droite: [{text: 'très bonne'}, {text: 'nouvelle', size: 200, color: '#138800'}],
+      droiteAt: 68,
+      droiteStagger: 5,
+      droiteX: 1100,
+      droiteY: 680,
+      droiteIndent: 0,
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
 ];

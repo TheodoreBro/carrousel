@@ -14,17 +14,21 @@ export type DiptyqueProps = {
   gauche: Ligne[];
   gaucheAt: number;
   gaucheX: number; // bord gauche du bloc (px)
+  gaucheY?: number; // haut du bloc (px) ; centré verticalement si absent
   // Bloc droit : une ligne après l'autre, chaque ligne décalée vers la droite.
   droite: Ligne[];
   droiteAt: number;
   droiteStagger: number; // frames entre deux lignes
   droiteX: number; // bord gauche de la première ligne (px)
+  droiteY?: number; // haut du bloc (px) ; centré verticalement si absent
   droiteIndent: number; // décalage supplémentaire par ligne (px)
   // Ombre portée derrière chaque mot (lisibilité sur image).
   shadow?: boolean;
 };
 
 const SHADOW = '0 4px 30px rgba(0,0,0,0.7)';
+
+const vertical = (y?: number) => (y === undefined ? {top: '50%', transform: 'translateY(-50%)'} : {top: y});
 
 const reveal = (frame: number, at: number) => Math.max(0, Math.min(1, (frame - at + 1) / CUT_FRAMES));
 
@@ -57,22 +61,24 @@ export const Diptyque: React.FC<DiptyqueProps> = ({
   gauche,
   gaucheAt,
   gaucheX,
+  gaucheY,
   droite,
   droiteAt,
   droiteStagger,
   droiteX,
+  droiteY,
   droiteIndent,
   shadow = false,
 }) => {
   const frame = useCurrentFrame();
   return (
     <AbsoluteFill style={{backgroundColor: 'transparent'}}>
-      <div style={{position: 'absolute', left: gaucheX, top: '50%', transform: 'translateY(-50%)'}}>
+      <div style={{position: 'absolute', left: gaucheX, ...vertical(gaucheY)}}>
         {gauche.map((l, i) => (
           <Mot key={i} ligne={l} progress={reveal(frame, gaucheAt)} indent={0} shadow={shadow} />
         ))}
       </div>
-      <div style={{position: 'absolute', left: droiteX, top: '50%', transform: 'translateY(-50%)'}}>
+      <div style={{position: 'absolute', left: droiteX, ...vertical(droiteY)}}>
         {droite.map((l, i) => (
           <Mot
             key={i}
