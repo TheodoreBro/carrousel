@@ -9,6 +9,7 @@ import {Appel} from './Appel';
 import {Chapitres} from './Chapitres';
 import {Ronde} from './Ronde';
 import {CarteFrance} from './CarteFrance';
+import {MotAMot} from './MotAMot';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -160,21 +161,33 @@ export const ELEMENTS: ElementDef[] = [
   },
   {
     id: 'feministes-ecologistes',
-    component: Cascade,
+    component: MotAMot,
     props: {
-      lignes: [
-        [{text: 'Pourquoi les féministes'}],
-        [{text: 'et les écologistes'}],
-        [{text: 'ne se tiennent pas'}],
-        [{text: 'par la main en chantant ?'}],
+      blocs: [
+        {
+          lignes: ['Pourquoi les féministes', 'et les écologistes'],
+          at: 0,
+          stagger: 5,
+          coin: 'haut-gauche',
+          x: 120,
+          y: 100,
+          blurAt: 53, // au premier mot du second bloc
+          blur: 8,
+          gap: 16,
+        },
+        {
+          lignes: ['ne se tiennent pas', 'par la main en chantant\u00A0?'],
+          at: 53, // dernier mot du premier bloc en place à 28, plus 1 s
+          stagger: 5,
+          coin: 'bas-droite',
+          x: 120,
+          y: 100,
+          gap: 16,
+        },
       ],
-      startAt: 0,
-      stagger: 0,
-      indent: 0,
       size: 140,
-      gap: 16, // dégage les accents de la ligne du dessus
     },
-    durationInFrames: 125,
+    durationInFrames: 150,
     alpha: true,
   },
 ];
