@@ -146,8 +146,8 @@ export const ELEMENTS: ElementDef[] = [
   {
     id: 'france-bonhommes',
     component: CarteFrance,
-    props: {drawFrames: 25, figuresAt: 30, vanishAt: 75, vanishShare: 0.35},
-    durationInFrames: 125,
+    props: {drawFrames: 25, figuresAt: 30, vanishAt: 100, vanishShare: 0.35},
+    durationInFrames: 150,
     alpha: true,
   },
 ];
