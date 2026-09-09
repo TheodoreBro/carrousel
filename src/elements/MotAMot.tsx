@@ -19,6 +19,7 @@ export type Bloc = {
   y: number; // distance au bord horizontal du coin (px)
   blurAt?: number; // frame à laquelle le bloc se floute (jamais si absent)
   blur?: number; // flou maximal (px)
+  hideAt?: number; // frame à laquelle le bloc disparaît d'un coup (jamais si absent)
   gap?: number; // espace entre les lignes (px), p. ex. pour dégager les accents
   size?: number;
   color?: string;
@@ -33,6 +34,7 @@ export type MotAMotProps = {
 const progress = (frame: number, at: number) => Math.max(0, Math.min(1, (frame - at + 1) / CUT_FRAMES));
 
 const BlocMots: React.FC<{bloc: Bloc; frame: number; size: number; color: string}> = ({bloc, frame, size, color}) => {
+  if (bloc.hideAt !== undefined && frame >= bloc.hideAt) return null;
   const droite = bloc.coin.endsWith('droite');
   const bas = bloc.coin.startsWith('bas');
   const flou = bloc.blurAt === undefined ? 0 : progress(frame, bloc.blurAt) * (bloc.blur ?? 8);

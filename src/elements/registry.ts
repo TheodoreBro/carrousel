@@ -176,6 +176,7 @@ export const ELEMENTS: ElementDef[] = [
           y: 100,
           blurAt: 78, // au premier mot du second bloc
           blur: 8,
+          hideAt: 93, // une demi-seconde après la fin du floutage (80)
           gap: 16,
         },
         {
