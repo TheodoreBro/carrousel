@@ -165,7 +165,10 @@ export const ELEMENTS: ElementDef[] = [
     props: {
       blocs: [
         {
-          lignes: ['Pourquoi les féministes', 'et les écologistes'],
+          lignes: [
+            [{text: 'Pourquoi les'}, {text: 'féministes', color: '#138800'}],
+            [{text: 'et les'}, {text: 'écologistes', color: '#138800'}],
+          ],
           at: 0,
           stagger: 5,
           coin: 'haut-gauche',
@@ -176,7 +179,7 @@ export const ELEMENTS: ElementDef[] = [
           gap: 16,
         },
         {
-          lignes: ['ne se tiennent pas', 'par la main en chantant\u00A0?'],
+          lignes: [[{text: 'ne se tiennent pas'}], [{text: 'par la main en chantant\u00A0?'}]],
           at: 78, // dernier mot du premier bloc en place à 28, plus 2 s
           stagger: 5,
           coin: 'bas-droite',

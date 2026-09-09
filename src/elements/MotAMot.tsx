@@ -4,9 +4,14 @@ import {fontFamily} from '../fonts';
 
 export type Coin = 'haut-gauche' | 'haut-droite' | 'bas-gauche' | 'bas-droite';
 
+export type Segment = {
+  text: string; // un ou plusieurs mots
+  color?: string;
+};
+
 export type Bloc = {
-  // Lignes du bloc ; les mots arrivent un par un, dans l'ordre de lecture.
-  lignes: string[];
+  // Lignes du bloc, chacune faite de segments (couleurs mixtes) ; les mots arrivent un par un.
+  lignes: Segment[][];
   at: number; // frame du premier mot
   stagger: number; // frames entre deux mots
   coin: Coin; // coin de l'écran auquel le bloc est accroché (aligne le texte du même côté)
@@ -51,15 +56,19 @@ const BlocMots: React.FC<{bloc: Bloc; frame: number; size: number; color: string
     >
       {bloc.lignes.map((ligne, i) => (
         <div key={i} style={{marginTop: i === 0 ? 0 : (bloc.gap ?? 0)}}>
-          {ligne.split(' ').map((mot, j) => {
-            const p = progress(frame, bloc.at + index++ * bloc.stagger);
-            return (
-              <span key={j}>
-                {j > 0 && ' '}
-                <span style={{display: 'inline-block', clipPath: `inset(-40% 0 ${(1 - p) * 100}% 0)`}}>{mot}</span>
-              </span>
-            );
-          })}
+          {ligne
+            .flatMap((seg) => seg.text.split(' ').map((mot) => ({mot, color: seg.color})))
+            .map(({mot, color: c}, j) => {
+              const p = progress(frame, bloc.at + index++ * bloc.stagger);
+              return (
+                <span key={j}>
+                  {j > 0 && ' '}
+                  <span style={{display: 'inline-block', color: c, clipPath: `inset(-40% 0 ${(1 - p) * 100}% 0)`}}>
+                    {mot}
+                  </span>
+                </span>
+              );
+            })}
         </div>
       ))}
     </div>
