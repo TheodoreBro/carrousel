@@ -158,4 +158,23 @@ export const ELEMENTS: ElementDef[] = [
     durationInFrames: 150,
     alpha: true,
   },
+  {
+    id: 'feministes-ecologistes',
+    component: Cascade,
+    props: {
+      lignes: [
+        [{text: 'Pourquoi les féministes'}],
+        [{text: 'et les écologistes'}],
+        [{text: 'ne se tiennent pas'}],
+        [{text: 'par la main en chantant ?'}],
+      ],
+      startAt: 0,
+      stagger: 0,
+      indent: 0,
+      size: 140,
+      gap: 16, // dégage les accents de la ligne du dessus
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
 ];
