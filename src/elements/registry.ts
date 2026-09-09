@@ -150,4 +150,23 @@ export const ELEMENTS: ElementDef[] = [
     durationInFrames: 150, // = turnFrames et multiple de hopFrames : boucle parfaite
     alpha: true,
   },
+  {
+    id: 'feministes-ecologistes',
+    component: Cascade,
+    props: {
+      lignes: [
+        [{text: 'Pourquoi les féministes'}],
+        [{text: 'et les écologistes'}],
+        [{text: 'ne se tiennent pas par la main'}],
+        [{text: 'en chantant\u202F?'}],
+      ],
+      startAt: 0,
+      stagger: 5,
+      indent: 70,
+      size: 100,
+      gap: 16,
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
 ];
