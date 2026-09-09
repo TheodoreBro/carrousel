@@ -7,6 +7,7 @@ import {Diptyque} from './Diptyque';
 import {Cascade} from './Cascade';
 import {Appel} from './Appel';
 import {Chapitres} from './Chapitres';
+import {Ronde} from './Ronde';
 import {CarteFrance} from './CarteFrance';
 
 export type ElementDef = {
@@ -134,13 +135,20 @@ export const ELEMENTS: ElementDef[] = [
       gaucheX: 120,
       gaucheY: 100,
       droite: [{text: 'très bonne'}, {text: 'nouvelle', size: 200, color: '#138800'}],
-      droiteAt: 63, // « nouvelle » à 2,7 s (63 + 5 images)
-      droiteStagger: 5,
+      droiteAt: 88, // 0,8 s (durée du mot « dénatalité » prononcé) + 2,7 s
+      droiteStagger: 12, // « nouvelle » au rythme de la parole (0,48 s après « très »)
       droiteX: 1100,
       droiteY: 680,
       droiteIndent: 0,
     },
-    durationInFrames: 125,
+    durationInFrames: 150,
+    alpha: true,
+  },
+  {
+    id: 'ronde',
+    component: Ronde,
+    props: {pairs: 4, colorB: '#138800', turnFrames: 150, hopFrames: 25},
+    durationInFrames: 150, // = turnFrames et multiple de hopFrames : boucle parfaite
     alpha: true,
   },
   {
