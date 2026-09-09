@@ -7,6 +7,7 @@ import {Diptyque} from './Diptyque';
 import {Cascade} from './Cascade';
 import {Appel} from './Appel';
 import {Chapitres} from './Chapitres';
+import {CarteFrance} from './CarteFrance';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -139,6 +140,13 @@ export const ELEMENTS: ElementDef[] = [
       droiteY: 680,
       droiteIndent: 0,
     },
+    durationInFrames: 125,
+    alpha: true,
+  },
+  {
+    id: 'france-bonhommes',
+    component: CarteFrance,
+    props: {drawFrames: 25, figuresAt: 30, vanishAt: 75, vanishShare: 0.35},
     durationInFrames: 125,
     alpha: true,
   },
