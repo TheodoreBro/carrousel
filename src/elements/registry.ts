@@ -171,13 +171,13 @@ export const ELEMENTS: ElementDef[] = [
           coin: 'haut-gauche',
           x: 120,
           y: 100,
-          blurAt: 53, // au premier mot du second bloc
+          blurAt: 78, // au premier mot du second bloc
           blur: 8,
           gap: 16,
         },
         {
           lignes: ['ne se tiennent pas', 'par la main en chantant\u00A0?'],
-          at: 53, // dernier mot du premier bloc en place à 28, plus 1 s
+          at: 78, // dernier mot du premier bloc en place à 28, plus 2 s
           stagger: 5,
           coin: 'bas-droite',
           x: 120,
@@ -187,7 +187,7 @@ export const ELEMENTS: ElementDef[] = [
       ],
       size: 140,
     },
-    durationInFrames: 150,
+    durationInFrames: 175,
     alpha: true,
   },
 ];
