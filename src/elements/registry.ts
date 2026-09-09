@@ -7,6 +7,7 @@ import {Diptyque} from './Diptyque';
 import {Cascade} from './Cascade';
 import {Appel} from './Appel';
 import {Chapitres} from './Chapitres';
+import {Ronde} from './Ronde';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -140,6 +141,13 @@ export const ELEMENTS: ElementDef[] = [
       droiteIndent: 0,
     },
     durationInFrames: 150,
+    alpha: true,
+  },
+  {
+    id: 'ronde',
+    component: Ronde,
+    props: {pairs: 4, colorB: '#138800', turnFrames: 150, hopFrames: 25},
+    durationInFrames: 150, // = turnFrames et multiple de hopFrames : boucle parfaite
     alpha: true,
   },
 ];
