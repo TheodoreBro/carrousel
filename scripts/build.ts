@@ -2,7 +2,7 @@
 import {bundle} from '@remotion/bundler';
 import {renderMedia, selectComposition, RenderInternals} from '@remotion/renderer';
 import {execFileSync} from 'node:child_process';
-import {existsSync, mkdirSync, unlinkSync} from 'node:fs';
+import {existsSync, mkdirSync, renameSync, unlinkSync} from 'node:fs';
 import path from 'node:path';
 import {OUT_DIR, VIDEO} from '../src/config';
 import {ELEMENTS} from '../src/elements/registry';
@@ -23,8 +23,11 @@ if (!el) {
 
 const ext = el.alpha ? 'mov' : 'mp4';
 const outFile = path.resolve(OUT_DIR, `${el.id}.${ext}`);
+// Rendu dans un fichier temporaire, puis remplacement d'un coup : le fichier livré ne disparaît jamais
+// pendant le rendu (sinon Premiere le passe « hors ligne »).
+const tmpFile = path.resolve(OUT_DIR, `.${el.id}.rendu.${ext}`);
 mkdirSync(path.dirname(outFile), {recursive: true});
-if (existsSync(outFile)) unlinkSync(outFile);
+if (existsSync(tmpFile)) unlinkSync(tmpFile);
 
 const probe = (file: string) => {
   const ffprobe = RenderInternals.getExecutablePath({
@@ -60,7 +63,7 @@ const probe = (file: string) => {
     composition,
     serveUrl,
     inputProps: el.props,
-    outputLocation: outFile,
+    outputLocation: tmpFile,
     browserExecutable,
     chromiumOptions,
     ...(el.alpha
@@ -79,7 +82,7 @@ const probe = (file: string) => {
   });
 
   // Vérification ffprobe avant livraison.
-  const info = probe(outFile);
+  const info = probe(tmpFile);
   const errors: string[] = [];
   if (info.width !== String(VIDEO.width) || info.height !== String(VIDEO.height)) {
     errors.push(`résolution ${info.width}x${info.height}`);
@@ -92,10 +95,12 @@ const probe = (file: string) => {
     errors.push(`codec ${info.codec_name}`);
   }
   if (errors.length) {
-    unlinkSync(outFile);
-    console.error('ÉCHEC — fichier supprimé : ' + errors.join(', '));
+    unlinkSync(tmpFile);
+    if (existsSync(outFile)) unlinkSync(outFile); // pas de version périmée qui traîne
+    console.error('ÉCHEC — rien de livré : ' + errors.join(', '));
     process.exit(1);
   }
+  renameSync(tmpFile, outFile);
 
   const seconds = el.durationInFrames / VIDEO.fps;
   console.log(`${path.relative(process.cwd(), outFile)} — ${seconds}s (${el.durationInFrames} img, ${info.codec_name} ${info.pix_fmt})`);
