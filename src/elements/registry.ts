@@ -194,4 +194,27 @@ export const ELEMENTS: ElementDef[] = [
     durationInFrames: 175,
     alpha: true,
   },
+  {
+    id: 'question-politique',
+    component: MotAMot,
+    props: {
+      blocs: [
+        {lignes: [[{text: 'Une seule'}]], at: 0, stagger: 5, coin: 'haut-gauche', x: 120, y: 100},
+        {
+          lignes: [[{text: 'Question'}], [{text: 'politique'}]],
+          at: 10, // dans la foulée d'« Une seule »
+          stagger: 5,
+          coin: 'bas-droite',
+          x: 120,
+          y: 100,
+          size: 220,
+          color: '#4B0001',
+          gap: 16,
+        },
+      ],
+      size: 140,
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
 ];
