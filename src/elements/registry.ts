@@ -225,9 +225,9 @@ export const ELEMENTS: ElementDef[] = [
       mots: [
         [{text: 'Qui'}],
         [{text: 'me'}],
-        [{text: 'parle', color: '#4B0001'}],
+        [{text: 'parle'}],
         [{text: 'dans'}],
-        [{text: "l'"}, {text: 'oreillette', color: '#4B0001'}],
+        [{text: "l'oreillette"}],
       ],
       startAt: 0,
       dureeMot: 6.25, // 0,25 s par mot, les 5 en 1,25 s (31 images)
