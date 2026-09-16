@@ -10,6 +10,7 @@ import {Chapitres} from './Chapitres';
 import {Ronde} from './Ronde';
 import {CarteFrance} from './CarteFrance';
 import {MotAMot} from './MotAMot';
+import {UnParUn} from './UnParUn';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -219,20 +220,18 @@ export const ELEMENTS: ElementDef[] = [
   },
   {
     id: 'oreillette',
-    component: MotAMot,
+    component: UnParUn,
     props: {
-      blocs: [
-        {
-          lignes: [
-            [{text: 'Qui me '}, {text: 'parle', color: COLORS.accent}],
-            [{text: "dans l'"}, {text: 'oreillette', color: COLORS.accent}],
-          ],
-          at: 0,
-          stagger: 5,
-          coin: 'centre',
-          gap: 16,
-        },
+      mots: [
+        [{text: 'Qui'}],
+        [{text: 'me'}],
+        [{text: 'parle', color: '#4B0001'}],
+        [{text: 'dans'}],
+        [{text: "l'"}, {text: 'oreillette', color: '#4B0001'}],
       ],
+      startAt: 0,
+      dureeMot: 15, // 0,6 s par mot
+      dernierTient: true,
       size: 160,
     },
     durationInFrames: 125,
