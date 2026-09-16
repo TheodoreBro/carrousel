@@ -230,7 +230,7 @@ export const ELEMENTS: ElementDef[] = [
         [{text: "l'"}, {text: 'oreillette', color: '#4B0001'}],
       ],
       startAt: 0,
-      dureeMot: 9.5, // les 5 mots en 1,9 s (48 images)
+      dureeMot: 8.5, // les 5 mots en 1,7 s (43 images)
       dernierTient: true,
       size: 160,
     },
