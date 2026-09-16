@@ -11,7 +11,7 @@ export type UnParUnProps = {
   // Chaque mot est une suite de morceaux (pour un mot bicolore : « l'» + « oreillette »).
   mots: Morceau[][];
   startAt: number; // frame du premier mot
-  dureeMot: number; // frames par mot, entrée et sortie (CUT_FRAMES chacune) comprises
+  dureeMot: number; // frames par mot, entrée et sortie (CUT_FRAMES chacune) comprises ; peut être fractionnaire (9,5)
   dernierTient?: boolean; // le dernier mot reste à l'écran jusqu'à la fin (sinon il sort comme les autres)
   size?: number;
   color?: string;
