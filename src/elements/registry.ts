@@ -1,5 +1,5 @@
 import type React from 'react';
-import {EU_COLORS} from '../config';
+import {COLORS, EU_COLORS} from '../config';
 import {Carton} from './Carton';
 import {CarteEurope} from './CarteEurope';
 import {DrapeauOnu} from './DrapeauOnu';
@@ -166,8 +166,8 @@ export const ELEMENTS: ElementDef[] = [
       blocs: [
         {
           lignes: [
-            [{text: 'Pourquoi les'}, {text: 'féministes', color: '#138800'}],
-            [{text: 'et les'}, {text: 'écologistes', color: '#138800'}],
+            [{text: 'Pourquoi les '}, {text: 'féministes', color: '#138800'}],
+            [{text: 'et les '}, {text: 'écologistes', color: '#138800'}],
           ],
           at: 0,
           stagger: 5,
@@ -213,6 +213,27 @@ export const ELEMENTS: ElementDef[] = [
         },
       ],
       size: 140,
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
+  {
+    id: 'oreillette',
+    component: MotAMot,
+    props: {
+      blocs: [
+        {
+          lignes: [
+            [{text: 'Qui me '}, {text: 'parle', color: COLORS.accent}],
+            [{text: "dans l'"}, {text: 'oreillette', color: COLORS.accent}],
+          ],
+          at: 0,
+          stagger: 5,
+          coin: 'centre',
+          gap: 16,
+        },
+      ],
+      size: 160,
     },
     durationInFrames: 125,
     alpha: true,
