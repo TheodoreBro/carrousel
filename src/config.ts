@@ -49,3 +49,6 @@ export const FONT_MANUSCRITE = {
   letterSpacing: '0',
   lineHeight: 1.1,
 } as const;
+
+// Ombre portée derrière un texte, pour la lisibilité sur image.
+export const TEXT_SHADOW = '0 4px 30px rgba(0,0,0,0.7)';

@@ -1,5 +1,5 @@
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
-import {COLORS, CUT_FRAMES, FONT} from '../config';
+import {COLORS, CUT_FRAMES, FONT, TEXT_SHADOW} from '../config';
 import {fontFamily} from '../fonts';
 
 export type Ligne = {
@@ -26,8 +26,6 @@ export type DiptyqueProps = {
   shadow?: boolean;
 };
 
-const SHADOW = '0 4px 30px rgba(0,0,0,0.7)';
-
 const vertical = (y?: number) => (y === undefined ? {top: '50%', transform: 'translateY(-50%)'} : {top: y});
 
 const reveal = (frame: number, at: number) => Math.max(0, Math.min(1, (frame - at + 1) / CUT_FRAMES));
@@ -48,7 +46,7 @@ const Mot: React.FC<{ligne: Ligne; progress: number; indent: number; shadow: boo
       textTransform: FONT.textTransform,
       marginLeft: indent,
       marginTop: ligne.gap ?? 0,
-      textShadow: shadow ? SHADOW : 'none',
+      textShadow: shadow ? TEXT_SHADOW : 'none',
       // Marges haute et latérales : accents, ascendantes et ombre ne sont pas rognés.
       clipPath: `inset(-40% -80px ${(1 - progress) * 100}% -80px)`,
     }}

@@ -1,5 +1,5 @@
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
-import {COLORS, FONT_MANUSCRITE} from '../config';
+import {COLORS, FONT_MANUSCRITE, TEXT_SHADOW} from '../config';
 import {fontFamilyManuscrite} from '../fonts';
 
 export type ManuscritProps = {
@@ -9,6 +9,7 @@ export type ManuscritProps = {
   y: number; // haut de la ligne (px)
   size?: number;
   color?: string;
+  shadow?: boolean; // ombre portée derrière le trait (lisibilité sur image)
 };
 
 // Texte manuscrit qui s'écrit de gauche à droite, comme sous un stylo : le trait est révélé par un
@@ -22,6 +23,7 @@ export const Manuscrit: React.FC<ManuscritProps> = ({
   y,
   size = 130,
   color = COLORS.accent,
+  shadow = false,
 }) => {
   const frame = useCurrentFrame();
   const p = Math.max(0, Math.min(1, (frame - startAt + 1) / dureeEcriture));
@@ -40,6 +42,7 @@ export const Manuscrit: React.FC<ManuscritProps> = ({
             letterSpacing: FONT_MANUSCRITE.letterSpacing,
             lineHeight: FONT_MANUSCRITE.lineHeight,
             whiteSpace: 'nowrap',
+            textShadow: shadow ? TEXT_SHADOW : 'none',
             clipPath: `polygon(-5% -30%, ${haut}% -30%, ${bas}% 130%, -5% 130%)`,
           }}
         >
