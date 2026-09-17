@@ -241,7 +241,16 @@ export const ELEMENTS: ElementDef[] = [
   {
     id: 'dans-quelques-annees',
     component: Manuscrit,
-    props: {text: 'dans quelques années', startAt: 0, dureeEcriture: 25, y: 760, size: 130, color: '#4B0001', shadow: true},
+    props: {
+      text: 'dans quelques années',
+      startAt: 0,
+      dureeEcriture: 25,
+      y: 740,
+      size: 130,
+      color: COLORS.white,
+      shadow: true,
+      signature: {text: 'Antoine Bueno', startAt: 28, dureeEcriture: 15, size: 90, color: '#4B0001'},
+    },
     durationInFrames: 125,
     alpha: true,
   },
