@@ -241,7 +241,7 @@ export const ELEMENTS: ElementDef[] = [
   {
     id: 'dans-quelques-annees',
     component: Manuscrit,
-    props: {text: 'dans quelques années', startAt: 0, dureeEcriture: 62, y: 760, size: 130, color: COLORS.accent},
+    props: {text: 'dans quelques années', startAt: 0, dureeEcriture: 25, y: 760, size: 130, color: '#4B0001'},
     durationInFrames: 125,
     alpha: true,
   },
