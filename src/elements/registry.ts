@@ -11,6 +11,7 @@ import {Ronde} from './Ronde';
 import {CarteFrance} from './CarteFrance';
 import {MotAMot} from './MotAMot';
 import {UnParUn} from './UnParUn';
+import {Manuscrit} from './Manuscrit';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -234,6 +235,13 @@ export const ELEMENTS: ElementDef[] = [
       dernierTient: true,
       size: 160,
     },
+    durationInFrames: 125,
+    alpha: true,
+  },
+  {
+    id: 'dans-quelques-annees',
+    component: Manuscrit,
+    props: {text: 'dans quelques années', startAt: 0, dureeEcriture: 62, y: 760, size: 130, color: COLORS.accent},
     durationInFrames: 125,
     alpha: true,
   },

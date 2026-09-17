@@ -42,3 +42,10 @@ export const VIDEO = {
 export const CUT_FRAMES = 3;
 
 export const OUT_DIR = 'out';
+
+// Police manuscrite (sur demande explicite) : écriture au stylo, bas de casse, pas de capitales forcées.
+export const FONT_MANUSCRITE = {
+  family: 'Caveat',
+  letterSpacing: '0',
+  lineHeight: 1.1,
+} as const;

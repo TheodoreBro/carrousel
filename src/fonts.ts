@@ -1,5 +1,6 @@
 import {loadFont} from '@remotion/google-fonts/Anton';
 import {loadFont as loadInter} from '@remotion/google-fonts/Inter';
+import {loadFont as loadCaveat} from '@remotion/google-fonts/Caveat';
 
 // Charge Anton une seule fois pour tout le bundle.
 export const {fontFamily, waitUntilDone} = loadFont('normal', {
@@ -10,5 +11,11 @@ export const {fontFamily, waitUntilDone} = loadFont('normal', {
 // Police secondaire, fine, pour les textes courants (bas de casse).
 export const {fontFamily: fontFamilySecondary} = loadInter('normal', {
   weights: ['500', '600'],
+  subsets: ['latin', 'latin-ext'],
+});
+
+// Police manuscrite (écriture au stylo), bas de casse.
+export const {fontFamily: fontFamilyManuscrite} = loadCaveat('normal', {
+  weights: ['600'],
   subsets: ['latin', 'latin-ext'],
 });
