@@ -8,7 +8,10 @@ conversation d'origine. Il est mis à jour à chaque étape.
 - Étape 0 livrée : `docs/etape0_plan.md` (plan, sources, faisabilité France/Corée/États-Unis/Europe,
   incertitudes, décisions à valider) et `docs/etape0_pays.md` (extension à 47 pays, classement N1/N2/N3,
   ordre de vérification).
-- **Aucune donnée téléchargée. Aucun script écrit. Préregistration non écrite.**
+- **Étape 1 livrée : `docs/preregistration.md` (version 1.0, gelée). Ne plus la modifier ; toute
+  déviation va dans `docs/preregistration_addenda.md`, et chaque pays reçoit un addendum de mesure
+  avant sa première estimation (§4.2 de la préregistration).**
+- **Aucune donnée téléchargée. Aucun script écrit.**
 - Environnement : pile Python vérifiée (`requirements.txt`) ; R sans `fixest`/`did` (CRAN bloqué) ;
   TeX Live installable via apt.
 - **Bloqueur** : au 18/09 la politique réseau de l'environnement « Default » refusait toutes les
@@ -18,10 +21,11 @@ conversation d'origine. Il est mis à jour à chaque étape.
 
 ## 2. Décisions de l'auteur
 
-Prises (message du 18/09) :
+Prises (messages du 18/09) :
 - « Beaucoup plus de pays » : oui. Voir `etape0_pays.md` pour le classement et l'ordre.
+- **Points 1 à 11 ci-dessous : tous validés par l'auteur le 18/09/2026.**
 
-En attente de validation explicite (voir `etape0_plan.md` §7) :
+Points validés (voir `etape0_plan.md` §7) :
 1. accès réseau (option A recommandée : unrestricted) ;
 2. emplacement : sous-dossier `smartphone-fecondite/` (défaut) ;
 3. cas secondaires Corée / États-Unis / Europe NUTS 2 en descriptif seulement ;
@@ -31,7 +35,7 @@ En attente de validation explicite (voir `etape0_plan.md` §7) :
 7. clé API KOSIS / accès NCHS : non par défaut ;
 8. PDF : TeX Live via apt.
 
-Nouvelles décisions ouvertes par l'extension multi-pays (à valider) :
+Décisions ouvertes par l'extension multi-pays (validées le 18/09) :
 9. périmètre causal : France + niveau 1 (Espagne, Suède, Brésil, Colombie) + niveau 2 vérifiés dans
    l'ordre du §4 de `etape0_pays.md`, avec critères d'inclusion préenregistrés ;
 10. synthèse entre pays par méta-analyse à effets aléatoires des estimations propres ;
@@ -41,9 +45,7 @@ Nouvelles décisions ouvertes par l'extension multi-pays (à valider) :
 
 1. Vérifier le réseau. Si bloqué : s'arrêter et le dire (règle 1).
 2. Faire valider les points 1-11 ci-dessus si ce n'est pas déjà fait.
-3. Étape 1 : écrire `docs/preregistration.md` (hypothèses par âge et par canal, spécifications,
-   critères d'inclusion des pays, règles de décision, calcul de puissance prévu), le committer, et ne
-   plus le modifier ensuite (citer le hash du commit dans le papier).
+3. Étape 1 : faite (commit contenant `preregistration.md` v1.0 ; citer son hash dans le papier).
 4. Étape 2 : `scripts/01_download.py` (France d'abord), `docs/data_log.md` (URL, date, licence,
    SHA-256, couverture, trous), puis construction du traitement et des résultats ; rapport des
    unités-années par spécification et du first stage. Puis pays de niveau 1, puis niveau 2 selon la
