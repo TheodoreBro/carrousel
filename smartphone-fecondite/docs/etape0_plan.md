@@ -391,6 +391,12 @@ Après validation : Étape 1 (préregistration), puis Étape 2 dès que le rése
 
 ---
 
+## 7 bis. Extension multi-pays
+
+À la demande de l'auteur (18/09), 47 pays supplémentaires ont été balayés : classement, sources et
+ordre de vérification dans `etape0_pays.md`. Décisions ouvertes correspondantes : `handover.md` §2,
+points 9-11.
+
 ## 8. Littérature repérée (positionnement uniquement)
 
 Références proposées dans le cahier des charges, DOI retrouvés par recherche web (page éditeur non
