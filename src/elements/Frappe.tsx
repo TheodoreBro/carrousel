@@ -1,5 +1,5 @@
 import {AbsoluteFill, Html5Audio, Sequence, staticFile, useCurrentFrame} from 'remotion';
-import {COLORS, CUT_FRAMES, FONT} from '../config';
+import {COLORS, CUT_FRAMES, FONT, TEXT_SHADOW} from '../config';
 import {fontFamily} from '../fonts';
 
 export type MotFrappe = {
@@ -23,6 +23,7 @@ export type FrappeProps = {
   lignes: LigneFrappe[];
   size?: number; // taille par défaut (px)
   gap?: number; // espace au-dessus de chaque ligne sauf la première (px), p. ex. pour dégager les accents
+  shadow?: boolean; // ombre portée derrière les mots (lisibilité sur image)
 };
 
 const progress = (frame: number, at: number) => Math.max(0, Math.min(1, (frame - at + 1) / CUT_FRAMES));
@@ -45,7 +46,7 @@ const remplissage = (bandes: string[]) => {
 
 // Bloc de lignes centré à l'écran. Chaque mot apparaît d'un coup, sans volet ; un mot peut se flouter
 // et déclencher un son au moment exact où il apparaît.
-export const Frappe: React.FC<FrappeProps> = ({lignes, size = 120, gap = 0}) => {
+export const Frappe: React.FC<FrappeProps> = ({lignes, size = 120, gap = 0, shadow = false}) => {
   const frame = useCurrentFrame();
   const mots = lignes.flatMap((l) => l.mots);
   return (
@@ -74,6 +75,12 @@ export const Frappe: React.FC<FrappeProps> = ({lignes, size = 120, gap = 0}) => 
           >
             {l.mots.map((m, j) => {
               const flou = m.blurAt === undefined ? 0 : progress(frame, m.blurAt) * (m.blur ?? 8);
+              // Un mot en bandes a un texte transparent : son ombre passe par un filtre, sinon elle
+              // se peindrait par-dessus les couleurs.
+              const filtres = [
+                ...(flou > 0 ? [`blur(${flou}px)`] : []),
+                ...(shadow && m.bandes ? [`drop-shadow(${TEXT_SHADOW})`] : []),
+              ];
               return (
                 <span key={j}>
                   {j > 0 && ' '}
@@ -83,7 +90,8 @@ export const Frappe: React.FC<FrappeProps> = ({lignes, size = 120, gap = 0}) => 
                       fontSize: m.size ?? size,
                       color: m.color ?? COLORS.white,
                       ...(m.bandes ? remplissage(m.bandes) : {}),
-                      filter: flou > 0 ? `blur(${flou}px)` : 'none',
+                      textShadow: shadow && !m.bandes ? TEXT_SHADOW : 'none',
+                      filter: filtres.length ? filtres.join(' ') : 'none',
                       // La place est réservée dès le début : rien ne bouge quand un mot apparaît.
                       visibility: frame >= m.at ? 'visible' : 'hidden',
                     }}

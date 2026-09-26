@@ -267,6 +267,7 @@ export const ELEMENTS: ElementDef[] = [
         },
       ],
       gap: 24, // dégage l'accent de « DÉ »
+      shadow: true,
     },
     durationInFrames: 125,
     alpha: true,
