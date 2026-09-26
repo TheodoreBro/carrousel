@@ -1,5 +1,5 @@
 import type React from 'react';
-import {COLORS, EU_COLORS} from '../config';
+import {COLORS, EU_COLORS, FLAG_COLORS} from '../config';
 import {Carton} from './Carton';
 import {CarteEurope} from './CarteEurope';
 import {DrapeauOnu} from './DrapeauOnu';
@@ -260,10 +260,35 @@ export const ELEMENTS: ElementDef[] = [
     component: Frappe,
     props: {
       lignes: [
-        {text: 'ultra', at: 0, size: 120},
-        {text: 'Dépendante', at: 12, size: 240, color: '#4B0001', indent: 160, son: 'sons/impact-sub.wav'},
+        {mots: [{text: 'ultra', at: 0, size: 120}]},
+        {
+          indent: 160,
+          mots: [{text: 'Dépendante', at: 12, size: 240, color: '#4B0001', son: 'sons/impact-sub.wav'}],
+        },
       ],
       gap: 24, // dégage l'accent de « DÉ »
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
+  {
+    id: 'sursaut-francais',
+    component: Frappe,
+    props: {
+      lignes: [
+        {
+          mots: [
+            {text: 'Sursaut', at: 0, blurAt: 12, blur: 8},
+            {
+              text: 'Français',
+              at: 12,
+              bandes: [FLAG_COLORS.franceBlue, COLORS.white, FLAG_COLORS.franceRed],
+              son: 'sons/snap-sec.wav',
+            },
+          ],
+        },
+      ],
+      size: 200,
     },
     durationInFrames: 125,
     alpha: true,

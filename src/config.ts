@@ -16,6 +16,8 @@ export const EU_COLORS = {
 export const FLAG_COLORS = {
   onuBlue: '#5B92E5',
   chinaRed: '#EE1C25',
+  franceBlue: '#0055A4',
+  franceRed: '#EF4135',
 } as const;
 
 export const FONT = {
