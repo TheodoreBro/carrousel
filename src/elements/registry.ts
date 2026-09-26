@@ -12,6 +12,7 @@ import {CarteFrance} from './CarteFrance';
 import {MotAMot} from './MotAMot';
 import {UnParUn} from './UnParUn';
 import {Manuscrit} from './Manuscrit';
+import {Frappe} from './Frappe';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -250,6 +251,19 @@ export const ELEMENTS: ElementDef[] = [
       color: COLORS.white,
       shadow: true,
       signature: {text: 'Antoine Bueno', startAt: 28, dureeEcriture: 15, size: 90, color: '#4B0001'},
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
+  {
+    id: 'ultra-dependante',
+    component: Frappe,
+    props: {
+      lignes: [
+        {text: 'ultra', at: 0, size: 120},
+        {text: 'Dépendante', at: 12, size: 240, color: '#4B0001', indent: 160, son: 'sons/impact-sub.wav'},
+      ],
+      gap: 24, // dégage l'accent de « DÉ »
     },
     durationInFrames: 125,
     alpha: true,
