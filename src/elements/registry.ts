@@ -13,6 +13,7 @@ import {MotAMot} from './MotAMot';
 import {UnParUn} from './UnParUn';
 import {Manuscrit} from './Manuscrit';
 import {Frappe} from './Frappe';
+import {Bandeau} from './Bandeau';
 
 export type ElementDef = {
   // Nom passé à `npm run build -- --nom=<id>` ; sert aussi de nom de fichier.
@@ -290,6 +291,22 @@ export const ELEMENTS: ElementDef[] = [
         },
       ],
       size: 200,
+    },
+    durationInFrames: 125,
+    alpha: true,
+  },
+  {
+    id: 'emmanuel-maurel',
+    component: Bandeau,
+    props: {
+      lignes: [
+        {text: 'Emmanuel Maurel', size: 96},
+        {text: 'candidat 2027', size: 64, color: '#4B0001'},
+      ],
+      at: 0,
+      x: 120,
+      y: 120,
+      gap: 8,
     },
     durationInFrames: 125,
     alpha: true,
