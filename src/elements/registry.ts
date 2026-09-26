@@ -283,7 +283,7 @@ export const ELEMENTS: ElementDef[] = [
               text: 'Français',
               at: 12,
               bandes: [FLAG_COLORS.franceBlue, COLORS.white, FLAG_COLORS.franceRed],
-              son: 'sons/snap-sec.wav',
+              son: 'sons/impact-sub.wav',
             },
           ],
         },
