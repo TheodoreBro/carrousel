@@ -1,4 +1,4 @@
-# Passation — état du projet au 18 septembre 2026
+# Passation — état du projet au 2 octobre 2026
 
 Ce fichier permet à une nouvelle session (ou à un nouvel agent) de reprendre le travail sans la
 conversation d'origine. Il est mis à jour à chaque étape.
@@ -11,13 +11,23 @@ conversation d'origine. Il est mis à jour à chaque étape.
 - **Étape 1 livrée : `docs/preregistration.md` (version 1.0, gelée). Ne plus la modifier ; toute
   déviation va dans `docs/preregistration_addenda.md`, et chaque pays reçoit un addendum de mesure
   avant sa première estimation (§4.2 de la préregistration).**
-- **Aucune donnée téléchargée. Aucun script écrit.**
+- **Squelette du pipeline écrit et testé (02/10)** : `scripts/common/sources.py` (registre des sources
+  avec méthode de résolution des URL ; tout ce qui vient de l'Étape 0 est « à vérifier »),
+  `scripts/common/download.py` (téléchargement avec reprises, SHA-256, manifeste, `docs/data_log.md`,
+  arrêt net sur refus), `scripts/01_download.py` (`--list`, `--check`, `--country`, `--ids`),
+  `scripts/common/did.py` (Callaway & Sant'Anna via `differences`, Sun & Abraham implémenté
+  directement, did2s, TWFE, Poisson à effets fixes, MDE par permutation, méta-analyse à effets
+  aléatoires), `tests/test_did.py` (8 tests sur panel synthétique, tous verts), `Makefile`,
+  `paper/paper.tex` (squelette), `paper/references.bib` (vide, volontairement).
+- **Aucune donnée téléchargée.** `02_treatment.py` à `06_tables.py` restent à écrire : ils dépendent
+  de la structure réelle des fichiers.
 - Environnement : pile Python vérifiée (`requirements.txt`) ; R sans `fixest`/`did` (CRAN bloqué) ;
   TeX Live installable via apt.
-- **Bloqueur** : au 18/09 la politique réseau de l'environnement « Default » refusait toutes les
-  sources de données. L'auteur a indiqué avoir modifié l'accès, mais la session en cours n'a pas vu
-  le changement (la politique s'applique à la création du conteneur). Première chose à faire dans une
-  nouvelle session : tester les hôtes du §1.1 de `etape0_plan.md` avec `curl -sS -o /dev/null -w "%{http_code}"`.
+- **Bloqueur** : au 02/10, dans un conteneur neuf, la politique réseau de l'environnement « Default »
+  refuse toujours toutes les sources de données (403). Le réglage à changer : menu de l'environnement
+  cloud dans la barre de titre de la session → Edit → Network access (accès complet, ou domaines
+  autorisés listés dans `etape0_plan.md` §1.3). Première chose à faire dans une nouvelle session :
+  `python scripts/01_download.py --check`.
 
 ## 2. Décisions de l'auteur
 
@@ -46,10 +56,11 @@ Décisions ouvertes par l'extension multi-pays (validées le 18/09) :
 1. Vérifier le réseau. Si bloqué : s'arrêter et le dire (règle 1).
 2. Faire valider les points 1-11 ci-dessus si ce n'est pas déjà fait.
 3. Étape 1 : faite (commit contenant `preregistration.md` v1.0 ; citer son hash dans le papier).
-4. Étape 2 : `scripts/01_download.py` (France d'abord), `docs/data_log.md` (URL, date, licence,
-   SHA-256, couverture, trous), puis construction du traitement et des résultats ; rapport des
-   unités-années par spécification et du first stage. Puis pays de niveau 1, puis niveau 2 selon la
-   check-list.
+4. Étape 2 : `make check` puis `python scripts/01_download.py --country FR` ; corriger les URL du
+   registre au fur et à mesure (chaque correction est une URL réelle constatée, consignée dans
+   `data_log.md`) ; écrire `02_treatment.py` (D1, D2, D3, ZDP) et `03_outcomes.py` à partir de la
+   structure réelle des fichiers ; tableau d'échantillon et MDE (`did.mde_permutation`) ; first stage.
+   Puis pays de niveau 1 (addendum par pays avant estimation), puis niveau 2 selon la check-list.
 5. Étape 3 : estimations, figures, tableaux.
 6. Étape 4 : rédaction, vérification chiffre par chiffre, références vérifiées une par une
    (les DOI listés dans `etape0_plan.md` §8 ne sont pas encore vérifiés sur la page éditeur).

@@ -1,0 +1,73 @@
+% Squelette du working paper. Chaque chiffre, tableau et figure provient d'un script de scripts/.
+% Compilation : make paper (latexmk -pdf). Les tableaux sont inclus depuis tables/*.tex, les figures
+% depuis figures/*.pdf ; rien n'est saisi à la main.
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french,english]{babel}
+\usepackage{lmodern,microtype}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,setspace,threeparttable,longtable}
+\usepackage[hidelinks]{hyperref}
+\usepackage[authoryear,round]{natbib}
+\graphicspath{{../figures/}}
+\onehalfspacing
+
+\title{Smartphones, réseaux sociaux, applications de rencontre et fécondité :\\
+y a-t-il un effet causal au-delà des adolescentes ?}
+\author{Working paper}
+\date{\today\ --- version de travail, ne pas citer}
+
+\begin{document}
+\selectlanguage{french}
+\maketitle
+
+\begin{abstract}
+\selectlanguage{english}
+\noindent\textbf{Abstract.} [À rédiger à l'Étape 4, à partir des seuls résultats du papier.]
+\selectlanguage{french}
+
+\medskip\noindent\textbf{Résumé.} [À rédiger à l'Étape 4.]
+\end{abstract}
+
+\section{Introduction}
+% question, contribution, résultat principal en une phrase
+
+\section{Positionnement}
+% ≤ 600 mots ; références vérifiées uniquement (references.bib)
+
+\section{Cadre conceptuel et hypothèses}
+% reprend docs/preregistration.md (hash du commit de gel : à insérer)
+
+\section{Données}
+% sources, construction, descriptives, limites de mesure ; tables/t_sample.tex ; docs/data_log.md
+
+\section{Stratégie empirique}
+
+\section{Résultats : effet causal par âge}
+% figures/f_event_*.pdf ; tables/t_main_*.tex — aucun résultat externe dans les sections 6 à 11
+
+\section{Résultats : décomposition du canal}
+
+\section{Robustesse}
+
+\section{Discussion et mécanismes}
+
+\section{Limites}
+
+\section{Conclusion et critères de révision}
+% (i) statut du smartphone comme facteur (premier ordre / second ordre / indéterminé) selon la règle préenregistrée ;
+% (ii) seuil de révision à la hausse ; (iii) ce qui ferait rétrograder l'hypothèse.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+\section{Tableaux complets}
+\section{Dictionnaire des variables}
+\section{Sources exactes}
+% généré depuis docs/data_log.md par scripts/06_tables.py
+\section{Pays examinés et exclus}
+% préregistration §4.3
+
+\end{document}

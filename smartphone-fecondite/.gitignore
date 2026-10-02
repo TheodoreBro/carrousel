@@ -1,0 +1,19 @@
+# données brutes et dérivées : régénérées par `make all` ; les empreintes sont dans docs/data_log.md
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+# sorties de compilation
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/*.bcf
+paper/*.run.xml
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.toc
+__pycache__/
+.venv/
+.pytest_cache/
