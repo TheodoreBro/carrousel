@@ -225,6 +225,11 @@ def run_block(col: Collector, d: pd.DataFrame, y: str, family: str, hyp: str, ou
                            f"écart-type par bootstrap par grappes ({bs['n_boot_ok']} tirages, grappe = {cluster or unit}) ; quantiles "
                            f"[{bs['q025']:+.4f}, {bs['q975']:+.4f}]", aggregation="post_avg_1_5_boot")
             log(f"  bootstrap grappes : es = {bs['se_boot']:.4f} ({bs['n_boot_ok']} tirages, {time.time() - t0:.0f} s)")
+    if ("sunab" in estimators or "did2s" in estimators) and not (d.cohort == 0).any():
+        col.add_scalar(family, hyp, outcome, sample, "sunab/did2s", "non estimable", np.nan, np.nan, nu, no,
+                       "aucune unité jamais traitée dans ce panel : Sun & Abraham (contrôle = jamais traitées) et did2s (pyfixest 0.60) "
+                       "ne sont pas estimables ; comparaisons = TWFE, Poisson, D3 continu", aggregation="note")
+        estimators = tuple(e for e in estimators if e not in ("sunab", "did2s"))
     if "sunab" in estimators and (d.cohort == 0).any():
         try:
             t = did.sunab_event_study(d, y, unit, "year", "cohort", cluster=cluster)
