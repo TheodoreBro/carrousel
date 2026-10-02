@@ -17,3 +17,4 @@ paper/*.toc
 __pycache__/
 .venv/
 .pytest_cache/
+tables/est_smoke/

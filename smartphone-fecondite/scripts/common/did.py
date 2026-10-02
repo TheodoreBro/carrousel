@@ -68,7 +68,8 @@ def cs_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str =
     """
     from differences import ATTgt
 
-    d = df[[unit, time, cohort, y] + (covariates or [])].dropna().copy()
+    keep = [unit, time, cohort, y] + (covariates or []) + ([cluster] if cluster and cluster not in (unit, time) else [])
+    d = df[list(dict.fromkeys(keep))].dropna().copy()
     d[cohort] = d[cohort].where(d[cohort] > 0)          # NaN = jamais traité pour ``differences``
     panel = d.set_index([unit, time]).sort_index()
     fml = y if not covariates else f"{y} ~ " + " + ".join(covariates)
@@ -290,3 +291,104 @@ def meta_random_effects(estimates, variances, names=None, alpha: float = 0.05) -
     pooled = summ.loc["random effect"] if "random effect" in summ.index else summ.iloc[-1]
     return {"estimate": float(pooled["eff"]), "ci_low": float(pooled["ci_low"]), "ci_upp": float(pooled["ci_upp"]),
             "tau2": float(res.tau2), "i2": float(getattr(res, "i2", np.nan)), "table": summ}
+
+
+# ----------------------------------------------------------------------------- compléments Étape 3
+
+def holm(pvals) -> np.ndarray:
+    """Correction de Holm (famille de tests) ; renvoie les p ajustées dans l'ordre d'entrée."""
+    p = np.asarray(pvals, float)
+    n = len(p)
+    order = np.argsort(p)
+    adj = np.empty(n)
+    running = 0.0
+    for rank, idx in enumerate(order):
+        val = min(1.0, (n - rank) * p[idx])
+        running = max(running, val)
+        adj[idx] = running
+    return adj
+
+
+def p_from_z(est, se) -> float:
+    from scipy.stats import norm
+    est, se = float(est), float(se)
+    return float(2 * norm.sf(abs(est / se))) if se > 0 else np.nan
+
+
+def difference_test(est1, se1, est2, se2) -> dict:
+    """Test de différence de deux estimations supposées indépendantes (approximation : les deux
+    échantillons partagent les unités, la covariance est ignorée ; dit dans le papier)."""
+    d = float(est1) - float(est2)
+    se = float(np.sqrt(se1 ** 2 + se2 ** 2))
+    return {"diff": d, "se": se, "p": p_from_z(d, se)}
+
+
+def cs_post_avg(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str = "cohort", **kw) -> float:
+    """Moyenne des effets +1..+5 de Callaway & Sant'Anna (estimation ponctuelle seule, pour le bootstrap)."""
+    r = cs_event_study(df, y, unit, time, cohort, **kw)
+    return float(r["post_avg"]["estimate"].iloc[0])
+
+
+def cluster_bootstrap(df: pd.DataFrame, unit: str, stat, n_boot: int = 100, seed: int = 1, cluster: str | None = None) -> dict:
+    """Bootstrap par grappes (unités ou ``cluster``) d'une statistique ``stat(df) -> float``.
+
+    Rééchantillonne les grappes avec remise ; les grappes tirées plusieurs fois reçoivent un suffixe
+    d'identifiant pour rester distinctes. Renvoie l'écart-type bootstrap et les quantiles 2,5 / 97,5 %."""
+    rng = np.random.default_rng(seed)
+    key = cluster or unit
+    groups = {k: g for k, g in df.groupby(key, sort=False)}
+    keys = np.array(list(groups))
+    draws = []
+    for b in range(n_boot):
+        pick = rng.choice(keys, size=len(keys), replace=True)
+        parts = []
+        counts: dict = {}
+        for k in pick:
+            c = counts.get(k, 0)
+            counts[k] = c + 1
+            g = groups[k]
+            if c:
+                g = g.copy()
+                g[unit] = g[unit].astype(str) + f"__b{c}"
+            parts.append(g)
+        boot = pd.concat(parts, ignore_index=True)
+        try:
+            draws.append(stat(boot))
+        except Exception:  # noqa: BLE001
+            continue
+    draws = np.array(draws, float)
+    draws = draws[np.isfinite(draws)]
+    return {"se_boot": float(np.std(draws, ddof=1)) if len(draws) > 2 else np.nan,
+            "q025": float(np.quantile(draws, 0.025)) if len(draws) > 2 else np.nan,
+            "q975": float(np.quantile(draws, 0.975)) if len(draws) > 2 else np.nan,
+            "n_boot_ok": int(len(draws))}
+
+
+def continuous_twfe(df: pd.DataFrame, y: str, x: str, fe: str, cluster: str, weights: str | None = None) -> pd.DataFrame:
+    """Régression à effets fixes de ``y`` sur une exposition continue ``x`` (ex. D3), ``fe`` = formule des
+    effets fixes pyfixest (ex. "dep^age_group + year^age_group")."""
+    import pyfixest as pf
+
+    m = pf.feols(f"{y} ~ {x} | {fe}", data=df, vcov={"CRV1": cluster}, weights=weights)
+    t = m.tidy().reset_index()
+    t = t[t["Coefficient"] == x]
+    return _tidy([x], t["Estimate"], t["Std. Error"], "twfe_continuous")
+
+
+def iv_2sls(df: pd.DataFrame, y: str, endog: str, instrument: str, fe: str, cluster: str, weights: str | None = None) -> dict:
+    """2SLS à effets fixes (pyfixest) : ``y ~ 1 | fe | endog ~ instrument``. Renvoie la forme réduite, le
+    premier étage (F) et le coefficient IV."""
+    import pyfixest as pf
+
+    vc = {"CRV1": cluster}
+    fs = pf.feols(f"{endog} ~ {instrument} | {fe}", data=df, vcov=vc, weights=weights).tidy().reset_index()
+    rf = pf.feols(f"{y} ~ {instrument} | {fe}", data=df, vcov=vc, weights=weights).tidy().reset_index()
+    iv = pf.feols(f"{y} ~ 1 | {fe} | {endog} ~ {instrument}", data=df, vcov=vc, weights=weights)
+    t = iv.tidy().reset_index()
+    fsr = fs[fs["Coefficient"] == instrument].iloc[0]
+    rfr = rf[rf["Coefficient"] == instrument].iloc[0]
+    ivr = t[t["Coefficient"].astype(str).str.contains(endog)].iloc[0]
+    return {"first_stage": (float(fsr["Estimate"]), float(fsr["Std. Error"])),
+            "first_stage_F": float((fsr["Estimate"] / fsr["Std. Error"]) ** 2),
+            "reduced_form": (float(rfr["Estimate"]), float(rfr["Std. Error"])),
+            "iv": (float(ivr["Estimate"]), float(ivr["Std. Error"])), "n": int(iv._N)}
