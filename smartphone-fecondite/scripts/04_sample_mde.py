@@ -70,7 +70,7 @@ def main() -> int:
     rows.append(sample_rows("H1 robustesse 2008-2019", c_pre[c_pre.year <= 2019], "unit"))
     rows.append(sample_rows("H1 robustesse hors cohortes 2013-2017", c_pre[~c_pre.cohort.between(2013, 2017)], "unit"))
     for dens, lab in ((1, "dense"), (2, "intermédiaire"), (3, "rural")):
-        sub = c_pre[c_pre.densite.map(lambda x: 1 if x in (1, 2) else 2 if x in (3, 4) else 3 if x in (5, 6, 7) else np.nan) == dens]
+        sub = c_pre[c_pre.densite.map(lambda x: 1 if x == 1 else 2 if x in (2, 3, 4) else 3 if x in (5, 6, 7) else np.nan) == dens]
         rows.append(sample_rows(f"H6 densité {lab}", sub, "unit"))
     rows.append(sample_rows("H6 ZDP", c_pre[c_pre.zdp], "unit"))
     # H2 : département × âge

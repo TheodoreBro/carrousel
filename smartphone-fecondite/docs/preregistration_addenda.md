@@ -31,3 +31,78 @@ Rédigé fichiers en main, à l'issue de l'Étape 2 (téléchargement, `docs/dat
 
 Aucune de ces décisions ne modifie les hypothèses H1-H6, les résultats primaires, les seuils ni les règles
 de décision du §6 de la préregistration.
+
+## A2 — France : addendum d'estimation (02/10/2026, Étape 3, écrit avant la lecture des résultats complets)
+
+Rédigé à la relecture adversariale de `scripts/05_estimate.py` et `scripts/common/did.py` (40 constats, consignés
+dans la passation), **avant** l'exécution complète des estimations. Deux séries de chiffres réels ont été vues avant ce
+commit, lors de tests de fonctionnement : un ATT H2b sur le panel départemental complet avec bootstraps réduits
+(`--fast`), et un ATT H1 sur un sous-échantillon aléatoire de 3 000 puis 5 000 communes. Ils n'ont servi qu'à
+vérifier que le code tourne ; aucune décision ci-dessous n'a été prise à partir d'eux (section 5 du papier).
+
+### A2.1 Corrections de mise en œuvre (sans changement des hypothèses, estimateurs ni seuils)
+
+| Point | Constat | Décision |
+|---|---|---|
+| Période de base de l'event study CS | `differences` utilise par défaut une base « variable » (t contre t−1) ; la préregistration fixe la référence −1 | Base **universelle** (référence −1) pour toutes les event studies ; test H5c sur −8..−2 |
+| Panel déséquilibré | `differences` bascule en silence sur l'estimateur « coupes répétées » dès qu'une observation manque | Estimateur panel imposé ; chaque bloc est **équilibré explicitement** (unités observées toutes les années de la fenêtre) et les exclusions sont comptées dans les notes de `est_fr_all.csv`. Exception : le placebo H5a, déséquilibré par construction (les unités sortent à leur vraie bascule), gardé tel quel et dit |
+| Écart-type de la moyenne +1..+5 | Calculé sous indépendance des coefficients (anti-conservateur) | **Covariance complète** des coefficients reconstruite à partir des fonctions d'influence (CS) ou de la matrice de covariance groupée (Sun & Abraham, did2s, TWFE) ; bootstrap par grappes stratifié par cohorte en contrôle pour les spécifications primaires |
+| Bandes simultanées | Non produites | Bandes **sup-t** par bootstrap multiplicateur de Rademacher sur les fonctions d'influence (999 tirages), tracées à côté des IC ponctuels |
+| Test H5c | Somme des t² (ignore la covariance) | **Wald joint** avec la covariance des coefficients −8..−2 (pseudo-inverse) |
+| Grappes ≠ unité (commune → département) | Les écarts-types « analytiques » de `differences` ignorent `cluster_var` | Fonctions d'influence **sommées par grappe** (sandwich groupé usuel) avant le calcul |
+| Poisson | log(exposition) en régresseur libre | **Offset** log(exposition) ; ATT rapporté aussi en % du taux contrefactuel |
+| Libellé « ATT[1,5] » | +5 n'existe pas pour les cohortes tardives ; au niveau département, sans unité jamais traitée, `differences` prend la dernière cohorte comme contrôle et n'identifie les ATT(g,t) que jusqu'à l'année précédant cette cohorte (1998-2017) | Libellé **ATT[1,k]** avec k = dernière période disponible ≤ 5 ; années identifiées, cohortes et effectifs par période relative écrits dans chaque ligne ; agrégat complémentaire « composition constante » (cohortes observées jusqu'à +5) pour H1 et H2b |
+| Cohortes postérieures à la fenêtre (2025-2027 au niveau commune ; 2020-2024 pour la fenêtre 2008-2019) | Recodées « jamais traitées » par `differences` avec un simple avertissement, mais traitées comme cohortes pré-seulement par les autres estimateurs | Recodage **explicite et identique** pour tous les estimateurs, effectif écrit dans les notes ; variante « jamais traitées strictes » (cohortes 2025-2027 exclues) en robustesse |
+| Covariable « taux de chômage 15-24 » | Chômage des femmes 15-24 utilisé | **Deux sexes** (P11_HCHOM1524 + P11_FCHOM1524) / P11_ACT1524, conformément au §4.1 |
+| Tendance des naissances | « 2004-2011 » impossible (fenêtre 2008+) ; calculée sur deux points | **Pente MCO** de log(naissances + 0,5) sur 2008-2011 (4 points). Cette covariable est construite sur les résultats 2008-2011 du panel et contamine mécaniquement les coefficients pré de ces années : H5c est rapporté **aussi sans elle** |
+| Classes de densité | Niveau 2 (centres urbains intermédiaires) classé « dense » | Grille INSEE : dense = {1}, intermédiaire = {2, 3, 4}, rural = {5, 6, 7} (tableau d'échantillon, figure de déploiement et H6 régénérés) |
+| Chocs concurrents §4.1 | Effets fixes année × densité absents ; très haut débit absent | Effets fixes **année × classe de densité** dans les estimateurs de régression (Sun & Abraham, did2s, TWFE, Poisson) ; pour CS, la classe de densité entre par les covariables de l'estimateur doublement robuste. Couverture très haut débit fixe : **non téléchargée, non estimée** (ligne « non construit ») |
+| Cellules département × âge absentes des fichiers mariages (15-19 surtout) | Supprimées comme manquantes (sélection sur le résultat) | **Codées 0** quand l'année est lue (`03_outcomes.py`) ; pour les groupes avec cellules nulles, asinh du taux pour CS et Poisson avec offset en comparaison (le log sans correction reste la règle au département) |
+| Fenêtre communale | A1 annonce 2008-2025 ; 2025 n'a pas de dénominateur ; 2023-2024 utilisent le dénominateur 2022 (prolongement à plat) | Fenêtre estimée **2008-2024**, dite ; robustesse 2008-2022 |
+| ARCEP | Cohortes ≥ 2020 au lieu de ≥ 2019 (A1) | **≥ 2019** |
+| 3G | Cohortes ≥ 2013 incluses ; la préregistration limite la robustesse 3G aux cohortes 2008-2012 | **Cohortes 2011-2012** (2008-2010 exclues par la règle « ≥ 3 ans de pré-période ») |
+| H6 | Sous-groupes estimés sans la spécification primaire | Spécification primaire (covariables, pas-encore-traités) sur chaque sous-groupe ; les covariables constantes dans un sous-groupe (indicatrices de densité) sont retirées et dites |
+| H2a | Non corrigée | Famille de Holm {15-19, 20-24} ajoutée (H2c inchangée : {25-29, 30-34, 35-39, 40-49}) |
+| H2d et règle §6 « canal » | Différences testées sous indépendance | **Bootstrap conjoint** par département, stratifié par cohorte, les deux ATT recalculés sur chaque tirage (écart-type sous indépendance gardé pour mémoire) |
+| IV | 9 grappes ZEAT : CRV1, F = t² et IC de Wald non fiables ; test d'exclusion absent | p du **wild cluster bootstrap** (Webb, 9 999 tirages) pour la forme réduite et le premier étage ; intervalle d'**Anderson-Rubin** par inversion du test ; test partiel de la restriction d'exclusion : effet de D3 sur le **taux d'emploi des femmes 25-54** (RP, seul groupe disponible ; préreg. : 25-39) par département aux millésimes 2011, 2016, 2021 |
+
+### A2.2 Résultat H3b et parts en couple (décisions de mesure, catégorie « correspondance des variables »)
+
+- **H3b préenregistré** (naissances pour 1 000 femmes en couple par âge) : construit au département pour 25-39 et
+  15-24 ; dénominateur = **moitié des personnes en couple** du groupe d'âge (RP, deux sexes, les couples de même sexe
+  étant négligeables à cette échelle), **interpolée linéairement** entre millésimes (2006-2022, prolongement ≤ 2 ans,
+  règle A1). Comme tout résultat interpolé, ses coefficients pré sont mécaniquement contaminés ; il est donc **aussi**
+  estimé par **différences longues entre millésimes** (2011 → 2016 sur l'indicatrice « bascule ≤ 2016 », 2011 → 2021
+  sur les années d'exposition), sans interpolation.
+- Le résultat « naissances de parents mariés pour 1 000 femmes » n'est **pas** H3b (dénominateur = toutes les femmes,
+  faute de femmes mariées par âge au département) : rapporté comme complément.
+- **H3a(iii)** (part en couple, commune) : même traitement — différences longues entre millésimes comme résultat
+  principal, event study interpolée marquée « exploratoire ».
+- **Règle §6 « canal »** : les deux tests qui y entrent sont nommés — H3a = mariages de femmes 25-39 pour 1 000 femmes
+  (CS, ATT[1,k]) et H3b = naissances pour 1 000 femmes en couple 25-39 (CS, ATT[1,k]) ; « effets standardisés » = les deux
+  ATT en log-points ; la différence est testée par bootstrap conjoint. H3 est présentée sans correction de tests
+  multiples (la préregistration ne prévoit Holm que pour les âges et les hétérogénéités).
+- **H3c** : première période relative ≥ 0 où le coefficient CS est négatif avec IC ponctuel excluant 0, pour les
+  mariages 25-39 et pour les naissances par femme en couple 25-39 (lecture descriptive).
+
+### A2.3 Analyses complémentaires hors préregistration (drapeau « exploratoire » dans `est_fr_all.csv`)
+
+Ajoutées à la relecture, **sans changement du primaire** :
+- **référence −2** (`anticipation = 1`) pour H1 et H2b : l'année −1 est partiellement exposée (émetteur en service en
+  médiane 5 mois avant le 1er janvier de la cohorte) et les naissances suivent les conceptions de 9 mois ; le primaire
+  (référence −1) est une borne basse en valeur absolue si l'effet commence avec l'exposition ;
+- H1 **pondéré** par les femmes 15-44 de 2011 (effet moyen par femme) et H1 sur les communes d'**au moins 20 femmes**
+  (le primaire non pondéré est dominé par les très petites communes et par la correction +0,5) ;
+- fenêtre 2008-2022 ; contrôle « jamais traitées strictes » ; agrégat à composition constante.
+
+### A2.4 Ce qui n'est pas fait
+
+- D2 (couverture ARCEP ≥ 90 % de la population) : non construit (croisement SIG non réalisé), ligne « non construit ».
+- Couverture très haut débit fixe en contrôle variable : non téléchargée.
+- `pyfixest.SaturatedEventStudy` : Sun & Abraham implémenté directement (régression saturée cohorte × période relative,
+  agrégation par parts de cohortes avec covariance groupée) ; sans unité jamais traitée (niveau département), Sun &
+  Abraham et did2s ne sont pas estimables et une ligne le dit.
+- Décès des 60 ans et plus au département (H5b) : non téléchargés ; le placebo communal utilise les décès totaux (A1).
+
+Aucune de ces décisions ne modifie les hypothèses H1-H6, les résultats primaires, les seuils ni les règles de
+décision du §6 de la préregistration.

@@ -315,6 +315,14 @@ def main() -> int:
     w = women_dep_age()
     da = b.merge(m, on=["dep", "age_group", "year"], how="outer").merge(w, on=["dep", "age_group", "year"], how="left")
     da = da[da.age_group.notna()]
+    # une cellule département × âge absente du fichier mariages d'une année lue est un zéro, pas une valeur manquante
+    # (addendum A2) ; même règle pour les naissances d'une année lue
+    years_m, years_b = set(m.year.unique()), set(b.year.unique())
+    n0 = int((da.marriages_f.isna() & da.year.isin(years_m)).sum())
+    da.loc[da.marriages_f.isna() & da.year.isin(years_m), "marriages_f"] = 0.0
+    n0b = int((da.births.isna() & da.year.isin(years_b)).sum())
+    da.loc[da.births.isna() & da.year.isin(years_b), "births"] = 0.0
+    log(f"  cellules département × âge sans ligne de mariage codées 0 : {n0} ; sans ligne de naissance : {n0b}")
     da["metro"] = da.dep.isin(METRO_DEPS)          # 01-95 (sans 20), 2A, 2B ; « 97 », « 98 », « 99 » et DOM exclus
     da["births_per_1000"] = 1000 * da.births / da.women
     da["marriages_per_1000"] = 1000 * da.marriages_f / da.women

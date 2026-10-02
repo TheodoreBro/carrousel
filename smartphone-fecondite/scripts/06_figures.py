@@ -72,14 +72,14 @@ def save(fig, name: str) -> None:
 def fig_rollout() -> None:
     tr = pd.read_parquet(PROC / "fr_treatment_commune.parquet")
     tr = tr[tr.metro & tr.year.between(2008, 2026)]
-    tr["classe"] = tr.densite.map(lambda x: "dense (1-2)" if x in (1, 2) else "intermédiaire (3-4)" if x in (3, 4) else "rural (5-7)")
+    tr["classe"] = tr.densite.map(lambda x: "dense (1)" if x == 1 else "intermédiaire (2-4)" if x in (2, 3, 4) else "rural (5-7)")
     sh = tr.groupby(["year", "classe"]).d1_4g.mean().unstack()
     dep = pd.read_parquet(PROC / "fr_treatment_dep.parquet")
     dep = dep[dep.year.between(2008, 2026)]
     fig, axes = plt.subplots(1, 2, figsize=(8, 3.1))
     ax = axes[0]
     items = []
-    for i, c in enumerate(["dense (1-2)", "intermédiaire (3-4)", "rural (5-7)"]):
+    for i, c in enumerate(["dense (1)", "intermédiaire (2-4)", "rural (5-7)"]):
         ax.plot(sh.index, 100 * sh[c], color=list(COLORS.values())[i], lw=2, label=c)
         items.append((sh.index[-1], 100 * sh[c].iloc[-1], c, list(COLORS.values())[i]))
     ax.set_ylabel("communes avec ≥ 1 émetteur 4G (%)")
