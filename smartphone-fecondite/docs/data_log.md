@@ -42,8 +42,7 @@ cloud.r-project.org.
 
 ## Fichiers téléchargés
 
-
-130 fichiers, 1,463 Mo. Empreintes complètes dans `data/raw/manifest.json`.
+130 fichiers, 1,964 Mo. Empreintes complètes dans `data/raw/manifest.json`.
 
 | source | pays | rôle | fichier | URL | accès (UTC) | octets | SHA-256 | licence |
 |---|---|---|---|---|---|---|---|---|
@@ -166,26 +165,14 @@ cloud.r-project.org.
 | fr_insee_naissances_detail_2022_2024 | FR | resultat | FD_NAIS_2024_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8610295/FD_NAIS_2024_csv.zip | 2026-10-02 10:37 | 2,811,449 | `8cc5e49e6a58af5b…` | Licence Ouverte 2.0 |
 | fr_insee_naissances_fecondite_series | FR | resultat | DS_NAISSANCES_FECONDITE_SERIES_CSV_FR.zip | https://api.insee.fr/melodi/file/DS_NAISSANCES_FECONDITE_SERIES/DS_NAISSANCES_FECONDITE_SERIES_CSV_FR | 2026-10-02 10:40 | 280,196 | `cecf917ce2b4b24c…` | Licence Ouverte 2.0 |
 | fr_insee_populations_historiques | FR | resultat | DS_POPULATIONS_HISTORIQUES_CSV_FR.zip | https://api.insee.fr/melodi/file/DS_POPULATIONS_HISTORIQUES/DS_POPULATIONS_HISTORIQUES_CSV_FR | 2026-10-02 10:40 | 5,311,838 | `47c5c7e3241a37dc…` | Licence Ouverte 2.0 |
-| fr_insee_rp_activite | FR | controle | base-ic-activite-residents-2011-com.zip | https://www.insee.fr/fr/statistiques/fichier/2028668/base-ic-activite-residents-2011-com.zip | 2026-10-02 10:40 | 41,756 | `deed2c0decca5216…` | Licence Ouverte 2.0 |
-| fr_insee_rp_activite | FR | controle | base-cc-emploi-pop-act-2016-COM-csv.zip | https://www.insee.fr/fr/statistiques/fichier/4171446/base-cc-emploi-pop-act-2016-COM-csv.zip | 2026-10-02 10:40 | 4,930 | `084fea9e9e716973…` | Licence Ouverte 2.0 |
-| fr_insee_rp_activite | FR | controle | base-cc-emploi-pop-active-2021-COM_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8202916/base-cc-emploi-pop-active-2021-COM_csv.zip | 2026-10-02 10:40 | 7,658 | `ade03ca8b6053ed4…` | Licence Ouverte 2.0 |
-| fr_insee_rp_cfm | FR | resultat | base-cc-coupl-fam-men-2011-COM.xls | https://www.insee.fr/fr/statistiques/fichier/2044612/base-cc-coupl-fam-men-2011-COM.xls | 2026-10-02 10:40 | 94,208 | `b6b6bb50d65000a6…` | Licence Ouverte 2.0 |
-| fr_insee_rp_cfm | FR | resultat | base-cc-coupl-fam-men-2016-COM-csv.zip | https://www.insee.fr/fr/statistiques/fichier/4171359/base-cc-coupl-fam-men-2016-COM-csv.zip | 2026-10-02 10:40 | 3,753 | `411c2250a8036a8b…` | Licence Ouverte 2.0 |
-| fr_insee_rp_cfm | FR | resultat | base-ic-couples-familles-menages-2021-com_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8268828/base-ic-couples-familles-menages-2021-com_csv.zip | 2026-10-02 10:40 | 13,071 | `b96764892c9e3870…` | Licence Ouverte 2.0 |
-| fr_insee_rp_cfm | FR | resultat | base-cc-coupl-fam-men-2022-COM_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8582452/base-cc-coupl-fam-men-2022-COM_csv.zip | 2026-10-02 10:40 | 4,827 | `6f9b6487773d5f39…` | Licence Ouverte 2.0 |
-| fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2011-COM.zip | https://www.insee.fr/fr/statistiques/fichier/2044745/base-cc-evol-struct-pop-2011-COM.zip | 2026-10-02 10:40 | 22,672 | `299c1363d4db6f1a…` | Licence Ouverte 2.0 |
-| fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2016-COM-csv.zip | https://www.insee.fr/fr/statistiques/fichier/4171334/base-cc-evol-struct-pop-2016-COM-csv.zip | 2026-10-02 10:40 | 4,560 | `e81be6bf6002a9df…` | Licence Ouverte 2.0 |
-| fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2021-COM_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8201904/base-cc-evol-struct-pop-2021-COM_csv.zip | 2026-10-02 10:40 | 6,147 | `48a617c34a6f091e…` | Licence Ouverte 2.0 |
-| fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2022-COM_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8581696/base-cc-evol-struct-pop-2022-COM_csv.zip | 2026-10-02 10:40 | 4,836 | `2494f27061c6845b…` | Licence Ouverte 2.0 |
-| fr_insee_rp_cfm | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/2044612/base-cc-coupl-fam-men-2011.xls | 2026-10-02 11:55 | 10777885 | `d98c9ecf3b15cad0…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_cfm | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/4171359/base-cc-coupl-fam-men-2016-csv.zip | 2026-10-02 11:56 | 20212453 | `e77a2d86c8c2857f…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_cfm | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/8205182/base-cc-coupl-fam-men-2021_csv.zip | 2026-10-02 11:58 | 40336883 | `258ef427e87b3827…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_cfm | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/8582452/base-cc-coupl-fam-men-2022_csv.zip | 2026-10-02 11:59 | 38475896 | `5c05fbca31a3d356…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_pop_struct | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/2044745/base-cc-evol-struct-pop-2011.zip | 2026-10-02 12:00 | 43453530 | `e4ab8262b685298a…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_pop_struct | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/4171334/base-cc-evol-struct-pop-2016-csv.zip | 2026-10-02 12:01 | 27162652 | `e14ca530700554d4…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_pop_struct | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/8201904/base-cc-evol-struct-pop-2021_csv.zip | 2026-10-02 12:02 | 54747901 | `8c5d17c16e873bc4…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_pop_struct | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/8581696/base-cc-evol-struct-pop-2022_csv.zip | 2026-10-02 12:03 | 48961124 | `cb4b918862289527…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_activite | FR | controle | https://www.insee.fr/fr/statistiques/fichier/2028668/infra-activite-resident-2011.zip | 2026-10-02 12:04 | 39644845 | `05076a23c7a3e6ba…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_activite | FR | controle | https://www.insee.fr/fr/statistiques/fichier/4171446/base-cc-emploi-pop-act-2016-csv.zip | 2026-10-02 12:05 | 32903894 | `f0e1baee9464255b…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_activite | FR | controle | https://www.insee.fr/fr/statistiques/fichier/8202916/base-cc-emploi-pop-active-2021_csv.zip | 2026-10-02 12:06 | 62738508 | `20045b0b245062f7…` | Licence Ouverte 2.0 | ok |
-| fr_insee_rp_cfm | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/2044612/base-cc-coupl-fam-men-2011.xls | 2026-10-02 12:14 | 92713984 | `d282720fd5721ac5…` | Licence Ouverte 2.0 | ok |
+| fr_insee_rp_activite | FR | controle | infra-activite-resident-2011.zip | https://www.insee.fr/fr/statistiques/fichier/2028668/infra-activite-resident-2011.zip | 2026-10-02 12:04 | 39,644,845 | `05076a23c7a3e6ba…` | Licence Ouverte 2.0 |
+| fr_insee_rp_activite | FR | controle | base-cc-emploi-pop-act-2016-csv.zip | https://www.insee.fr/fr/statistiques/fichier/4171446/base-cc-emploi-pop-act-2016-csv.zip | 2026-10-02 12:05 | 32,903,894 | `f0e1baee9464255b…` | Licence Ouverte 2.0 |
+| fr_insee_rp_activite | FR | controle | base-cc-emploi-pop-active-2021_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8202916/base-cc-emploi-pop-active-2021_csv.zip | 2026-10-02 12:06 | 62,738,508 | `20045b0b245062f7…` | Licence Ouverte 2.0 |
+| fr_insee_rp_cfm | FR | resultat | base-cc-coupl-fam-men-2011.xls | https://www.insee.fr/fr/statistiques/fichier/2044612/base-cc-coupl-fam-men-2011.xls | 2026-10-02 12:14 | 92,713,984 | `d282720fd5721ac5…` | Licence Ouverte 2.0 |
+| fr_insee_rp_cfm | FR | resultat | base-cc-coupl-fam-men-2016-csv.zip | https://www.insee.fr/fr/statistiques/fichier/4171359/base-cc-coupl-fam-men-2016-csv.zip | 2026-10-02 11:56 | 20,212,453 | `e77a2d86c8c2857f…` | Licence Ouverte 2.0 |
+| fr_insee_rp_cfm | FR | resultat | base-cc-coupl-fam-men-2021_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8205182/base-cc-coupl-fam-men-2021_csv.zip | 2026-10-02 11:58 | 40,336,883 | `258ef427e87b3827…` | Licence Ouverte 2.0 |
+| fr_insee_rp_cfm | FR | resultat | base-cc-coupl-fam-men-2022_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8582452/base-cc-coupl-fam-men-2022_csv.zip | 2026-10-02 11:59 | 38,475,896 | `5c05fbca31a3d356…` | Licence Ouverte 2.0 |
+| fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2011.zip | https://www.insee.fr/fr/statistiques/fichier/2044745/base-cc-evol-struct-pop-2011.zip | 2026-10-02 12:00 | 43,453,530 | `e4ab8262b685298a…` | Licence Ouverte 2.0 |
+| fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2016-csv.zip | https://www.insee.fr/fr/statistiques/fichier/4171334/base-cc-evol-struct-pop-2016-csv.zip | 2026-10-02 12:01 | 27,162,652 | `e14ca530700554d4…` | Licence Ouverte 2.0 |
+| fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2021_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8201904/base-cc-evol-struct-pop-2021_csv.zip | 2026-10-02 12:02 | 54,747,901 | `8c5d17c16e873bc4…` | Licence Ouverte 2.0 |
+| fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2022_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8581696/base-cc-evol-struct-pop-2022_csv.zip | 2026-10-02 12:03 | 48,961,124 | `cb4b918862289527…` | Licence Ouverte 2.0 |

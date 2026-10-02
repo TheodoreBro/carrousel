@@ -40,9 +40,11 @@ def commune_panel() -> pd.DataFrame:
 def dep_age_panel() -> pd.DataFrame:
     da = pd.read_parquet(PROC / "fr_outcomes_dep_age.parquet")
     dt = pd.read_parquet(PROC / "fr_treatment_dep.parquet")
-    d = da[da.metro].merge(dt[["dep", "year", "d3", "cohort_d3_50", "cohort_d3_90"]], on=["dep", "year"], how="left")
+    d = da[da.metro].merge(dt[["dep", "year", "d3"]], on=["dep", "year"], how="left")
+    coh = dt.drop_duplicates("dep").set_index("dep")[["cohort_d3_50", "cohort_d3_90"]]   # bascules par département (constantes)
+    d = d.merge(coh, left_on="dep", right_index=True, how="left")
     d["cohort"] = d.cohort_d3_50.fillna(0).astype(int)
-    d["log_rate"] = np.log(d.births_per_1000)
+    d["log_rate"] = np.log(d.births_per_1000.where(d.births_per_1000 > 0))
     return d
 
 

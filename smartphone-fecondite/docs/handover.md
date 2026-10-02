@@ -47,6 +47,9 @@ Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prim
     est **négative** (contraire à la prédiction H4 « davantage chez les moins de 40 ans »), rapportée telle quelle.
     Au niveau région 2020-2025 : imprécis (D3 ≥ 0,74 partout).
 - `make test` vert (8 tests, panel synthétique). `make build` = 02 → 03 → 04 → 04b.
+- Transparence : lors du débogage de `04_sample_mde.py` (02/10), un ATT TWFE statique sur le taux 25-29 ans a été
+  affiché une fois à l'écran ; il n'a été ni enregistré ni utilisé, et le script ne calcule que des ATT placebo
+  (cohortes permutées). Aucune autre estimation sur données réelles n'a eu lieu avant l'Étape 3.
 - Pas encore fait : D2 (croisement SIG des cartes ARCEP), estimations (Étape 3), pays de niveau 1 et 2, panel
   mondial (hôtes bloqués), références (`references.bib` vide).
 

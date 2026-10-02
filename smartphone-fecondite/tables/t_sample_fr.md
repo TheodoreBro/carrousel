@@ -10,10 +10,10 @@
 | H6 densité intermédiaire                                          |     2821 | 2008-2024 |           47957 |              2372 |               449 | 2013-2027  |                              7 |
 | H6 densité rural                                                  |    30594 | 2008-2024 |          520098 |             17744 |             12850 | 2013-2027  |                             11 |
 | H6 ZDP                                                            |    21184 | 2008-2024 |          360128 |             11671 |              9513 | 2013-2027  |                             12 |
-| H2 département × année, naissances/1 000 femmes 15-19 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                96 | 2013-2018  |                             17 |
-| H2 département × année, naissances/1 000 femmes 20-24 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                96 | 2013-2018  |                             17 |
-| H2 département × année, naissances/1 000 femmes 25-29 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                96 | 2013-2018  |                             17 |
-| H2 département × année, naissances/1 000 femmes 30-34 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                96 | 2013-2018  |                             17 |
-| H2 département × année, naissances/1 000 femmes 35-39 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                96 | 2013-2018  |                             17 |
-| H2 département × année, naissances/1 000 femmes 40-49 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                96 | 2013-2018  |                             17 |
-| H3a département × âge × année, mariages/1 000 femmes              |       96 | 1998-2024 |           15476 |                96 |                96 | 2013-2018  |                             17 |
+| H2 département × année, naissances/1 000 femmes 15-19 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                 0 | 2013-2018  |                             17 |
+| H2 département × année, naissances/1 000 femmes 20-24 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                 0 | 2013-2018  |                             17 |
+| H2 département × année, naissances/1 000 femmes 25-29 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                 0 | 2013-2018  |                             17 |
+| H2 département × année, naissances/1 000 femmes 30-34 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                 0 | 2013-2018  |                             17 |
+| H2 département × année, naissances/1 000 femmes 35-39 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                 0 | 2013-2018  |                             17 |
+| H2 département × année, naissances/1 000 femmes 40-49 (D3 ≥ 50 %) |       96 | 1998-2024 |            2592 |                96 |                 0 | 2013-2018  |                             17 |
+| H3a département × âge × année, mariages/1 000 femmes              |       96 | 1998-2024 |           15476 |                96 |                 0 | 2013-2018  |                             17 |
