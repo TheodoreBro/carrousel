@@ -3,6 +3,10 @@
 Ce fichier permet à une nouvelle session (ou à un nouvel agent) de reprendre le travail sans la
 conversation d'origine. Il est mis à jour à chaque étape.
 
+## 0. Cahier des charges
+
+Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prime sur tout résumé.
+
 ## 1. Où en est-on
 
 - Étape 0 livrée : `docs/etape0_plan.md` (plan, sources, faisabilité France/Corée/États-Unis/Europe,
@@ -75,7 +79,9 @@ distinguées ; chaque figure et tableau produit par un script nommé.
 ## 5. Message de démarrage suggéré pour une nouvelle session
 
 ```
-Continue le working paper smartphones/fécondité sur la branche claude/confident-pasteur-og6cgd.
-Lis smartphone-fecondite/docs/handover.md, etape0_plan.md et etape0_pays.md. Vérifie l'accès
-réseau aux sources (etape0_plan.md §1.1). Puis reprends à l'étape indiquée dans handover.md §3.
+Continue le working paper smartphones/fécondité sur la branche claude/confident-pasteur-og6cgd,
+dossier smartphone-fecondite/. Lis dans l'ordre docs/mission.md, docs/handover.md,
+docs/preregistration.md, docs/etape0_plan.md, docs/etape0_pays.md. Vérifie l'accès réseau avec
+`python scripts/01_download.py --check` ; si des hôtes sont bloqués, arrête-toi et dis-le.
+Sinon reprends à l'Étape 2 (handover.md §3).
 ```
