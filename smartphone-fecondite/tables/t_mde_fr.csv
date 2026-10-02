@@ -1,8 +1,8 @@
 hypothèse,sd placebo,"MDE (80 %, 5 %) en log ≈ %",permutations,moyenne placebo
 "H1 commune, log(naissances/1 000 f. 15-44)",0.002997294400356624,0.008397175686371891,200,-0.000254604068264897
-"H2b département, log(naissances/1 000 f. 25-39), bascule D3 ≥ 50 %",,,0,
-"H2 département, log(naissances/1 000 f. 15-19)",,,0,
-"H2 département, log(naissances/1 000 f. 20-24)",,,0,
-"H2 département, log(naissances/1 000 f. 25-29)",,,0,
-"H2 département, log(naissances/1 000 f. 30-34)",,,0,
-"H2 département, log(naissances/1 000 f. 35-39)",,,0,
+"H2b département, log(naissances/1 000 f. 25-39), bascule D3 ≥ 50 %",0.0046687282526039755,0.013079840059881687,200,3.775712980693045e-05
+"H2 département, log(naissances/1 000 f. 15-19)",0.021024044512265985,0.058900652330513455,200,0.0005086073430805442
+"H2 département, log(naissances/1 000 f. 20-24)",0.01001313991618488,0.02805266477608049,200,0.0009499084081268643
+"H2 département, log(naissances/1 000 f. 25-29)",0.006463718319353434,0.01810865769754658,200,-8.987615765858759e-05
+"H2 département, log(naissances/1 000 f. 30-34)",0.005890874029593751,0.01650378560307543,200,0.0001184806142523872
+"H2 département, log(naissances/1 000 f. 35-39)",0.007100445270139651,0.019892502510843388,200,0.00033895617853727563

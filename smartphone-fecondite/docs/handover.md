@@ -55,7 +55,13 @@ Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prim
 
 ## 1 bis. Chiffres à connaître avant l'Étape 3
 
-Voir `tables/t_sample_fr.md` et `tables/t_mde_fr.md` (générés). Points à garder en tête :
+Voir `tables/t_sample_fr.md` et `tables/t_mde_fr.md` (générés). Échantillons : H1 commune × année 2008-2024 =
+589 968 unités-années (34 704 unités métropolitaines, 21 392 traitées, 13 312 jamais, cohortes 2013-2027, pré-période
+médiane 10 ans) ; H2 département × année 1998-2024 = 2 592 unités-années par groupe d'âge (96 départements, tous
+basculés à D3 ≥ 50 % entre 2013 et 2018 : pas de « jamais traité » à ce niveau, le contrôle est « pas encore
+traité »). MDE par permutation (80 %, 5 %, 200 tirages, TWFE statique sur le log du taux) : H1 commune 0,8 % ;
+H2b 25-39 ans 1,3 % ; 15-19 ans 5,9 % ; 20-24 ans 2,8 % ; 25-29 ans 1,8 % ; 30-34 ans 1,7 % ; 35-39 ans 2,0 %.
+Points à garder en tête :
 - fenêtre communale 2008-2025 (pas 2004) : les cohortes 2013-2014 ont 4-5 ans de pré-période ; la règle « ≥ 3 ans »
   les garde ;
 - femmes 15-44 communales : dernier millésime RP 2022, prolongé 2 ans (2023, 2024) ; 2025 sans dénominateur ;
