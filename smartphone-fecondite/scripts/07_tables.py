@@ -6,13 +6,15 @@
 - tab_firststage.tex   : first stage Baromètre (04b_firststage.py)
 - tab_main.tex         : H1 et H2b, tous estimateurs (05_estimate.py)
 - tab_h2_age.tex       : H2 par groupe d'âge (CS, Holm) et D3 continu
-- tab_h3.tex           : canal (mariages, PACS, couples, parents mariés)
+- tab_h3.tex           : canal (mariages, PACS, couples, naissances par femme en couple, différences longues, règle §6)
 - tab_placebo.tex      : H5a-c
 - tab_h6.tex           : hétérogénéité
 - tab_robust.tex       : robustesse
-- tab_iv.tex           : IV (secondaire)
+- tab_iv.tex           : IV (secondaire) et test d'exclusion
+- tab_exploratory.tex  : analyses complémentaires hors préregistration (addendum A2)
 
-Aucune valeur n'est saisie à la main ; chaque cellule vient d'un csv.
+Aucune valeur n'est saisie à la main ; chaque cellule vient d'un csv. `--smoke` : lit tables/est_smoke/est_fr_all.csv et écrit
+dans tables/est_smoke/tex/ (tests de fonctionnement ; jamais pour le papier).
 """
 from __future__ import annotations
 
@@ -48,8 +50,10 @@ def write(name: str, header: list[str], rows: list[list[str]], caption: str, lab
     if note:
         lines += [r"\begin{tablenotes}\footnotesize", rf"\item {note}", r"\end{tablenotes}"]
     lines += [r"\end{threeparttable}", r"\end{table}", ""]
-    (TABLES / name).write_text("\n".join(lines), encoding="utf-8")
-    print("tableau :", name)
+    out = (TABLES / "est_smoke" / "tex") if SMOKE else TABLES
+    out.mkdir(parents=True, exist_ok=True)
+    (out / name).write_text("\n".join(lines), encoding="utf-8")
+    print("tableau :", out / name)
 
 
 def tab_sample() -> None:
@@ -86,26 +90,37 @@ def tab_firststage() -> None:
           "Source : scripts/04b\\_firststage.py. Effets fixes zone, année, classe d'âge ; pondération POND ; erreurs groupées par zone (9 ou 13 groupes). * p<0,10, ** p<0,05, *** p<0,01.")
 
 
+SMOKE = False
+
+
 def _load_est() -> pd.DataFrame | None:
-    p = TABLES / "est_fr_all.csv"
-    return pd.read_csv(p) if p.exists() else None
+    p = (TABLES / "est_smoke" / "est_fr_all.csv") if SMOKE else (TABLES / "est_fr_all.csv")
+    if not p.exists():
+        return None
+    d = pd.read_csv(p)
+    if "exploratory" not in d:
+        d["exploratory"] = False
+    return d
 
 
 def _row(r, with_sample=True) -> list[str]:
     cells = [esc(r.hypothesis), esc(r.outcome)]
     if with_sample:
         cells.append(esc(r["sample"]))
-    cells += [esc(r.estimator), esc(r.term), fmt(r.estimate, 4) + stars(r.p), f"({fmt(r.se, 4)})", f"{int(r.n_units):,}".replace(",", "\\,"), f"{int(r.n_obs):,}".replace(",", "\\,")]
+    est = fmt(r.estimate, 4) + stars(r.p) if np.isfinite(r.se) else (fmt(r.estimate, 2) if np.isfinite(r.estimate) else "")
+    se = f"({fmt(r.se, 4)})" if np.isfinite(r.se) else (f"p = {fmt(r.p, 3)}" if np.isfinite(r.p) else "")
+    cells += [esc(r.estimator), esc(r.term), est, se, f"{int(r.n_units):,}".replace(",", "\\,"), f"{int(r.n_obs):,}".replace(",", "\\,")]
     return cells
 
 
-def tab_from(allr: pd.DataFrame, name: str, mask, caption: str, label: str, note: str) -> None:
-    sub = allr[mask]
+def tab_from(allr: pd.DataFrame, name: str, mask, caption: str, label: str, note: str, exploratory: bool = False) -> None:
+    sub = allr[mask & (allr.exploratory == exploratory)]  # noqa: E712
     if sub.empty:
         return
     rows = [_row(r) for _, r in sub.iterrows()]
     write(name, ["Hyp.", "Résultat", "Échantillon", "Estimateur", "Terme", "Estimation", "É.-t.", "Unités", "Obs."], rows, caption, label,
-          note + " * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué).", align="llllrrrrr")
+          note + " ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\\leq$ 5). * p<0,10, ** p<0,05, *** p<0,01 "
+          "(p d'un test z sur l'écart-type indiqué ; pour les tests de Wald et les p bootstrap, la p est donnée à la place de l'écart-type).", align="llllrrrrr")
 
 
 def main() -> int:
@@ -115,27 +130,33 @@ def main() -> int:
     allr = _load_est()
     if allr is None:
         return 0
-    key_aggs = ["post_avg_1_5", "post_avg_1_5_boot", "static"]
+    key_aggs = ["post_avg", "post_avg_boot", "post_avg_balanced", "static"]
     tab_from(allr, "tab_main.tex",
-             allr.aggregation.isin(key_aggs) & allr.hypothesis.isin(["H1", "H2b"]) & ~allr["sample"].str.contains("90 %"),
+             allr.aggregation.isin(key_aggs) & allr.hypothesis.isin(["H1", "H2b"]) & ~allr["sample"].str.contains("90 %") & (allr.family != "robustesse"),
              "Effet de la bascule 4G sur les naissances : effet total (H1, communes) et 25-39 ans (H2b, départements)", "tab:main",
-             "Source : scripts/05\\_estimate.py. ATT[1,5] = moyenne des effets +1 à +5 (log-points). cs = Callaway \\& Sant'Anna.")
+             "Source : scripts/05\\_estimate.py. cs = Callaway \\& Sant'Anna (écart-type avec covariance complète des coefficients).")
     tab_from(allr, "tab_h2_age.tex",
-             ((allr.aggregation.isin(["post_avg_1_5", "post_avg_1_5_holm"]) & (allr.estimator == "cs")) | (allr.aggregation == "continuous") | (allr.aggregation == "difference"))
-             & allr.hypothesis.str.startswith("H2"),
-             "Effet par groupe d'âge (H2), départements", "tab:h2age", "Source : scripts/05\\_estimate.py. Familles corrigées par Holm : 25-29, 30-34, 35-39, 40-49.")
-    tab_from(allr, "tab_h3.tex", allr.aggregation.isin(key_aggs + ["note"]) & allr.hypothesis.str.startswith("H3"),
-             "Décomposition du canal (H3)", "tab:h3", "Source : scripts/05\\_estimate.py.")
+             ((allr.aggregation.isin(["post_avg", "post_avg_holm"]) & (allr.estimator == "cs")) | allr.aggregation.isin(["continuous", "difference"]))
+             & allr.hypothesis.str.startswith("H2") & ~allr["sample"].str.contains("90 %|anticipation"),
+             "Effet par groupe d'âge (H2), départements", "tab:h2age",
+             "Source : scripts/05\\_estimate.py. Familles corrigées par Holm : 15-19, 20-24 (H2a) ; 25-29, 30-34, 35-39, 40-49 (H2c) ; p Holm dans est\\_fr\\_all.csv.")
+    tab_from(allr, "tab_h3.tex", allr.aggregation.isin(key_aggs + ["long_diff", "decision", "timing", "note"]) & allr.hypothesis.str.startswith(("H3", "§6")),
+             "Décomposition du canal (H3) et règle de décision §6", "tab:h3", "Source : scripts/05\\_estimate.py.")
     tab_from(allr, "tab_placebo.tex", allr.aggregation.isin(key_aggs + ["pre_test"]) & allr.hypothesis.str.startswith("H5"),
-             "Placebos (H5)", "tab:placebo", "Source : scripts/05\\_estimate.py. H5c : p du test de Wald approché sur les coefficients $-8$ à $-2$, reporté pour chaque spécification dans est\\_fr\\_all.csv.")
-    tab_from(allr, "tab_h6.tex", allr.aggregation.isin(["post_avg_1_5", "post_avg_1_5_holm"]) & allr.hypothesis.str.startswith("H6"),
+             "Placebos (H5)", "tab:placebo", "Source : scripts/05\\_estimate.py. H5c : test de Wald joint des coefficients $-8$ à $-2$ (covariance des fonctions d'influence) ; "
+             "la p est reportée pour chaque spécification dans est\\_fr\\_all.csv.")
+    tab_from(allr, "tab_h6.tex", allr.aggregation.isin(["post_avg", "post_avg_holm", "note"]) & allr.hypothesis.str.startswith("H6"),
              "Hétérogénéité (H6), communes", "tab:h6", "Source : scripts/05\\_estimate.py. p Holm dans la colonne notes de est\\_fr\\_all.csv.")
-    tab_from(allr, "tab_robust.tex", allr.aggregation.isin(key_aggs) & (allr.family == "robustesse") & (allr.estimator == "cs"),
+    tab_from(allr, "tab_robust.tex", allr.aggregation.isin(key_aggs + ["note"]) & (allr.family == "robustesse") & allr.estimator.isin(["cs", "—"]),
              "Robustesse", "tab:robust", "Source : scripts/05\\_estimate.py.")
-    tab_from(allr, "tab_iv.tex", allr.aggregation == "iv", "Variables instrumentales (secondaire), ZEAT × âge × année", "tab:iv",
-             "Source : scripts/05\\_estimate.py. 9 grappes : inférence indicative.")
+    tab_from(allr, "tab_iv.tex", allr.aggregation.isin(["iv", "exclusion"]), "Variables instrumentales (secondaire), ZEAT × âge × année, et test d'exclusion", "tab:iv",
+             "Source : scripts/05\\_estimate.py. 9 grappes : p du wild cluster bootstrap et intervalle d'Anderson-Rubin dans est\\_fr\\_all.csv.")
+    tab_from(allr, "tab_exploratory.tex", allr.aggregation.isin(key_aggs), "Analyses complémentaires hors préregistration (addendum A2)", "tab:exploratory",
+             "Source : scripts/05\\_estimate.py. Analyses ajoutées à la relecture, marquées « exploratoire » ; aucune n'entre dans les règles de décision.", exploratory=True)
     return 0
 
 
 if __name__ == "__main__":
+    import sys
+    SMOKE = "--smoke" in sys.argv
     raise SystemExit(main())

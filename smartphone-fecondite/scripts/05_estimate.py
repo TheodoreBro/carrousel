@@ -914,7 +914,8 @@ def part_summary(args) -> None:
         log("aucun résultat à synthétiser")
         return
     allr = pd.concat([pd.read_csv(f) for f in files], ignore_index=True)
-    allr.to_csv(ROOT / "tables" / "est_fr_all.csv", index=False)
+    out_dir = EST if EST.name == "est_smoke" else ROOT / "tables"          # les tests de fonctionnement restent dans est_smoke
+    allr.to_csv(out_dir / "est_fr_all.csv", index=False)
     key = allr[allr.aggregation.isin(KEY_AGGS)]
     lines = ["# Estimations France — synthèse (généré par scripts/05_estimate.py --part summary)", "",
              "Toutes les estimations : `tables/est_fr_all.csv` (une ligne par coefficient, event studies comprises). "
@@ -934,7 +935,7 @@ def part_summary(args) -> None:
             lines.append(f"| {r.hypothesis} | {r.outcome} | {r['sample']} | {r.estimator} | {r.term} | {est} | {se} | {ci} | {pv} | {r.n_units:,} | {r.n_obs:,} | "
                          f"{'oui' if r.exploratory else ''} | {str(r.notes)[:220]} |")
         lines.append("")
-    (ROOT / "tables" / "t_estimates_fr.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (out_dir / "t_estimates_fr.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     import differences, pyfixest  # noqa: E401
     manifest = {"generated": time.strftime("%Y-%m-%d %H:%M:%S"), "commit": _git_rev(), "python": platform.python_version(),
                 "packages": {"differences": differences.__version__, "pyfixest": pyfixest.__version__, "pandas": pd.__version__, "numpy": np.__version__},

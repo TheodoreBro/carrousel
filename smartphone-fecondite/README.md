@@ -22,7 +22,13 @@ MDE, first stage) ; aucune estimation lancée. Les hôtes refusés par la politi
     make all          # download → build → estimate → figures → tables → paper
 
 `make test` exécute les tests du module d'estimation sur un panel synthétique (jamais utilisé dans
-le papier). Le PDF demande TeX Live (`apt-get install texlive-latex-extra texlive-lang-french
+le papier).
+
+Étape 3 (estimations) : `python scripts/05_estimate.py --part all` (plusieurs heures ; parties `h1 h2 h3 h5 h6
+robust iv summary` exécutables séparément, en parallèle si besoin, puis `--part summary`). Les sorties sont dans
+`tables/est/<partie>.csv`, `tables/est_fr_all.csv`, `tables/t_estimates_fr.md` et le manifeste `tables/est/_run.json`.
+Les tests de fonctionnement (`--fast`, `--sample N`) écrivent dans `tables/est_smoke/` ; `06_figures.py --smoke` et
+`07_tables.py --smoke` les lisent et écrivent dans `figures/smoke/` et `tables/est_smoke/tex/` (jamais pour le papier). Le PDF demande TeX Live (`apt-get install texlive-latex-extra texlive-lang-french
 latexmk`) ; à défaut, `paper/paper.md` est produit par pandoc.
 
 ## Organisation

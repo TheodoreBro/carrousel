@@ -5,8 +5,11 @@
                            distribution de D3 (départements) par année  (02_treatment.py)
 - fig_rates_age.pdf      : taux de fécondité par âge 1998-2024, France métropolitaine (03_outcomes.py)
 - fig_barometre.pdf      : possession de smartphone et usage des réseaux sociaux par classe d'âge (04b_firststage.py)
-- fig_event_<clé>.pdf    : event studies (coefficients et IC 95 %) pour les spécifications clés (05_estimate.py)
-- fig_h2_age.pdf         : ATT[1,5] par groupe d'âge, naissances et mariages (05_estimate.py)
+- fig_event_<clé>.pdf    : event studies (coefficients, IC 95 % ponctuels ; bande simultanée sup-t pour Callaway & Sant'Anna)
+                           pour les spécifications clés (05_estimate.py)
+- fig_h2_age.pdf         : ATT[1,k] par groupe d'âge, naissances et mariages (05_estimate.py)
+
+`--smoke` : lit tables/est_smoke/est_fr_all.csv (tests de fonctionnement) et écrit dans figures/smoke/ ; jamais pour le papier.
 
 Palette catégorielle validée (dataviz, mode clair, paires adjacentes) : bleu, orange, aqua, jaune.
 Aucune valeur n'est saisie à la main.
@@ -162,30 +165,42 @@ def _event_rows(allr: pd.DataFrame, hyp: str, outcome_re: str, sample_re: str) -
 
 
 def fig_event(allr: pd.DataFrame, key: str, hyp: str, outcome_re: str, sample_re: str, title: str, ylabel: str) -> None:
+    """Coefficients et IC 95 % ponctuels par estimateur ; pour Callaway & Sant'Anna, la bande simultanée sup-t (colonnes
+    cband_low/high, bootstrap multiplicateur) est tracée en aplat quand elle existe."""
     e = _event_rows(allr, hyp, outcome_re, sample_re)
     if e.empty:
         return
+    e = e.drop_duplicates(subset=["estimator", "rel"], keep="first")
     ests = [k for k in COLORS if k in set(e.estimator)]
     fig, ax = plt.subplots(figsize=(6.4, 3.4))
     offs = np.linspace(-0.18, 0.18, len(ests)) if len(ests) > 1 else [0.0]
+    band = False
     for k, off in zip(ests, offs):
         s = e[e.estimator == k].sort_values("rel")
+        if k == "cs" and "cband_low" in s and s.cband_low.notna().any():
+            ax.fill_between(s.rel, s.cband_low, s.cband_high, color=COLORS[k], alpha=0.12, lw=0, label="bande simultanée 95 % (CS, sup-t)")
+            band = True
         ax.errorbar(s.rel + off, s.estimate, yerr=[s.estimate - s.ci_low, s.ci_high - s.estimate], fmt="o", ms=3.5, lw=1,
                     color=COLORS[k], ecolor=COLORS[k], capsize=0, label=LABELS[k], alpha=0.95)
     ax.axhline(0, color=INK2, lw=0.8)
     ax.axvline(-0.5, color=INK2, lw=0.8, ls="--")
+    # échelle verticale fixée par les IC ponctuels (la bande sup-t des périodes extrêmes, peu peuplées, peut déborder : elle est alors tronquée)
+    lo, hi = float(e.ci_low.min()), float(e.ci_high.max())
+    pad = 0.08 * (hi - lo) if hi > lo else 0.01
+    ax.set_ylim(lo - pad, hi + pad)
     ax.set_xlabel("années depuis la bascule (référence : −1)")
-    ax.set_ylabel(ylabel)
+    ax.set_ylabel(ylabel + (" ; IC 95 % ponctuels" if not band else " ; IC ponctuels et bande sup-t"))
     ax.set_title(title, loc="left", fontsize=9)
-    ax.legend(fontsize=8, ncol=2, loc="lower left")
+    int_ticks(ax, 9)
+    ax.legend(fontsize=7.5, ncol=2, loc="lower left")
     save(fig, f"fig_event_{key}.pdf")
 
 
 def fig_h2_age(allr: pd.DataFrame) -> None:
-    rows = allr[(allr.aggregation == "post_avg_1_5") & (allr.estimator == "cs")]
+    rows = allr[(allr.aggregation == "post_avg") & (allr.estimator == "cs") & (allr.exploratory == False)]  # noqa: E712
     groups = ["15-19", "20-24", "25-29", "30-34", "35-39", "40-49"]
-    panels = [("H2", r"naissances / 1 000 f\. (\d\d-\d\d)\)$", "département, bascule D3 ≥ 50 %", "Naissances pour 1 000 femmes (H2)"),
-              ("H3a", r"mariages de femmes / 1 000 f\. (\d\d-\d\d)\)$", "département, bascule D3 ≥ 50 %", "Mariages de femmes pour 1 000 femmes (H3a)")]
+    panels = [("H2", r"naissances / 1 000 f\. (?:\d\d-\d\d)\)$", "département, bascule D3 ≥ 50 %", "Naissances pour 1 000 femmes (H2)"),
+              ("H3a", r"mariages de femmes / 1 000 f\. (?:\d\d-\d\d)\)$", "département, bascule D3 ≥ 50 %", "Mariages de femmes pour 1 000 femmes (H3a)")]
     fig, axes = plt.subplots(1, 2, figsize=(8, 3.2), sharey=False)
     for ax, (fam, pat, samp, title) in zip(axes, panels):
         sub = rows[rows.hypothesis.str.startswith(fam[:2]) & rows.outcome.str.contains(pat, regex=True) & (rows["sample"] == samp)]
@@ -202,21 +217,31 @@ def fig_h2_age(allr: pd.DataFrame) -> None:
         ax.axhline(0, color=INK2, lw=0.8)
         ax.set_xticks(x, [p[0] for p in pts])
         ax.set_title(title, loc="left", fontsize=9)
-        ax.set_ylabel("ATT[1,5], log-points (≈ %)")
+        ax.set_ylabel("ATT[1,k], log-points (≈ %) ; IC 95 %")
         ax.set_xlabel("groupe d'âge")
     save(fig, "fig_h2_age.pdf")
 
 
 def main() -> int:
-    fig_rollout()
-    fig_rates_age()
-    fig_barometre()
-    p = TABLES / "est_fr_all.csv"
+    import sys
+    global FIG
+    smoke = "--smoke" in sys.argv
+    if smoke:
+        FIG = ROOT / "figures" / "smoke"
+        FIG.mkdir(parents=True, exist_ok=True)
+    else:
+        fig_rollout()
+        fig_rates_age()
+        fig_barometre()
+    p = (TABLES / "est_smoke" / "est_fr_all.csv") if smoke else (TABLES / "est_fr_all.csv")
     if p.exists():
         allr = pd.read_csv(p)
+        if "exploratory" not in allr:
+            allr["exploratory"] = False
         fig_event(allr, "h1", "H1", r"naissances\+0,5 / 1 000 f\. 15-44", "^toutes communes, sans covariables$",
                   "H1 : naissances pour 1 000 femmes 15-44, communes (log)", "effet (log-points)")
-        fig_event(allr, "h1_primaire", "H1", r"naissances\+0,5 / 1 000 f\. 15-44", "^primaire", "H1 : spécification primaire (covariables de pré-période)", "effet (log-points)")
+        fig_event(allr, "h1_primaire", "H1", r"naissances\+0,5 / 1 000 f\. 15-44", "^primaire : communes avec covariables$|^communes avec covariables, comparaisons$",
+                  "H1 : spécification primaire (covariables de pré-période) et comparaisons", "effet (log-points)")
         fig_event(allr, "h2b", "H2b", r"f\. 25-39\)", "≥ 50 %$", "H2b : naissances pour 1 000 femmes 25-39, départements (log)", "effet (log-points)")
         fig_event(allr, "h2_1524", "H2d", r"f\. 15-24\)", "≥ 50 %$", "Naissances pour 1 000 femmes 15-24, départements (log)", "effet (log-points)")
         fig_event(allr, "h3a_2539", "H3a", r"mariages de femmes / 1 000 f\. 25-39", "≥ 50 %$", "H3a : mariages de femmes pour 1 000 femmes 25-39 (log)", "effet (log-points)")
