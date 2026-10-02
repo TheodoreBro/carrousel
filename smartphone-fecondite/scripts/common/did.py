@@ -76,7 +76,8 @@ def cs_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str =
     att = ATTgt(data=panel, cohort_column=cohort)
     kw = dict(formula=fml, est_method=est_method if covariates else "reg", control_group=control,
               boot_iterations=boot, random_state=seed, progress_bar=False)
-    if cluster:
+    if cluster and cluster != unit:
+        _patch_differences_cluster()
         kw["cluster_var"] = cluster
     att.fit(**kw)
 
@@ -96,6 +97,24 @@ def cs_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str =
                       [np.sqrt((post["se"] ** 2).sum()) / k if k else np.nan], "cs")
     pre_p = pre_trend_test(tidy_ev)["p_value"]
     return {"event": tidy_ev, "simple": tidy_simple, "post_avg": tidy_post, "pre_wald_p": pre_p, "model": att}
+
+
+def _patch_differences_cluster() -> None:
+    """``differences`` 0.3 indexe la colonne de grappe comme une Series puis appelle une validation qui
+    attend un DataFrame (plantage « 'Series' object has no attribute 'columns' »). On convertit à la volée."""
+    import differences.models.attgt.attgt as mod
+
+    if getattr(mod, "_cluster_patched", False):
+        return
+    orig = mod.get_cluster_groups
+
+    def patched(data, cluster_var):
+        if isinstance(data, pd.Series):
+            data = data.to_frame()
+        return orig(data=data, cluster_var=cluster_var)
+
+    mod.get_cluster_groups = patched
+    mod._cluster_patched = True
 
 
 def _normalise_agg(agg: pd.DataFrame) -> pd.DataFrame:
