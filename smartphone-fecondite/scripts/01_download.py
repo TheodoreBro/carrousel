@@ -21,7 +21,7 @@ from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common.sources import SOURCES, select  # noqa: E402
-from common.download import DownloadBlocked, download_source, resolve, _get  # noqa: E402
+from common.download import DownloadBlocked, download_source, resolve, rebuild_data_log, _get  # noqa: E402
 
 
 def main() -> int:
@@ -33,9 +33,14 @@ def main() -> int:
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--resolve", action="store_true")
+    ap.add_argument("--log", action="store_true", help="régénère docs/data_log.md depuis le manifeste")
     ap.add_argument("--skip", nargs="*", default=[], help="identifiants à sauter")
     a = ap.parse_args()
 
+    if a.log:
+        rebuild_data_log()
+        print("docs/data_log.md régénéré")
+        return 0
     srcs = select(a.country, a.ids, a.roles) if (a.country or a.ids or a.roles) else (SOURCES if (a.all or a.list or a.check) else [])
     if not srcs:
         ap.print_help()

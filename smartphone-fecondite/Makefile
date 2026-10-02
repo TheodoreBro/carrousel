@@ -2,7 +2,7 @@
 PY ?= python
 SCRIPTS := scripts
 
-.PHONY: all check download build estimate figures tables paper test clean
+.PHONY: all check download log build estimate figures tables paper test clean
 
 all: download build estimate figures tables paper
 
@@ -14,18 +14,22 @@ download:           ## données brutes → data/raw + docs/data_log.md
 	$(PY) $(SCRIPTS)/01_download.py --country EU
 	$(PY) $(SCRIPTS)/01_download.py --country WORLD
 
-build:              ## traitement et résultats → data/processed
+build:              ## traitement et résultats → data/processed, puis échantillons et MDE (avant toute estimation)
 	$(PY) $(SCRIPTS)/02_treatment.py
 	$(PY) $(SCRIPTS)/03_outcomes.py
+	$(PY) $(SCRIPTS)/04_sample_mde.py
+
+log:                ## régénère docs/data_log.md depuis data/raw/manifest.json
+	$(PY) $(SCRIPTS)/01_download.py --log
 
 estimate:           ## estimations → tables/*.csv
-	$(PY) $(SCRIPTS)/04_estimate.py
+	$(PY) $(SCRIPTS)/05_estimate.py
 
 figures:
-	$(PY) $(SCRIPTS)/05_figures.py
+	$(PY) $(SCRIPTS)/06_figures.py
 
 tables:
-	$(PY) $(SCRIPTS)/06_tables.py
+	$(PY) $(SCRIPTS)/07_tables.py
 
 paper:              ## paper/paper.pdf (latexmk) et paper/paper.md (pandoc)
 	cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error paper.tex

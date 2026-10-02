@@ -318,6 +318,35 @@ def download_source(src: Source, verbose: bool = True) -> list[Path]:
     return paths
 
 
+def rebuild_data_log() -> None:
+    """Réécrit la section « Fichiers téléchargés » de docs/data_log.md à partir du manifeste.
+
+    La partie rédigée à la main (tout ce qui précède le marqueur) est conservée ; le tableau est
+    régénéré en entier, trié par source puis URL, pour rester lisible quand plusieurs
+    téléchargements tournent en parallèle.
+    """
+    from .sources import BY_ID
+    marker = "## Fichiers téléchargés"
+    head = "# Journal des données\n\nUne ligne par fichier téléchargé (régénéré depuis `data/raw/manifest.json` par `scripts/01_download.py --log`).\n"
+    if DATA_LOG.exists():
+        txt = DATA_LOG.read_text(encoding="utf-8")
+        if marker in txt:
+            head = txt.split(marker)[0]
+        else:                                   # ancien format : on retire le tableau automatique
+            lines = [l for l in txt.splitlines() if not l.startswith("| ") or l.startswith("| source |") and False]
+            head = "\n".join(l for l in lines if not l.startswith("|---") and not l.startswith("| source |")) + "\n"
+    m = _load_manifest()
+    rows = ["| source | pays | rôle | fichier | URL | accès (UTC) | octets | SHA-256 | licence |", "|---|---|---|---|---|---|---|---|---|"]
+    for k in sorted(m, key=lambda k: (m[k]["source"], m[k]["url"])):
+        v = m[k]
+        s = BY_ID.get(v["source"])
+        rows.append(f"| {v['source']} | {s.country if s else ''} | {s.role if s else ''} | {Path(v['path']).name} | {v['url']} | "
+                    f"{v['accessed_utc'][:16].replace('T', ' ')} | {v['bytes']:,} | `{v['sha256'][:16]}…` | {v['license']} |")
+    total = sum(v["bytes"] for v in m.values())
+    DATA_LOG.write_text(head.rstrip() + f"\n\n{marker}\n\n{len(m)} fichiers, {total / 1e6:,.0f} Mo. Empreintes complètes dans `data/raw/manifest.json`.\n\n"
+                        + "\n".join(rows) + "\n", encoding="utf-8")
+
+
 def raw_files(src_id: str) -> list[Path]:
     """Fichiers consignés dans le manifeste pour une source (ordre des URL)."""
     m = _load_manifest()
