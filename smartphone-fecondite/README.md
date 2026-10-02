@@ -27,7 +27,7 @@ latexmk`) ; à défaut, `paper/paper.md` est produit par pandoc.
 
     data/raw          bruts, jamais modifiés ; non versionnés ; empreintes SHA-256 dans docs/data_log.md et data/raw/manifest.json
     data/processed    panels construits
-    scripts/          01_download.py 02_treatment.py 03_outcomes.py 04_sample_mde.py 05_estimate.py 06_figures.py 07_tables.py
+    scripts/          01_download.py 02_treatment.py 03_outcomes.py 04_sample_mde.py 04b_firststage.py 05_estimate.py 06_figures.py 07_tables.py
     scripts/common/   sources.py (registre), download.py (téléchargement journalisé), did.py (estimateurs)
     tests/            tests sur données synthétiques
     figures/ tables/  sorties des scripts, référencées dans le texte

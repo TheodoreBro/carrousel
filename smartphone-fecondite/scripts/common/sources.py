@@ -172,18 +172,19 @@ SOURCES: list[Source] = [
            "INSEE RP — Bases Couples-Familles-Ménages par commune : 2011 (var. 2006, 2011), 2016 (2011, 2016), 2021 (2010, 2015, 2021), 2022",
            "insee_page",
            "https://www.insee.fr/fr/statistiques/2044612|https://www.insee.fr/fr/statistiques/4171359|"
-           "https://www.insee.fr/fr/statistiques/8268828|https://www.insee.fr/fr/statistiques/8582452",
+           "https://www.insee.fr/fr/statistiques/8205182|https://www.insee.fr/fr/statistiques/8582452",
            "Licence Ouverte 2.0", years="RP2006-RP2022 (millésimes glissants)", granularity="commune × sexe × âge × vie en couple",
-           notes="Constaté le 02/10/2026 : base-cc-coupl-fam-men-2011-COM.xls, base-cc-coupl-fam-men-2016-COM-csv.zip, "
-                 "base-ic-couples-familles-menages-2021-com_csv.zip, base-cc-coupl-fam-men-2022-COM_csv.zip.",
-           include=(r"(?i)(coupl-fam-men-2011-COM\.xls|coupl-fam-men-2016-COM-csv\.zip|couples-familles-menages-2021-com_csv\.zip|coupl-fam-men-2022-COM_csv\.zip)$",)),
+           notes="Constaté le 02/10/2026 : base-cc-coupl-fam-men-2011.xls, base-cc-coupl-fam-men-2016-csv.zip, "
+                 "base-cc-coupl-fam-men-2021_csv.zip (page 8205182), base-cc-coupl-fam-men-2022_csv.zip. Attention : le suffixe "
+                 "« -COM » des fichiers INSEE désigne les collectivités d'outre-mer (5 lignes), pas les communes.",
+           include=(r"(?i)(coupl-fam-men-2011\.xls|coupl-fam-men-2016-csv\.zip|coupl-fam-men-2021_csv\.zip|coupl-fam-men-2022_csv\.zip)$",)),
     Source("fr_insee_rp_pop_struct", "FR", "resultat",
            "INSEE RP — Bases Évolution et structure de la population par commune (sexe × âge) : 2011, 2016, 2021, 2022",
            "insee_page",
            "https://www.insee.fr/fr/statistiques/2044745|https://www.insee.fr/fr/statistiques/4171334|"
            "https://www.insee.fr/fr/statistiques/8201904|https://www.insee.fr/fr/statistiques/8581696",
            "Licence Ouverte 2.0", years="RP2006-RP2022", granularity="commune × sexe × âge",
-           include=(r"(?i)evol-struct-pop-(2011-COM\.zip|2016-COM-csv\.zip|2021-COM_csv\.zip|2022-COM_csv\.zip)$",)),
+           include=(r"(?i)evol-struct-pop-(2011\.zip|2016-csv\.zip|2021_csv\.zip|2022_csv\.zip)$",)),
     # ================================================================== France : exposition, contrôles, géo
     Source("fr_barometre_numerique", "FR", "exposition",
            "ARCEP / CGE / ANCT / Arcom (CREDOC) — Baromètre du numérique, microdonnées 2007-2025 et dictionnaire",
@@ -201,7 +202,8 @@ SOURCES: list[Source] = [
            "https://www.insee.fr/fr/statistiques/2028668|https://www.insee.fr/fr/statistiques/4171446|"
            "https://www.insee.fr/fr/statistiques/8202916",
            "Licence Ouverte 2.0", years="RP2011, RP2016, RP2021", granularity="commune",
-           include=(r"(?i)(activite-residents-2011-com\.zip|emploi-pop-act-2016-COM-csv\.zip|emploi-pop-active-2021-COM_csv\.zip)$",)),
+           notes="2011 : base infracommunale (IRIS) nationale, agrégée à la commune ; 2016 et 2021 : bases communales nationales.",
+           include=(r"(?i)(infra-activite-resident-2011\.zip|emploi-pop-act-2016-csv\.zip|emploi-pop-active-2021_csv\.zip)$",)),
     Source("fr_insee_grille_densite", "FR", "controle",
            "INSEE — Grille communale de densité à 7 niveaux, 2015-2024",
            "insee_page", "https://www.insee.fr/fr/information/6439600", "Licence Ouverte 2.0", granularity="commune",

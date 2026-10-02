@@ -18,6 +18,7 @@ build:              ## traitement et résultats → data/processed, puis échant
 	$(PY) $(SCRIPTS)/02_treatment.py
 	$(PY) $(SCRIPTS)/03_outcomes.py
 	$(PY) $(SCRIPTS)/04_sample_mde.py
+	$(PY) $(SCRIPTS)/04b_firststage.py
 
 log:                ## régénère docs/data_log.md depuis data/raw/manifest.json
 	$(PY) $(SCRIPTS)/01_download.py --log

@@ -112,13 +112,20 @@ def load_archives(cog: Cog) -> pd.DataFrame:
         su.columns = [c.upper() for c in su.columns]
         em = em[em.EMR_LB_SYSTEME.fillna("").str.upper().str.match(r"^(LTE|UMTS)")]
         em["gen"] = np.where(em.EMR_LB_SYSTEME.str.upper().str.startswith("LTE"), "4G", "3G")
-        em["date"] = pd.to_datetime(em.EMR_DT_SERVICE, format="%d/%m/%Y", errors="coerce")
+        snapshot = pd.Timestamp(p.name[:8])
+        if "EMR_DT_SERVICE" in em.columns:
+            em["date"] = pd.to_datetime(em.EMR_DT_SERVICE, format="%d/%m/%Y", errors="coerce")
+            kind = "émetteurs datés (EMR_DT_SERVICE)"
+        else:
+            # exports 2018 : pas de date d'émetteur ; la présence dans l'instantané borne la date par celle de l'export
+            em["date"] = snapshot
+            kind = f"émetteurs présents, datés par l'instantané ({snapshot.date()}, borne supérieure)"
         em = em.dropna(subset=["date"]).merge(su.drop_duplicates("STA_NM_ANFR"), on="STA_NM_ANFR", how="inner")
         em["unit"] = cog.harmonize(em.COM_CD_INSEE)
         g = em.groupby(["unit", "gen"]).date.min().reset_index()
         g["archive"] = p.name[:8]
         out.append(g)
-        log(f"  archive {p.name} : {len(em):,} émetteurs LTE/UMTS datés, {g.unit.nunique():,} communes")
+        log(f"  archive {p.name} : {len(em):,} {kind}, {g.unit.nunique():,} communes")
     return pd.concat(out, ignore_index=True) if out else pd.DataFrame(columns=["unit", "gen", "date", "archive"])
 
 
@@ -187,9 +194,9 @@ def load_density(cog: Cog) -> pd.Series:
 def load_rp2011_weights(cog: Cog) -> pd.DataFrame:
     p = _one("fr_insee_rp_pop_struct", r"2011")
     z = zipfile.ZipFile(p)
-    name = next(n for n in z.namelist() if re.search(r"\.(xls|csv)$", n, re.I) and "COM" in n.upper())
+    name = next(n for n in z.namelist() if re.search(r"\.(xls|csv)$", n, re.I) and not re.search(r"meta", n, re.I))
     if name.lower().endswith(".xls"):
-        df = pd.read_excel(z.open(name), sheet_name="COM", header=5, dtype={"CODGEO": str})
+        df = pd.read_excel(z.open(name), sheet_name="COM", header=5, dtype={"CODGEO": str})   # feuille COM = communes
     else:
         df = pd.read_csv(z.open(name), sep=";", dtype={"CODGEO": str})
     cols = [c for c in df.columns if re.fullmatch(r"P11_F(1529|3044)", c)]

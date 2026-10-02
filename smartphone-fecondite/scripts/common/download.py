@@ -160,7 +160,21 @@ def fetch(src: Source, url: str, subdir: str | None = None, filename: str | None
     if key in manifest and (RAW / manifest[key]["path"]).exists():
         return RAW / manifest[key]["path"]
 
-    tmp = dest_dir / (re.sub(r"[^A-Za-z0-9._-]+", "_", Path(urlparse(url).path).name or "download") + ".part")
+    guess = dest_dir / re.sub(r"[^A-Za-z0-9._-]+", "_", Path(urlparse(url).path).name or "download")
+    if filename is None and not guess.exists():           # nom donné par content-disposition (ex. Melodi : « …_CSV_FR.zip »)
+        cands = [c for c in dest_dir.iterdir() if c.name.lower() in (guess.name.lower(), guess.name.lower() + ".zip")
+                 and not c.name.endswith(".part")]
+        if len(cands) == 1:
+            guess = cands[0]
+    if filename is None and guess.exists() and guess.stat().st_size > 0:
+        # fichier déjà complet sur disque (téléchargement antérieur non consigné) : consigné sans retéléchargement
+        sha = sha256_of(guess)
+        manifest[key] = {"source": src.id, "url": url, "path": str(guess.relative_to(RAW)), "bytes": guess.stat().st_size,
+                         "sha256": sha, "accessed_utc": datetime.fromtimestamp(guess.stat().st_mtime, timezone.utc).isoformat(timespec="seconds"),
+                         "license": src.license, "title": src.title}
+        _save_manifest(manifest)
+        return guess
+    tmp = guess.with_name(guess.name + ".part")
     size, r = _stream_to(url, tmp)
     expected = r.headers.get("content-length")
     if size == 0:
