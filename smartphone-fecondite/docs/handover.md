@@ -1,4 +1,4 @@
-# Passation — état du projet au 2 octobre 2026
+# Passation — état du projet au 2 octobre 2026 (soir)
 
 Ce fichier permet à une nouvelle session (ou à un nouvel agent) de reprendre le travail sans la
 conversation d'origine. Il est mis à jour à chaque étape.
@@ -9,79 +9,106 @@ Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prim
 
 ## 1. Où en est-on
 
-- Étape 0 livrée : `docs/etape0_plan.md` (plan, sources, faisabilité France/Corée/États-Unis/Europe,
-  incertitudes, décisions à valider) et `docs/etape0_pays.md` (extension à 47 pays, classement N1/N2/N3,
-  ordre de vérification).
-- **Étape 1 livrée : `docs/preregistration.md` (version 1.0, gelée). Ne plus la modifier ; toute
-  déviation va dans `docs/preregistration_addenda.md`, et chaque pays reçoit un addendum de mesure
-  avant sa première estimation (§4.2 de la préregistration).**
-- **Squelette du pipeline écrit et testé (02/10)** : `scripts/common/sources.py` (registre des sources
-  avec méthode de résolution des URL ; tout ce qui vient de l'Étape 0 est « à vérifier »),
-  `scripts/common/download.py` (téléchargement avec reprises, SHA-256, manifeste, `docs/data_log.md`,
-  arrêt net sur refus), `scripts/01_download.py` (`--list`, `--check`, `--country`, `--ids`),
-  `scripts/common/did.py` (Callaway & Sant'Anna via `differences`, Sun & Abraham implémenté
-  directement, did2s, TWFE, Poisson à effets fixes, MDE par permutation, méta-analyse à effets
-  aléatoires), `tests/test_did.py` (8 tests sur panel synthétique, tous verts), `Makefile`,
-  `paper/paper.tex` (squelette), `paper/references.bib` (vide, volontairement).
-- **Aucune donnée téléchargée.** `02_treatment.py` à `06_tables.py` restent à écrire : ils dépendent
-  de la structure réelle des fichiers.
-- Environnement : pile Python vérifiée (`requirements.txt`) ; R sans `fixest`/`did` (CRAN bloqué) ;
-  TeX Live installable via apt.
-- **Bloqueur** : au 02/10, dans un conteneur neuf, la politique réseau de l'environnement « Default »
-  refuse toujours toutes les sources de données (403). Le réglage à changer : menu de l'environnement
-  cloud dans la barre de titre de la session → Edit → Network access (accès complet, ou domaines
-  autorisés listés dans `etape0_plan.md` §1.3). Première chose à faire dans une nouvelle session :
-  `python scripts/01_download.py --check`.
+- Étape 0 livrée : `docs/etape0_plan.md`, `docs/etape0_pays.md`.
+- Étape 1 livrée : `docs/preregistration.md` (v1.0, **gelée**, commit `c4002c6`). Déviations et décisions
+  de mesure : `docs/preregistration_addenda.md` (addendum A1 France, écrit **avant toute estimation**).
+- **Étape 2 France : données téléchargées, traitement et résultats construits, échantillons et MDE calculés,
+  first stage estimé.** Aucune estimation H1-H6 n'a été lancée.
+  - Réseau (02/10) : les sources du cœur France sont joignables (data.gouv.fr instable, insee.fr, api.insee.fr,
+    data.anfr.fr, data.arcep.fr, arcep.fr), ainsi qu'Eurostat, UN, SCB, PTS, INE, DANE, Anatel, doi.org et la
+    plupart des éditeurs. **Restent refusés** : api.worldbank.org, ourworldindata.org, datahub.itu.int (panel
+    descriptif mondial), datos.gob.es (Espagne), apisidra.ibge.gov.br (Brésil), legifrance.gouv.fr (contourné via
+    arcep.fr), stats.justice.gouv.fr (HTTP 5xx, remplacé par l'API Melodi). Rien n'a été remplacé par des valeurs
+    de substitution ; ces sources sont vides tant que l'accès n'est pas ouvert (réglage : menu de l'environnement
+    → Edit → Network access).
+  - 130 fichiers bruts (1,46 Go) consignés dans `data/raw/manifest.json` et `docs/data_log.md` (URL exacte, date,
+    SHA-256, licence). Le journal contient aussi, à la main, toutes les corrections du registre constatées sur
+    les pages des producteurs (section « Corrections du registre »), dont deux pièges : le slug data.gouv de
+    l'Étape 0 pointait vers un jeu régional, et le suffixe « -COM » des bases INSEE désigne les collectivités
+    d'outre-mer, pas les communes.
+  - `scripts/02_treatment.py` → `data/processed/fr_treatment_commune.parquet` (34 833 unités × 2004-2026),
+    `fr_treatment_dep.parquet` (D3), `tables/t_treatment_fr.md`. D1 = premier émetteur LTE en service (observatoire
+    ANFR courant ∪ archives annuelles 2018-2025) ; 21 392 unités avec 4G, 13 312 jamais (surtout densité 6-7 :
+    communes sans antenne propre, **couvertes par les sites voisins** — c'est la limite « site ≠ couverture »,
+    D2 non construit, voir addendum A1) ; cohortes 2013-2027 ; 3G ; 2e opérateur ; recoupement sites ARCEP
+    (écart ≤ 1 an dans 95 % des cas datés) ; ZDP (21 184 unités) et zones blanches extraites du PDF ARCEP
+    2012-0039 ; densité ; D3 par département (bascule 50 % : 2013-2018, médiane 2015 ; 90 % : 44 départements).
+  - `scripts/03_outcomes.py` → `fr_outcomes_commune.parquet` (naissances 2008-2025, décès, femmes 15-44 RP
+    interpolées, parts en couple par âge deux sexes), `fr_outcomes_dep_age.parquet` (département × 6 groupes
+    d'âge × 1998-2024 : naissances, naissances de parents mariés jusqu'en 2021, rang 1 jusqu'en 2012, épouses par
+    âge, femmes au 1er janvier, taux pour 1 000), `fr_outcomes_dep.parquet` (mariages domiciliés 1975-2024, PACS
+    2007-2016), `tables/t_outcomes_fr.md`. Contrôle : naissances des fichiers détail / série officielle = 1,000 à
+    partir de 2010, 1,004-1,011 en 1998-2009 (enfants sans vie inclus, non corrigés, dit).
+  - `scripts/04_sample_mde.py` → `tables/t_sample_fr.md|csv` (unités-années par spécification) et
+    `tables/t_mde_fr.md|csv` (MDE par permutation, 200 tirages). Résultats : voir ces tables (résumé en §1 bis).
+  - `scripts/04b_firststage.py` → `tables/t_firststage_fr.md|csv`, `tables/t_barometre_age_year.csv`. Baromètre du
+    numérique × D3 par ZEAT (2011-2020) : +9,8 points de possession de smartphone (es 4,0, 9 groupes) et +14,9
+    points d'usage des réseaux sociaux (es 3,0) pour 0 → 100 % de couverture ; l'interaction « moins de 40 ans »
+    est **négative** (contraire à la prédiction H4 « davantage chez les moins de 40 ans »), rapportée telle quelle.
+    Au niveau région 2020-2025 : imprécis (D3 ≥ 0,74 partout).
+- `make test` vert (8 tests, panel synthétique). `make build` = 02 → 03 → 04 → 04b.
+- Pas encore fait : D2 (croisement SIG des cartes ARCEP), estimations (Étape 3), pays de niveau 1 et 2, panel
+  mondial (hôtes bloqués), références (`references.bib` vide).
+
+## 1 bis. Chiffres à connaître avant l'Étape 3
+
+Voir `tables/t_sample_fr.md` et `tables/t_mde_fr.md` (générés). Points à garder en tête :
+- fenêtre communale 2008-2025 (pas 2004) : les cohortes 2013-2014 ont 4-5 ans de pré-période ; la règle « ≥ 3 ans »
+  les garde ;
+- femmes 15-44 communales : dernier millésime RP 2022, prolongé 2 ans (2023, 2024) ; 2025 sans dénominateur ;
+- niveau département × âge : 96 départements, 1998-2024, dénominateurs Melodi ; H3b « parents mariés » 1998-2021 ;
+- Baromètre : ZEAT disponible jusqu'en 2020 seulement, REGION à partir de 2020.
 
 ## 2. Décisions de l'auteur
 
-Prises (messages du 18/09) :
-- « Beaucoup plus de pays » : oui. Voir `etape0_pays.md` pour le classement et l'ordre.
-- **Points 1 à 11 ci-dessous : tous validés par l'auteur le 18/09/2026.**
+Prises (messages du 18/09) : « beaucoup plus de pays » (voir `etape0_pays.md`) ; points 1 à 11 de l'Étape 0
+validés le 18/09/2026 (accès réseau, sous-dossier, cas secondaires descriptifs, D1 principal / D2 second / 3G
+robustesse, fenêtres, estimateurs, pas de clé KOSIS/NCHS, TeX Live, périmètre causal France + niveau 1 + niveau 2,
+méta-analyse, extension descriptive ~200 pays).
 
-Points validés (voir `etape0_plan.md` §7) :
-1. accès réseau (option A recommandée : unrestricted) ;
-2. emplacement : sous-dossier `smartphone-fecondite/` (défaut) ;
-3. cas secondaires Corée / États-Unis / Europe NUTS 2 en descriptif seulement ;
-4. traitement principal France : premier émetteur 4G (ANFR), couverture ARCEP en second, 3G en robustesse ;
-5. fenêtres : commune 2004-2024, département × âge 1998-2025 ;
-6. estimateurs : Callaway & Sant'Anna, Sun & Abraham, did2s, TWFE comparatif ; dCDH si CRAN accessible ;
-7. clé API KOSIS / accès NCHS : non par défaut ;
-8. PDF : TeX Live via apt.
-
-Décisions ouvertes par l'extension multi-pays (validées le 18/09) :
-9. périmètre causal : France + niveau 1 (Espagne, Suède, Brésil, Colombie) + niveau 2 vérifiés dans
-   l'ordre du §4 de `etape0_pays.md`, avec critères d'inclusion préenregistrés ;
-10. synthèse entre pays par méta-analyse à effets aléatoires des estimations propres ;
-11. extension descriptive à ~200 pays (ITU indicateur 100095 × UN WPP 2024).
+Décisions de mesure prises à la lecture des fichiers (liste fermée §10 de la préregistration) : toutes dans
+`docs/preregistration_addenda.md` (A1). Les plus importantes : géographie COG 2026 ; fenêtre communale 2008-2025 ;
+D2 non construit à l'Étape 2 ; recoupement des cohortes avec les archives 2018-2025 (pas 2015) ; parts en couple
+deux sexes ; PACS 2007-2016 ; rang jusqu'en 2012 ; parents mariés jusqu'en 2021.
 
 ## 3. Prochaines étapes, dans l'ordre
 
-1. Vérifier le réseau. Si bloqué : s'arrêter et le dire (règle 1).
-2. Faire valider les points 1-11 ci-dessus si ce n'est pas déjà fait.
-3. Étape 1 : faite (commit contenant `preregistration.md` v1.0 ; citer son hash dans le papier).
-4. Étape 2 : `make check` puis `python scripts/01_download.py --country FR` ; corriger les URL du
-   registre au fur et à mesure (chaque correction est une URL réelle constatée, consignée dans
-   `data_log.md`) ; écrire `02_treatment.py` (D1, D2, D3, ZDP) et `03_outcomes.py` à partir de la
-   structure réelle des fichiers ; tableau d'échantillon et MDE (`did.mde_permutation`) ; first stage.
-   Puis pays de niveau 1 (addendum par pays avant estimation), puis niveau 2 selon la check-list.
-5. Étape 3 : estimations, figures, tableaux.
-6. Étape 4 : rédaction, vérification chiffre par chiffre, références vérifiées une par une
-   (les DOI listés dans `etape0_plan.md` §8 ne sont pas encore vérifiés sur la page éditeur).
+1. Relire `tables/t_sample_fr.md`, `t_mde_fr.md`, `t_treatment_fr.md`, `t_outcomes_fr.md`, `t_firststage_fr.md` et
+   l'addendum A1 ; si l'auteur veut D2 avant les estimations, construire le croisement SIG (geopandas + contours
+   communaux IGN, non téléchargés) — sinon passer à l'Étape 3.
+2. Étape 3 France : `scripts/05_estimate.py` (Callaway & Sant'Anna primaire via `differences`, Sun & Abraham,
+   did2s, TWFE, Poisson ; H1 commune ; H2 département × âge sur D3 ≥ 50 % ; H3 ; H5 placebos ; H6), puis
+   `06_figures.py`, `07_tables.py`. Les fonctions sont dans `scripts/common/did.py` (testées sur synthétique).
+3. Pays de niveau 1 : Suède (api.scb.se et statistik.pts.se joignables), Colombie (datos.gov.co joignable),
+   Brésil (anatel joignable ; SIDRA bloqué → mariages absents), Espagne (datos.gob.es bloqué → traitement absent :
+   à signaler). Check-list des critères §4.3 et addendum par pays **avant** toute estimation.
+4. Étape 4 : rédaction ; références vérifiées une par une sur la page éditeur (doi.org, Springer, PLOS, NBER,
+   RePEc joignables ; tandfonline.com et pnas.org refusent → vérifier via doi.org / crossref).
 
 ## 4. Règles non négociables (rappel)
 
-Données réelles uniquement, téléchargées depuis les sources primaires ; toute référence vérifiée
-avant d'entrer dans `references.bib` ; aucun résultat externe dans les sections Résultats, Discussion,
-Conclusion ; hypothèses écrites avant l'analyse et non modifiées ; corrélation et causalité
-distinguées ; chaque figure et tableau produit par un script nommé.
+Données réelles uniquement, téléchargées depuis les sources primaires ; toute référence vérifiée avant d'entrer
+dans `references.bib` ; aucun résultat externe dans les sections Résultats, Discussion, Conclusion ; hypothèses
+écrites avant l'analyse et non modifiées ; corrélation et causalité distinguées ; chaque figure et tableau
+produit par un script nommé.
 
-## 5. Message de démarrage suggéré pour une nouvelle session
+## 5. Pièges techniques de l'environnement (pour ne pas les redécouvrir)
+
+- data.gouv.fr : le relais du proxy coupe souvent la connexion ; `download.py` reprend avec `Range` et réessaie
+  9 fois. Ne jamais lancer deux `01_download.py` en parallèle : ils écrasent `manifest.json` l'un de l'autre.
+- insee.fr : épisodes de HTTP 503 ; pas de Content-Length en HTTP/2 → un transfert coupé passe inaperçu : le
+  téléchargeur teste l'intégrité des zip/xls/xlsx/pdf avant de consigner.
+- `pkill -f "01_download"` depuis un shell dont la ligne de commande contient le motif tue le shell lui-même.
+- Les fichiers détail dBase se lisent avec `dbfread` (≈ 20 s par année) ; `03_outcomes.py` prend ≈ 9 minutes.
+
+## 6. Message de démarrage suggéré pour une nouvelle session
 
 ```
 Continue le working paper smartphones/fécondité sur la branche claude/confident-pasteur-og6cgd,
 dossier smartphone-fecondite/. Lis dans l'ordre docs/mission.md, docs/handover.md,
-docs/preregistration.md, docs/etape0_plan.md, docs/etape0_pays.md. Vérifie l'accès réseau avec
-`python scripts/01_download.py --check` ; si des hôtes sont bloqués, arrête-toi et dis-le.
-Sinon reprends à l'Étape 2 (handover.md §3).
+docs/preregistration.md, docs/preregistration_addenda.md, docs/etape0_plan.md, docs/etape0_pays.md.
+Crée le venv (python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt),
+vérifie `python scripts/01_download.py --check`, puis `python scripts/01_download.py --country FR`
+(idempotent : consigne les fichiers déjà présents) et `make build`. Reprends à l'étape indiquée dans
+handover.md §3.
 ```

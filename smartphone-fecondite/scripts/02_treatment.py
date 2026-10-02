@@ -196,7 +196,14 @@ def load_rp2011_weights(cog: Cog) -> pd.DataFrame:
     z = zipfile.ZipFile(p)
     name = next(n for n in z.namelist() if re.search(r"\.(xls|csv)$", n, re.I) and not re.search(r"meta", n, re.I))
     if name.lower().endswith(".xls"):
-        df = pd.read_excel(z.open(name), sheet_name="COM", header=5, dtype={"CODGEO": str})   # feuille COM = communes
+        sheets = pd.read_excel(z.open(name), sheet_name=None, header=None, dtype=str)
+        sheet = sheets["COM_2011"] if "COM_2011" in sheets else next(v for k, v in sheets.items() if k.upper().startswith("COM"))
+        hdr = next(i for i in range(min(12, len(sheet))) if str(sheet.iloc[i, 0]).strip().upper() == "CODGEO")
+        df = sheet.iloc[hdr + 1:].copy()
+        df.columns = [str(c).upper() for c in sheet.iloc[hdr]]
+        for c in df.columns:
+            if c != "CODGEO" and c != "LIBGEO":
+                df[c] = pd.to_numeric(df[c], errors="coerce")
     else:
         df = pd.read_csv(z.open(name), sep=";", dtype={"CODGEO": str})
     cols = [c for c in df.columns if re.fullmatch(r"P11_F(1529|3044)", c)]

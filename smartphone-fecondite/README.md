@@ -9,8 +9,10 @@ données ouvertes le permettent (`docs/etape0_pays.md`), synthèse par méta-ana
 ## État
 
 Voir `docs/handover.md` (état, décisions, prochaines étapes). Préregistration gelée :
-`docs/preregistration.md`. Aucune donnée n'est téléchargée tant que l'accès réseau aux sources
-primaires n'est pas ouvert ; le pipeline s'arrête et le dit.
+`docs/preregistration.md` ; déviations et décisions de mesure : `docs/preregistration_addenda.md`.
+Étape 2 France faite (données brutes consignées dans `docs/data_log.md`, traitement, résultats, échantillons,
+MDE, first stage) ; aucune estimation lancée. Les hôtes refusés par la politique réseau sont listés dans
+`docs/data_log.md` ; rien n'est remplacé par des valeurs de substitution.
 
 ## Tout régénérer
 

@@ -39,6 +39,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PROC = ROOT / "data" / "processed"
 TABLES = ROOT / "tables"
 GROUPS = [g[2] for g in AGE_GROUPS]
+METRO_DEPS = {f"{i:02d}" for i in range(1, 96) if i != 20} | {"2A", "2B"}
 notes: list[str] = []
 
 
@@ -163,10 +164,20 @@ def dep_series() -> pd.DataFrame:
 
 # ----------------------------------------------------------------------------- RP : femmes en couple par âge (commune)
 
-def _read_rp_zip(p: Path, sheet_hint: str = "COM") -> pd.DataFrame:
+def _sheet_to_df(sheet: pd.DataFrame) -> pd.DataFrame:
+    hdr = next(i for i in range(min(12, len(sheet))) if str(sheet.iloc[i, 0]).strip().upper() == "CODGEO")
+    df = sheet.iloc[hdr + 1:].copy()
+    df.columns = [str(c).upper() for c in sheet.iloc[hdr]]
+    return df.reset_index(drop=True)
+
+
+def _read_rp_zip(p: Path) -> pd.DataFrame:
+    """Base RP communale (csv dans un zip, ou xls avec une feuille COM_<millésime> par millésime).
+
+    Les feuilles COM_* d'un xls (ex. COM_2011 et COM_2006) sont empilées : chaque millésime a ses propres
+    colonnes (P06_…, P11_…) et sa propre géographie, harmonisée ensuite par le COG."""
     if p.suffix.lower() == ".xls":
         x = pd.read_excel(p, sheet_name=None, header=None, dtype=str)
-        sheet = x.get(sheet_hint) or next(v for k, v in x.items() if v.shape[0] > 30000)
     else:
         z = zipfile.ZipFile(p)
         name = next(n for n in z.namelist() if re.search(r"\.(csv|xls|xlsx)$", n, re.I) and not re.search(r"meta|doc", n, re.I))
@@ -175,32 +186,33 @@ def _read_rp_zip(p: Path, sheet_hint: str = "COM") -> pd.DataFrame:
             df.columns = [c.upper() for c in df.columns]
             return df
         x = pd.read_excel(z.open(name), sheet_name=None, header=None, dtype=str)
-        sheet = x.get(sheet_hint) or next(v for k, v in x.items() if v.shape[0] > 30000)
-    hdr = next(i for i in range(min(12, len(sheet))) if str(sheet.iloc[i, 0]).strip().upper() == "CODGEO")
-    df = sheet.iloc[hdr + 1:].copy()
-    df.columns = [str(c).upper() for c in sheet.iloc[hdr]]
-    return df.reset_index(drop=True)
+    parts = [_sheet_to_df(v) for k, v in x.items() if k.upper().startswith("COM")]
+    if not parts:
+        parts = [_sheet_to_df(next(v for v in x.values() if v.shape[0] > 30000))]
+    return pd.concat(parts, ignore_index=True, sort=False)
 
 
 def couples_rp(cog: Cog) -> pd.DataFrame:
-    """Femmes en couple par groupe d'âge RP (15-24, 25-39) par unité harmonisée et millésime."""
+    """Personnes vivant en couple par groupe d'âge RP (15-19, 20-24, 25-39, 40-54), deux sexes confondus, par unité
+    harmonisée et millésime. Les bases communales Couples-Familles-Ménages ne ventilent pas la vie en couple par sexe
+    (variables P<yy>_POP<grp>_COUPLE et P<yy>_POP<grp>) : décision de mesure consignée dans preregistration_addenda.md."""
     out = []
+    groups = ("1519", "2024", "2539", "4054")
     for p in raw_files("fr_insee_rp_cfm"):
         df = _read_rp_zip(p)
-        cols = [c for c in df.columns if re.fullmatch(r"C\d{2}_F(1524|2539|4054|1529|3044)(_COUPLE|_MARIEE|_PACSEE)?", c)]
-        yrs = sorted({c[1:3] for c in cols})
+        cols = [c for c in df.columns if re.fullmatch(r"P\d{2}_POP(1519|2024|2539|4054)_COUPLE", c)]
         if not cols:
             log(f"  RP CFM {p.name} : aucune colonne de couple reconnue ({list(df.columns)[:12]})")
             continue
         df["unit"] = cog.harmonize(df.CODGEO)
-        for yy in yrs:
+        for yy in sorted({c[1:3] for c in cols}):
             year = 2000 + int(yy) if int(yy) < 50 else 1900 + int(yy)
             rec = {"unit": df.unit}
-            for grp in ("1524", "2539"):
-                tot, cpl = f"C{yy}_F{grp}", f"C{yy}_F{grp}_COUPLE"
+            for grp in groups:
+                tot, cpl = f"P{yy}_POP{grp}", f"P{yy}_POP{grp}_COUPLE"
                 if tot in df and cpl in df:
-                    rec[f"f{grp}"] = pd.to_numeric(df[tot], errors="coerce")
-                    rec[f"f{grp}_couple"] = pd.to_numeric(df[cpl], errors="coerce")
+                    rec[f"p{grp}"] = pd.to_numeric(df[tot], errors="coerce")
+                    rec[f"p{grp}_couple"] = pd.to_numeric(df[cpl], errors="coerce")
             if len(rec) == 1:
                 continue
             g = pd.DataFrame(rec).groupby("unit").sum(min_count=1).reset_index()
@@ -283,11 +295,13 @@ def main() -> int:
     com = com.merge(wi[["unit", "year", "women_1544", "pop"]], on=["unit", "year"], how="left")
     cpl = couples_rp(cog)
     if len(cpl):
-        cols = [c for c in cpl.columns if c.startswith("f")]
+        cols = [c for c in cpl.columns if c.startswith("p")]
         ci = interpolate_years(cpl, cols, years)
-        for grp in ("1524", "2539"):
-            if f"f{grp}_couple" in ci and f"f{grp}" in ci:
-                ci[f"share_couple_{grp}"] = ci[f"f{grp}_couple"] / ci[f"f{grp}"]
+        for grp in ("1519", "2024", "2539", "4054"):
+            if f"p{grp}_couple" in ci and f"p{grp}" in ci:
+                ci[f"share_couple_{grp}"] = ci[f"p{grp}_couple"] / ci[f"p{grp}"]
+        if {"p1519_couple", "p2024_couple"} <= set(ci.columns):
+            ci["share_couple_1524"] = (ci.p1519_couple + ci.p2024_couple) / (ci.p1519 + ci.p2024)
         com = com.merge(ci[["unit", "year"] + [c for c in ci.columns if c.startswith("share_couple")]], on=["unit", "year"], how="left")
     com["births_per_1000_f1544"] = 1000 * com.births / com.women_1544
     com["deaths_per_1000"] = 1000 * com.deaths / com["pop"]
@@ -301,7 +315,7 @@ def main() -> int:
     w = women_dep_age()
     da = b.merge(m, on=["dep", "age_group", "year"], how="outer").merge(w, on=["dep", "age_group", "year"], how="left")
     da = da[da.age_group.notna()]
-    da["metro"] = ~da.dep.str.startswith("97") & ~da.dep.isin(["99", "97"]) & da.dep.str.len().eq(2)
+    da["metro"] = da.dep.isin(METRO_DEPS)          # 01-95 (sans 20), 2A, 2B ; « 97 », « 98 », « 99 » et DOM exclus
     da["births_per_1000"] = 1000 * da.births / da.women
     da["marriages_per_1000"] = 1000 * da.marriages_f / da.women
     da["share_births_married"] = da.births_married / da.births
@@ -309,7 +323,7 @@ def main() -> int:
     # femmes en couple par âge au département (millésimes RP agrégés ; 15-24 et 25-39 seulement)
     if len(cpl):
         cpl["dep"] = cog.dep_of(cpl.unit)
-        cd = cpl.groupby(["dep", "rp_year"])[[c for c in cpl.columns if c.startswith("f")]].sum(min_count=1).reset_index()
+        cd = cpl.groupby(["dep", "rp_year"])[[c for c in cpl.columns if c.startswith("p")]].sum(min_count=1).reset_index()
         cd = cd.rename(columns={"rp_year": "year"})
         da = da.merge(cd, on=["dep", "year"], how="left")
     da.to_parquet(PROC / "fr_outcomes_dep_age.parquet", index=False)
@@ -345,8 +359,9 @@ def main() -> int:
               "| année | départements | naissances | mariages (épouses) | femmes 15-49 | naissances/1 000 f. 15-49 | part parents mariés | rang 1 dispo |",
               "|---|---|---|---|---|---|---|---|"]
     for y, g in met.groupby("year"):
+        married = f"{g.births_married.sum() / g.births.sum():.1%}" if g.married_available.any() else "n. d."
         lines.append(f"| {y} | {g.dep.nunique()} | {g.births.sum():,.0f} | {g.marriages_f.sum():,.0f} | {g.women.sum():,.0f} | "
-                     f"{1000 * g.births.sum() / g.women.sum():.1f} | {g.births_married.sum() / g.births.sum():.1%} | "
+                     f"{1000 * g.births.sum() / g.women.sum():.1f} | {married} | "
                      f"{'oui' if g.rank_available.any() else 'non'} |")
     lines += ["", "## Taux de fécondité par âge pour 1 000 femmes (métropole, naissances/femmes au 1er janvier)", "",
               "| année | " + " | ".join(GROUPS) + " |", "|---|" + "---|" * len(GROUPS)]

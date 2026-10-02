@@ -147,6 +147,31 @@ def _stream_to(url: str, tmp: Path, max_restarts: int = 5) -> tuple[int, request
             time.sleep(BACKOFF[min(restarts, len(BACKOFF)) - 1])
 
 
+def _check_integrity(path: Path, name: str, url: str) -> None:
+    """Un transfert coupé sans en-tête Content-Length passe inaperçu (constaté sur insee.fr en HTTP/2) :
+    on vérifie que les archives s'ouvrent et que leurs CRC sont bons avant de les consigner."""
+    low = name.lower()
+    try:
+        if low.endswith(".zip"):
+            import zipfile
+            with zipfile.ZipFile(path) as z:
+                bad = z.testzip()
+            if bad is not None:
+                raise ValueError(f"CRC incorrect pour {bad}")
+        elif low.endswith(".xls"):
+            import xlrd
+            xlrd.open_workbook(path, on_demand=True)
+        elif low.endswith(".xlsx"):
+            import openpyxl
+            openpyxl.load_workbook(path, read_only=True).close()
+        elif low.endswith(".pdf"):
+            import pypdf
+            pypdf.PdfReader(path)
+    except Exception as e:  # noqa: BLE001
+        path.unlink(missing_ok=True)
+        raise DownloadBlocked(f"Fichier incomplet ou illisible reçu pour {url} ({type(e).__name__}: {e}) — relancer") from e
+
+
 def fetch(src: Source, url: str, subdir: str | None = None, filename: str | None = None) -> Path:
     """Télécharge ``url`` dans data/raw/<pays>/<source>/, journalise, renvoie le chemin.
 
@@ -185,6 +210,7 @@ def fetch(src: Source, url: str, subdir: str | None = None, filename: str | None
         raise DownloadBlocked(f"Taille reçue {size} ≠ annoncée {expected} pour {url}")
     name = filename or _filename_from(url, r)
     dest = dest_dir / name
+    _check_integrity(tmp, name, url)
     tmp.replace(dest)
     sha = sha256_of(dest)
     manifest[key] = {

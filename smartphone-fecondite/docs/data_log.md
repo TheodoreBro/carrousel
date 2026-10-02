@@ -183,3 +183,9 @@ cloud.r-project.org.
 | fr_insee_rp_cfm | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/8582452/base-cc-coupl-fam-men-2022_csv.zip | 2026-10-02 11:59 | 38475896 | `5c05fbca31a3d356…` | Licence Ouverte 2.0 | ok |
 | fr_insee_rp_pop_struct | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/2044745/base-cc-evol-struct-pop-2011.zip | 2026-10-02 12:00 | 43453530 | `e4ab8262b685298a…` | Licence Ouverte 2.0 | ok |
 | fr_insee_rp_pop_struct | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/4171334/base-cc-evol-struct-pop-2016-csv.zip | 2026-10-02 12:01 | 27162652 | `e14ca530700554d4…` | Licence Ouverte 2.0 | ok |
+| fr_insee_rp_pop_struct | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/8201904/base-cc-evol-struct-pop-2021_csv.zip | 2026-10-02 12:02 | 54747901 | `8c5d17c16e873bc4…` | Licence Ouverte 2.0 | ok |
+| fr_insee_rp_pop_struct | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/8581696/base-cc-evol-struct-pop-2022_csv.zip | 2026-10-02 12:03 | 48961124 | `cb4b918862289527…` | Licence Ouverte 2.0 | ok |
+| fr_insee_rp_activite | FR | controle | https://www.insee.fr/fr/statistiques/fichier/2028668/infra-activite-resident-2011.zip | 2026-10-02 12:04 | 39644845 | `05076a23c7a3e6ba…` | Licence Ouverte 2.0 | ok |
+| fr_insee_rp_activite | FR | controle | https://www.insee.fr/fr/statistiques/fichier/4171446/base-cc-emploi-pop-act-2016-csv.zip | 2026-10-02 12:05 | 32903894 | `f0e1baee9464255b…` | Licence Ouverte 2.0 | ok |
+| fr_insee_rp_activite | FR | controle | https://www.insee.fr/fr/statistiques/fichier/8202916/base-cc-emploi-pop-active-2021_csv.zip | 2026-10-02 12:06 | 62738508 | `20045b0b245062f7…` | Licence Ouverte 2.0 | ok |
+| fr_insee_rp_cfm | FR | resultat | https://www.insee.fr/fr/statistiques/fichier/2044612/base-cc-coupl-fam-men-2011.xls | 2026-10-02 12:14 | 92713984 | `d282720fd5721ac5…` | Licence Ouverte 2.0 | ok |
