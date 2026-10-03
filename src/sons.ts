@@ -5,4 +5,4 @@ export type SonDef = {
   fichier: string; // chemin dans public/
 };
 
-export const SONS: SonDef[] = [{id: 'pierre-ravin', fichier: 'sons/pierre-ravin.wav'}];
+export const SONS: SonDef[] = [{id: 'boom-punchline', fichier: 'sons/boom-punchline.wav'}];
