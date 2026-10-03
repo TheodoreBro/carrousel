@@ -316,7 +316,7 @@ export const ELEMENTS: ElementDef[] = [
     component: MotAMot,
     props: {
       // En escalier autour de « peste », centré : « une » finit où « peste » commence,
-      // « noire » commence où « peste » finit, 24 px entre les lignes. Un mot toutes les 0,32 s, une frappe sèche à chaque mot.
+      // « noire » commence où « peste » finit, 24 px entre les lignes. Un mot toutes les 0,16 s, un bam qui résonne à chaque mot.
       blocs: [
         {
           lignes: [[{text: 'une'}]],
@@ -326,25 +326,25 @@ export const ELEMENTS: ElementDef[] = [
           x: 500,
           y: 253,
           apparition: 'coup',
-          son: 'sons/snap-sec.wav',
+          son: 'sons/bam.wav',
         },
         {
           lignes: [[{text: 'peste', color: '#4B0001'}]],
-          at: 8,
+          at: 4,
           stagger: 0,
           coin: 'centre',
           apparition: 'coup',
-          son: 'sons/snap-sec.wav',
+          son: 'sons/bam.wav',
         },
         {
           lignes: [[{text: 'noire'}]],
-          at: 16,
+          at: 8,
           stagger: 0,
           coin: 'bas-droite',
           x: 364,
           y: 253,
           apparition: 'coup',
-          son: 'sons/snap-sec.wav',
+          son: 'sons/bam.wav',
         },
       ],
       size: 200,
