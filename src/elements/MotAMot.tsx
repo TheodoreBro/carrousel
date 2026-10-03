@@ -34,7 +34,7 @@ export type MotAMotProps = {
   blocs: Bloc[];
   size?: number;
   color?: string;
-  relief?: boolean; // relief pour texte sombre : liseré de lumière, ombre portée, halo clair
+  relief?: boolean; // relief discret pour texte sombre : liseré de lumière, ombre portée courte
 };
 
 type Morceau = {text: string; color?: string};

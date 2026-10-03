@@ -315,19 +315,12 @@ export const ELEMENTS: ElementDef[] = [
     id: 'peste-noire',
     component: MotAMot,
     props: {
+      // En escalier autour de « peste », centré : « une » finit où « peste » commence,
+      // « noire » commence où « peste » finit, 24 px entre les lignes.
       blocs: [
-        {lignes: [[{text: 'une'}]], at: 0, stagger: 0, coin: 'haut-gauche', x: 120, y: 100, apparition: 'coup'},
+        {lignes: [[{text: 'une'}]], at: 0, stagger: 0, coin: 'haut-gauche', x: 500, y: 253, apparition: 'coup'},
         {lignes: [[{text: 'peste'}]], at: 10, stagger: 0, coin: 'centre', apparition: 'coup'},
-        {
-          lignes: [[{text: 'noire'}]],
-          at: 20,
-          stagger: 0,
-          coin: 'bas-droite',
-          x: 120,
-          y: 100,
-          apparition: 'coup',
-          son: 'sons/boom-punchline.wav',
-        },
+        {lignes: [[{text: 'noire'}]], at: 20, stagger: 0, coin: 'bas-droite', x: 364, y: 253, apparition: 'coup'},
       ],
       size: 200,
       color: COLORS.black,
