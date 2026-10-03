@@ -41,15 +41,60 @@ export const fonduFinal = (x: Float64Array, secondes: number) => {
   for (let i = 0; i < n; i++) x[x.length - 1 - i] *= 0.5 - 0.5 * Math.cos((Math.PI * i) / n);
 };
 
-// Normalise à la crête voulue et écrit un WAV PCM 24 bits stéréo (même signal sur les deux canaux).
-export const ecrireWav = (chemin: string, x: Float64Array, creteDb: number) => {
-  const crete = x.reduce((m, v) => Math.max(m, Math.abs(v)), 0);
+// Réverbération de type Schroeder/Freeverb, stéréo (8 filtres en peigne amortis + 4 passe-tout par canal).
+// rt60 : durée de décroissance de 60 dB (s) ; amortissement : 0 = clair, 0,9 = très sombre ;
+// taille : multiplie les retards (1 = pièce, 2,5 = grand espace ouvert) ; ecart : décorrélation droite (éch.).
+export const reverbe = (
+  x: Float64Array,
+  {rt60, amortissement, taille = 1, ecart = 23}: {rt60: number; amortissement: number; taille?: number; ecart?: number},
+): [Float64Array, Float64Array] => {
+  const echelle = SR / 44100;
+  const peignes = [1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617].map((d) => Math.round(d * taille * echelle));
+  const passeTout = [556, 441, 341, 225].map((d) => Math.round(d * echelle));
+  const canal = (dec: number) => {
+    const out = new Float64Array(x.length);
+    for (const d0 of peignes) {
+      const d = d0 + dec;
+      const g = Math.pow(10, (-3 * d) / SR / rt60);
+      const buf = new Float64Array(d);
+      let idx = 0, lp = 0;
+      for (let i = 0; i < x.length; i++) {
+        const y = buf[idx];
+        lp = y * (1 - amortissement) + lp * amortissement;
+        buf[idx] = x[i] + lp * g;
+        out[i] += y;
+        idx = (idx + 1) % d;
+      }
+    }
+    for (const a0 of passeTout) {
+      const d = a0 + dec;
+      const buf = new Float64Array(d);
+      let idx = 0;
+      for (let i = 0; i < out.length; i++) {
+        const b = buf[idx];
+        buf[idx] = out[i] + b * 0.5;
+        out[i] = b - out[i];
+        idx = (idx + 1) % d;
+      }
+    }
+    return out;
+  };
+  return [canal(0), canal(ecart)];
+};
+
+// Normalise à la crête voulue et écrit un WAV PCM 24 bits stéréo.
+// Un signal mono est écrit à l'identique sur les deux canaux.
+export const ecrireWav = (chemin: string, x: Float64Array | [Float64Array, Float64Array], creteDb: number) => {
+  const [g, d] = x instanceof Float64Array ? [x, x] : x;
+  const crete = Math.max(...[g, d].map((c) => c.reduce((m, v) => Math.max(m, Math.abs(v)), 0)));
   const gain = Math.pow(10, creteDb / 20) / crete;
   const CANAUX = 2, OCTETS = 3;
-  const data = Buffer.alloc(x.length * CANAUX * OCTETS);
-  for (let i = 0; i < x.length; i++) {
-    const v = Math.max(-8388608, Math.min(8388607, Math.round(x[i] * gain * 8388607)));
-    for (let c = 0; c < CANAUX; c++) data.writeIntLE(v, (i * CANAUX + c) * OCTETS, OCTETS);
+  const n = g.length;
+  const data = Buffer.alloc(n * CANAUX * OCTETS);
+  const ech = (v: number) => Math.max(-8388608, Math.min(8388607, Math.round(v * gain * 8388607)));
+  for (let i = 0; i < n; i++) {
+    data.writeIntLE(ech(g[i]), (i * CANAUX) * OCTETS, OCTETS);
+    data.writeIntLE(ech(d[i]), (i * CANAUX + 1) * OCTETS, OCTETS);
   }
   const entete = Buffer.alloc(44);
   entete.write('RIFF', 0); entete.writeUInt32LE(36 + data.length, 4); entete.write('WAVE', 8);
@@ -60,5 +105,5 @@ export const ecrireWav = (chemin: string, x: Float64Array, creteDb: number) => {
   const sortie = path.resolve(chemin);
   mkdirSync(path.dirname(sortie), {recursive: true});
   writeFileSync(sortie, Buffer.concat([entete, data]));
-  console.log(`${path.relative(process.cwd(), sortie)} — ${(x.length / SR).toFixed(2)}s, crête ${creteDb} dBFS`);
+  console.log(`${path.relative(process.cwd(), sortie)} — ${(n / SR).toFixed(2)}s, crête ${creteDb} dBFS`);
 };

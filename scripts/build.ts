@@ -2,34 +2,44 @@
 import {bundle} from '@remotion/bundler';
 import {renderMedia, selectComposition, RenderInternals} from '@remotion/renderer';
 import {execFileSync} from 'node:child_process';
-import {existsSync, mkdirSync, renameSync, unlinkSync} from 'node:fs';
+import {copyFileSync, existsSync, mkdirSync, renameSync, unlinkSync} from 'node:fs';
 import path from 'node:path';
 import {OUT_DIR, VIDEO} from '../src/config';
 import {ELEMENTS} from '../src/elements/registry';
+import {SONS} from '../src/sons';
 
 const arg = process.argv.find((a) => a.startsWith('--nom='));
 const id = arg?.slice('--nom='.length);
+const liste = () => {
+  console.error('Éléments : ' + ELEMENTS.map((e) => e.id).join(', '));
+  console.error('Sons : ' + SONS.map((s) => s.id).join(', '));
+};
 if (!id) {
   console.error('Usage : npm run build -- --nom=<id>');
-  console.error('Éléments : ' + ELEMENTS.map((e) => e.id).join(', '));
+  liste();
   process.exit(1);
 }
 const el = ELEMENTS.find((e) => e.id === id);
-if (!el) {
+const son = SONS.find((s) => s.id === id);
+if (!el && !son) {
   console.error(`Élément inconnu : ${id}`);
-  console.error('Éléments : ' + ELEMENTS.map((e) => e.id).join(', '));
+  liste();
   process.exit(1);
 }
 
-const ext = el.alpha ? 'mov' : 'mp4';
-const outFile = path.resolve(OUT_DIR, `${el.id}.${ext}`);
+const ext = son ? 'wav' : el!.alpha ? 'mov' : 'mp4';
+const outFile = path.resolve(OUT_DIR, `${id}.${ext}`);
 // Rendu dans un fichier temporaire, puis remplacement d'un coup : le fichier livré ne disparaît jamais
 // pendant le rendu (sinon Premiere le passe « hors ligne »).
-const tmpFile = path.resolve(OUT_DIR, `.${el.id}.rendu.${ext}`);
+const tmpFile = path.resolve(OUT_DIR, `.${id}.rendu.${ext}`);
 mkdirSync(path.dirname(outFile), {recursive: true});
 if (existsSync(tmpFile)) unlinkSync(tmpFile);
 
-const probe = (file: string) => {
+const probe = (
+  file: string,
+  flux = 'v:0',
+  champs = 'codec_name,pix_fmt,width,height,r_frame_rate,nb_frames',
+): Record<string, string | undefined> => {
   const ffprobe = RenderInternals.getExecutablePath({
     type: 'ffprobe',
     indent: false,
@@ -41,8 +51,8 @@ const probe = (file: string) => {
     ffprobe,
     [
       '-v', 'error',
-      '-select_streams', 'v:0',
-      '-show_entries', 'stream=codec_name,pix_fmt,width,height,r_frame_rate,nb_frames',
+      '-select_streams', flux,
+      '-show_entries', `stream=${champs}`,
       '-of', 'default=noprint_wrappers=1',
       file,
     ],
@@ -51,7 +61,35 @@ const probe = (file: string) => {
   return Object.fromEntries(out.trim().split('\n').map((l) => l.split('=')));
 };
 
+// Son seul : copie depuis public/, vérification au ffprobe, remplacement d'un coup.
+const livrerSon = (s: NonNullable<typeof son>) => {
+  const source = path.resolve('public', s.fichier);
+  if (!existsSync(source)) {
+    console.error(`ÉCHEC — ${path.relative(process.cwd(), source)} introuvable (lancer son script scripts/gen-*.ts)`);
+    process.exit(1);
+  }
+  copyFileSync(source, tmpFile);
+  const info = probe(tmpFile, 'a:0', 'codec_name,sample_rate,channels,duration');
+  const errors: string[] = [];
+  if (!info.codec_name?.startsWith('pcm_')) errors.push(`codec ${info.codec_name}`);
+  if (info.sample_rate !== '48000') errors.push(`fréquence ${info.sample_rate}`);
+  if (info.channels !== '2') errors.push(`${info.channels} canaux`);
+  if (errors.length) {
+    unlinkSync(tmpFile);
+    if (existsSync(outFile)) unlinkSync(outFile);
+    console.error('ÉCHEC — rien de livré : ' + errors.join(', '));
+    process.exit(1);
+  }
+  renameSync(tmpFile, outFile);
+  console.log(`${path.relative(process.cwd(), outFile)} — ${Number(info.duration).toFixed(1)}s (${info.codec_name}, ${info.sample_rate} Hz, stéréo)`);
+};
+if (son) {
+  livrerSon(son);
+  process.exit(0);
+}
+
 (async () => {
+  const el = ELEMENTS.find((e) => e.id === id)!;
   const serveUrl = await bundle({entryPoint: path.resolve('src/index.ts')});
   // Optionnel : REMOTION_BROWSER=/chemin/vers/chrome pour éviter le téléchargement de Chrome Headless Shell.
   const browserExecutable = process.env.REMOTION_BROWSER ?? null;
