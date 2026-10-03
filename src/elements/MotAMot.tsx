@@ -1,4 +1,4 @@
-import {AbsoluteFill, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Html5Audio, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {COLORS, CUT_FRAMES, FONT, TEXT_RELIEF} from '../config';
 import {fontFamily} from '../fonts';
 
@@ -24,6 +24,8 @@ export type Bloc = {
   hideAt?: number; // frame à laquelle le bloc disparaît d'un coup (jamais si absent)
   gap?: number; // espace entre les lignes (px), p. ex. pour dégager les accents
   apparition?: 'volet' | 'coup'; // volet vertical en CUT_FRAMES (par défaut) ou mot qui apparaît d'un coup
+  son?: string; // fichier dans public/, joué au premier mot du bloc
+  sonVolume?: number; // 1 = niveau du fichier
   size?: number;
   color?: string;
 };
@@ -129,6 +131,13 @@ export const MotAMot: React.FC<MotAMotProps> = ({blocs, size = 140, color = COLO
       {blocs.map((b, i) => (
         <BlocMots key={i} bloc={b} frame={frame} size={size} color={color} relief={relief} />
       ))}
+      {blocs.map((b, i) =>
+        b.son ? (
+          <Sequence key={`son-${i}`} from={b.at} layout="none">
+            <Html5Audio src={staticFile(b.son)} volume={b.sonVolume ?? 1} />
+          </Sequence>
+        ) : null,
+      )}
     </AbsoluteFill>
   );
 };

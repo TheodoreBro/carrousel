@@ -318,7 +318,16 @@ export const ELEMENTS: ElementDef[] = [
       blocs: [
         {lignes: [[{text: 'une'}]], at: 0, stagger: 0, coin: 'haut-gauche', x: 120, y: 100, apparition: 'coup'},
         {lignes: [[{text: 'peste'}]], at: 10, stagger: 0, coin: 'centre', apparition: 'coup'},
-        {lignes: [[{text: 'noire'}]], at: 20, stagger: 0, coin: 'bas-droite', x: 120, y: 100, apparition: 'coup'},
+        {
+          lignes: [[{text: 'noire'}]],
+          at: 20,
+          stagger: 0,
+          coin: 'bas-droite',
+          x: 120,
+          y: 100,
+          apparition: 'coup',
+          son: 'sons/boom-punchline.wav',
+        },
       ],
       size: 200,
       color: COLORS.black,
