@@ -316,11 +316,36 @@ export const ELEMENTS: ElementDef[] = [
     component: MotAMot,
     props: {
       // En escalier autour de « peste », centré : « une » finit où « peste » commence,
-      // « noire » commence où « peste » finit, 24 px entre les lignes.
+      // « noire » commence où « peste » finit, 24 px entre les lignes. Une frappe sèche à chaque mot.
       blocs: [
-        {lignes: [[{text: 'une'}]], at: 0, stagger: 0, coin: 'haut-gauche', x: 500, y: 253, apparition: 'coup'},
-        {lignes: [[{text: 'peste'}]], at: 10, stagger: 0, coin: 'centre', apparition: 'coup'},
-        {lignes: [[{text: 'noire'}]], at: 20, stagger: 0, coin: 'bas-droite', x: 364, y: 253, apparition: 'coup'},
+        {
+          lignes: [[{text: 'une'}]],
+          at: 0,
+          stagger: 0,
+          coin: 'haut-gauche',
+          x: 500,
+          y: 253,
+          apparition: 'coup',
+          son: 'sons/snap-sec.wav',
+        },
+        {
+          lignes: [[{text: 'peste', color: '#4B0001'}]],
+          at: 10,
+          stagger: 0,
+          coin: 'centre',
+          apparition: 'coup',
+          son: 'sons/snap-sec.wav',
+        },
+        {
+          lignes: [[{text: 'noire'}]],
+          at: 20,
+          stagger: 0,
+          coin: 'bas-droite',
+          x: 364,
+          y: 253,
+          apparition: 'coup',
+          son: 'sons/snap-sec.wav',
+        },
       ],
       size: 200,
       color: COLORS.black,
