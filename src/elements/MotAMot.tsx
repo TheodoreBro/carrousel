@@ -1,5 +1,5 @@
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
-import {COLORS, CUT_FRAMES, FONT} from '../config';
+import {COLORS, CUT_FRAMES, FONT, TEXT_RELIEF} from '../config';
 import {fontFamily} from '../fonts';
 
 export type Coin = 'haut-gauche' | 'haut-droite' | 'bas-gauche' | 'bas-droite' | 'centre';
@@ -23,6 +23,7 @@ export type Bloc = {
   blur?: number; // flou maximal (px)
   hideAt?: number; // frame à laquelle le bloc disparaît d'un coup (jamais si absent)
   gap?: number; // espace entre les lignes (px), p. ex. pour dégager les accents
+  apparition?: 'volet' | 'coup'; // volet vertical en CUT_FRAMES (par défaut) ou mot qui apparaît d'un coup
   size?: number;
   color?: string;
 };
@@ -31,6 +32,7 @@ export type MotAMotProps = {
   blocs: Bloc[];
   size?: number;
   color?: string;
+  relief?: boolean; // relief pour texte sombre : liseré de lumière, ombre portée, halo clair
 };
 
 type Morceau = {text: string; color?: string};
@@ -56,7 +58,13 @@ const mots = (ligne: Segment[]): Mot[] => {
 
 const progress = (frame: number, at: number) => Math.max(0, Math.min(1, (frame - at + 1) / CUT_FRAMES));
 
-const BlocMots: React.FC<{bloc: Bloc; frame: number; size: number; color: string}> = ({bloc, frame, size, color}) => {
+const BlocMots: React.FC<{bloc: Bloc; frame: number; size: number; color: string; relief: boolean}> = ({
+  bloc,
+  frame,
+  size,
+  color,
+  relief,
+}) => {
   if (bloc.hideAt !== undefined && frame >= bloc.hideAt) return null;
   const centre = bloc.coin === 'centre';
   const droite = bloc.coin.endsWith('droite');
@@ -80,6 +88,7 @@ const BlocMots: React.FC<{bloc: Bloc; frame: number; size: number; color: string
         textAlign: centre ? 'center' : droite ? 'right' : 'left',
         whiteSpace: 'nowrap',
         filter: flou > 0 ? `blur(${flou}px)` : 'none',
+        textShadow: relief ? TEXT_RELIEF : 'none',
       }}
     >
       {bloc.lignes.map((ligne, i) => (
@@ -89,7 +98,14 @@ const BlocMots: React.FC<{bloc: Bloc; frame: number; size: number; color: string
             return (
               <span key={j}>
                 {j > 0 && ' '}
-                <span style={{display: 'inline-block', clipPath: `inset(-40% 0 ${(1 - p) * 100}% 0)`}}>
+                <span
+                  style={
+                    bloc.apparition === 'coup'
+                      ? // D'un coup, sans découpe : rien ne rogne le relief autour des lettres.
+                        {display: 'inline-block', visibility: p > 0 ? 'visible' : 'hidden'}
+                      : {display: 'inline-block', clipPath: `inset(-40% 0 ${(1 - p) * 100}% 0)`}
+                  }
+                >
                   {mot.map((m, k) => (
                     <span key={k} style={{color: m.color}}>
                       {m.text}
@@ -106,12 +122,12 @@ const BlocMots: React.FC<{bloc: Bloc; frame: number; size: number; color: string
 };
 
 // Phrase en blocs ancrés aux coins ou au centre de l'écran, mots révélés un par un ; un bloc peut se flouter puis disparaître.
-export const MotAMot: React.FC<MotAMotProps> = ({blocs, size = 140, color = COLORS.white}) => {
+export const MotAMot: React.FC<MotAMotProps> = ({blocs, size = 140, color = COLORS.white, relief = false}) => {
   const frame = useCurrentFrame();
   return (
     <AbsoluteFill style={{backgroundColor: 'transparent'}}>
       {blocs.map((b, i) => (
-        <BlocMots key={i} bloc={b} frame={frame} size={size} color={color} />
+        <BlocMots key={i} bloc={b} frame={frame} size={size} color={color} relief={relief} />
       ))}
     </AbsoluteFill>
   );

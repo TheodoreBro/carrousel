@@ -54,3 +54,8 @@ export const FONT_MANUSCRITE = {
 
 // Ombre portée derrière un texte, pour la lisibilité sur image.
 export const TEXT_SHADOW = '0 4px 30px rgba(0,0,0,0.7)';
+
+// Relief pour un texte sombre sur image : liseré de lumière sur le haut des lettres, ombre portée
+// dessous, halo clair diffus qui le détache d'un fond sombre.
+export const TEXT_RELIEF =
+  '0 -2px 1px rgba(255,255,255,0.5), 0 8px 18px rgba(0,0,0,0.85), 0 0 36px rgba(255,255,255,0.28)';
