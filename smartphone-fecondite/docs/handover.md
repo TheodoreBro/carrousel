@@ -57,9 +57,11 @@ Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prim
   `tables/est_es/_run.json`) : voir §1 quater. Chaîne : `01_download.py --country ES` (couverture LTE municipale MINECO/SETELECO servie par
   digital.gob.es, microdonnées INE des naissances 2007-2024 et des mariages 2008-2024, Padrón par âge 2003-2022 en PC-Axis),
   `16_es_treatment.py`, `17_es_outcomes.py`, `15_estimate_country.py --country ES`, `12_co_figures_tables.py --country ES` ; `make es`.
-- **Brésil : vérifié le 04/10/2026 et inclus (addendum A5)** ; chaîne `01_download.py --country BR` (Anatel « municípios atendidos », API IBGE :
-  naissances table 2609, recensements 2000/2010/2022, estimations de population, mariages table 4412), `13_br_treatment.py`,
-  `14_br_outcomes.py`, `15_estimate_country.py --country BR`, `12_co_figures_tables.py --country BR` ; `make br`. État : voir §1 quinquies.
+- **Brésil : vérifié le 04/10/2026 et inclus (addendum A5), estimations exécutées le 04/10/2026** (`15_estimate_country.py --country BR`,
+  17:25-17:46, `tables/est_br/_run.json`) ; chaîne `01_download.py --country BR` (Anatel « municípios atendidos », API IBGE : naissances
+  table 2609, recensements 2000/2010/2022, estimations de population, mariages table 4412), `13_br_treatment.py`, `14_br_outcomes.py`,
+  `15_estimate_country.py --country BR`, `12_co_figures_tables.py --country BR` ; `make br`. Voir §1 quinquies.
+- **Synthèse entre pays exécutée** (`18_meta.py`, règles A7) : `tables/t_meta.md`, `figures/fig_meta.pdf` ; voir §1 sexies.
 - Pas encore fait : rédaction (Étape 4) ; panel mondial (hôtes bloqués) ; D2 (SIG) ; références (`references.bib` vide) ; méta-analyse
   (≥ 3 pays inclus désormais : France, Colombie, Brésil, Espagne — à écrire, §7 de la préregistration).
 
@@ -124,8 +126,28 @@ rejeté, règle à écrire **avant** de lancer la méta-analyse (addendum à ven
 
 Traitement (`t_treatment_br.md`) : 5 570 municípios ; présence 4G d'au moins un opérateur : 2014 : 189, 2015 : 298, 2016 : 551, 2017 : 2 739,
 2018 : 680, 2019 : 399, 2020 : 424, 2021 : 170, 2022-2023 : 120, jamais : 0 ; la source est annuelle (décembre) jusqu'en 2016 et mensuelle
-ensuite (le saut de 2017 vient en partie de là, dit). Résultats et estimations : voir `t_outcomes_br.md`, `t_sample_br.md`, `t_estimates_br.md`
-quand ils existent (état dans `tables/est_br/_run.json`).
+ensuite (le saut de 2017 vient en partie de là, dit). Panel (`t_outcomes_br.md`, `t_sample_br.md`) : 5 558 municípios × 2003-2024 (12 exclus :
+créés en 2013 et leurs municípios d'origine), ≈ 2,9 M naissances par an en 2003, 2,3 M en 2024 (provisoire), enregistrements tardifs 2 % ;
+MDE par permutation : H1 1,3 %, H2b 1,4 %. Résultats : lire `t_estimates_br.md` et `est_br_all.csv`. Points à connaître :
+- primaire H1 : ATT[1,5] = −0,036 (es 0,019, p 0,06 ; bootstrap par grappes es 0,027, p 0,18), pré-test p 0,66 ; H2b : −0,048 (es 0,022,
+  p 0,03 ; bootstrap es 0,029, p 0,10), pré-test p 0,82 ; agrégat à composition constante −0,033 (p 0,19) ; sans covariables −0,06 à −0,07
+  (p < 0,001) mais pré-test rejeté ; TWFE donne un signe opposé (+0,03), Sun & Abraham −0,07, did2s −0,03 ;
+- par âge : 15-19 −0,096 (p Holm 0,00), 20-24 −0,049 (0,03), 25-29 −0,075 (0,01), 35-39 −0,09 (0,09), 30-34 et 40-49 nuls ; H2d (15-24 −
+  25-39) −0,01 (p 0,46) ;
+- **placebo H5a rejeté** (bascule fictive −3 ans : −0,145, p 0,04) : à discuter avec le pré-test non rejeté de la spécification primaire ;
+  les coefficients d'event study sont nuls de 0 à +3 et décroissent ensuite (jusqu'à −0,5 à +8, cohortes 2014-2016 seules, bande sup-t large) ;
+- H6 : effet concentré dans le tercile des grands municípios (−0,23, p Holm 0,00) et au Centro-Oeste (−0,14) ; Nordeste nul, Sudeste +0,07 ;
+- H3a non estimé (mariages 2017-2024 indisponibles, API IBGE) ; H3b, H3c, H5b non construits (A5) ; robustesse : fenêtre 2003-2019 −0,007
+  (p 0,84), sans 2020-2021 −0,03 (p 0,27), ≥ 2 opérateurs −0,027 (p 0,16), 3G −0,017 (p 0,43), cohorte 2014 exclue −0,035 (p 0,08).
+
+## 1 sexies. Synthèse entre pays (A7) — chiffres à connaître
+
+`t_meta.md` : poolé 25-39 (REML, es analytiques, 4 pays) = +9,7 % (p 0,40, I² 96 %, intervalle de prédiction [−99 ; +118]) — dominé par
+l'Espagne (+44 %, es 5) ; avec les es bootstrap : −0,0 % (p 0,99, I² 61 %) ; sensibilité A7 sans les pays au pré-test rejeté (France,
+Espagne) = Colombie + Brésil : −3,9 % (p 0,03, I² 0 %), 15-19 −8,5 % (p < 0,001), 15-24 −5,2 % (p 0,004), 30-34 −5,1 % (p 0,05).
+Règle §6 : H2b rejetée de même signe dans ≥ 2 pays : non (Brésil −4,7 % p 0,03 ; Espagne +44 % non interprétable ; France +1,8 % p 0,12 ;
+Colombie −1,4 % p 0,72) ; poolé non significatif → **« effet net sur les 25 ans et plus : non établi »**. Pour le papier : la sensibilité
+Colombie + Brésil est exploratoire (A7) et ne change pas la règle.
 
 ## 2. Décisions de l'auteur
 
@@ -178,12 +200,16 @@ construit, H6 par densité/taille/rang).
 1. Lire `tables/t_estimates_fr.md` et les figures ; vérifier les lignes « non estimé » / « non estimable » et les
    écarts-types aberrants éventuels (sous-groupes H6 : l'estimateur doublement robuste est instable quand le groupe
    de contrôle d'une cohorte est petit ; les lignes « régression de résultat seule » servent de contrôle).
-2. Pays de niveau 1 (Suède exclue, Colombie faite) : Brésil (Anatel
+2. (fait) Pays de niveau 1 (Suède exclue, Colombie, Brésil, Espagne faits) : Brésil (Anatel
    acessos par município ; SINASC via PCDaS, FTP DATASUS refusé ; SIDRA bloqué → mariages absents), Espagne (datos.gob.es bloqué →
    traitement absent : à signaler). Check-list §4.3 et addendum par pays **avant** toute estimation ; réutiliser `did.py` et le
    squelette de `05_estimate.py`. Pièges : les sites publics derrière Radware/anti-robot se chargent avec Playwright
    (`chromium.launch({proxy: {server: process.env.HTTPS_PROXY}})`, voir scratchpad `pts_links.js` reproduit dans la passation
    §6) ; `openpyxl` refuse l'extension `.part` (corrigé dans `download.py`).
+2 bis. Reste à faire avant l'Étape 4 : (a) relancer `01_download.py --country BR` puis `15_estimate_country.py --country BR --part h3 summary`
+   et `18_meta.py` quand l'API IBGE répond pour les mariages 2017+ (H3a Brésil) ; (b) décider, par addendum, de la règle de présentation
+   de l'Espagne (pays inclus mais identification échouée : §1 quater) ; (c) relire une fois `t_estimates_br.md` et `t_estimates_es.md`
+   ligne par ligne (les « non estimé / non testable » sont attendus) ; (d) `references.bib` : toute référence vérifiée sur la page éditeur.
 3. Étape 4 : rédaction ; références vérifiées une par une sur la page éditeur (doi.org, Springer, PLOS, NBER, RePEc
    joignables ; tandfonline.com et pnas.org refusent → vérifier via doi.org / crossref). Sections 6-11 sans résultat
    externe ; règles §6 appliquées aux lignes nommées en §1 bis.
@@ -249,5 +275,6 @@ docs/preregistration.md, docs/preregistration_addenda.md, docs/etape0_plan.md, d
 Crée le venv (python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt),
 vérifie `python scripts/01_download.py --check`, puis `python scripts/01_download.py --country FR`
 (idempotent : consigne les fichiers déjà présents) et `make build` ; pour la Colombie,
-`python scripts/01_download.py --country CO` puis `make co`. Reprends à l'étape indiquée dans handover.md §4.
+`python scripts/01_download.py --country CO` puis `make co` (de même `BR`/`make br`, `ES`/`make es`, puis `make meta`).
+Reprends à l'étape indiquée dans handover.md §4.
 ```
