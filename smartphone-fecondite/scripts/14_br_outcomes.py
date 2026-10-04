@@ -69,6 +69,7 @@ def births() -> tuple[pd.DataFrame, dict]:
     b["births"] = b.same.fillna(0) + b.late.fillna(0)
     b.loc[b.same.isna() & b.late.isna(), "births"] = np.nan
     b = b.rename(columns={"born": "year"})
+    b = b[b.year >= YEARS[0]]                      # les nés en 2002 enregistrés en 2003 n'ont pas d'enregistrement « même année » lu
     notes["part des enregistrements tardifs (naissances 15-49, 2003-2023)"] = float(
         b[(b.year <= 2023) & b.age_group.isin(AGE_GROUPS)].late.sum() / b[(b.year <= 2023) & b.age_group.isin(AGE_GROUPS)].births.sum())
     return b[["municipio", "year", "age_group", "births"]], notes

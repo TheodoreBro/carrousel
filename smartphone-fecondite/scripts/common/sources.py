@@ -85,7 +85,7 @@ def _ibge_census_urls() -> str:
              for k, g in enumerate(_chunks("1143,1144,1145,1146,1147,1148,1149", 4))]
     items += [f"{IBGE_API}/1378/periodos/2010/variaveis/93?localidades=N6[all]&classificacao=1[0]%7C2[5]%7C287[{g}]%7C455[0]@@ibge1378_censo2010_mulheres_{k}.json"
               for k, g in enumerate(_chunks(IBGE_SINGLE_AGES_15_49, 5))]
-    items += [f"{IBGE_API}/9514/periodos/2022/variaveis/93?localidades=N6[all]&classificacao=2[5]%7C287[{g}]%7C286[0]@@ibge9514_censo2022_mulheres_{k}.json"
+    items += [f"{IBGE_API}/9514/periodos/2022/variaveis/93?localidades=N6[all]&classificacao=2[5]%7C287[{g}]%7C286[113635]@@ibge9514_censo2022_mulheres_{k}.json"
               for k, g in enumerate(_chunks(IBGE_SINGLE_AGES_15_49, 5))]
     return "|".join(items)
 
@@ -94,7 +94,7 @@ def _ibge_census_total_urls() -> str:
     return "|".join([
         f"{IBGE_API}/200/periodos/2000/variaveis/93?localidades=N6[all]&classificacao=2[0]%7C1[0]%7C58[0]@@ibge200_censo2000_total.json",
         f"{IBGE_API}/1378/periodos/2010/variaveis/93?localidades=N6[all]&classificacao=1[0]%7C2[0]%7C287[0]%7C455[0]@@ibge1378_censo2010_total.json",
-        f"{IBGE_API}/9514/periodos/2022/variaveis/93?localidades=N6[all]&classificacao=2[0]%7C287[100362]%7C286[0]@@ibge9514_censo2022_total.json",
+        f"{IBGE_API}/9514/periodos/2022/variaveis/93?localidades=N6[all]&classificacao=2[6794]%7C287[100362]%7C286[113635]@@ibge9514_censo2022_total.json",
     ])
 
 
@@ -105,7 +105,7 @@ def _ibge_estimates_urls() -> str:
 
 def _ibge_marriages_urls() -> str:
     return "|".join(f"{IBGE_API}/4412/periodos/{y}/variaveis/221?localidades=N6[all]&classificacao=244[0]%7C664[0]%7C665[0]%7C666[0]%7C667[{g}]"
-                    f"@@ibge4412_casamentos_{y}_{k}.json" for y in range(2013, 2025) for k, g in enumerate(_chunks(IBGE_4412_WIFE_AGE_IDS, 4)))
+                    f"@@ibge4412_casamentos_{y}_{k}.json" for y in range(2013, 2025) for k, g in enumerate(_chunks(IBGE_4412_WIFE_AGE_IDS, 6)))
 
 
 # ----------------------------------------------------------------------------- Espagne : microdonnées INE (MNP)

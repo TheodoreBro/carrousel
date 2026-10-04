@@ -124,7 +124,7 @@ def _stream_to(url: str, tmp: Path, max_restarts: int = 5) -> tuple[int, request
     first: requests.Response | None = None
     while True:
         headers = {"Range": f"bytes={size}-"} if size else None
-        r = _get(url, stream=True, headers=headers)
+        r = _get(url, stream=True, headers=headers, timeout=900)      # l'API IBGE met 2 à 4 min à répondre sur les grandes tables
         if first is None:
             first = r
         if size and r.status_code != 206:          # le serveur ne gère pas Range : on repart de zéro

@@ -2,7 +2,7 @@
 PY ?= python
 SCRIPTS := scripts
 
-.PHONY: all check download log build estimate co figures tables paper test clean
+.PHONY: all check download log build estimate co br es figures tables paper test clean
 
 all: download build estimate figures tables paper
 
@@ -31,7 +31,21 @@ co:                 ## Colombie : traitement, résultats, échantillon/MDE, esti
 	$(PY) $(SCRIPTS)/10_co_outcomes.py
 	$(PY) $(SCRIPTS)/11_co_estimate.py --part sample
 	$(PY) $(SCRIPTS)/11_co_estimate.py
-	$(PY) $(SCRIPTS)/12_co_figures_tables.py
+	$(PY) $(SCRIPTS)/12_co_figures_tables.py --country CO
+
+br:                 ## Brésil : traitement, résultats, échantillon/MDE, estimations, figures et tableaux (01_download.py --country BR d'abord)
+	$(PY) $(SCRIPTS)/13_br_treatment.py
+	$(PY) $(SCRIPTS)/14_br_outcomes.py
+	$(PY) $(SCRIPTS)/15_estimate_country.py --country BR --part sample
+	$(PY) $(SCRIPTS)/15_estimate_country.py --country BR
+	$(PY) $(SCRIPTS)/12_co_figures_tables.py --country BR
+
+es:                 ## Espagne : idem (01_download.py --country ES d'abord)
+	$(PY) $(SCRIPTS)/16_es_treatment.py
+	$(PY) $(SCRIPTS)/17_es_outcomes.py
+	$(PY) $(SCRIPTS)/15_estimate_country.py --country ES --part sample
+	$(PY) $(SCRIPTS)/15_estimate_country.py --country ES
+	$(PY) $(SCRIPTS)/12_co_figures_tables.py --country ES
 
 figures:
 	$(PY) $(SCRIPTS)/06_figures.py
