@@ -113,7 +113,7 @@ def mun_age_panel(cohort_col: str | None = None, censored_col: str | None = None
     years = years or CFG["years"]
     oc = outcomes()
     st = static()
-    keep = ["municipio", cohort_col, censored_col] + [c for c in ("region", "uf", "prov", "pop_2010", "pop_2013") if c in st.columns]
+    keep = ["municipio", cohort_col, censored_col] + [c for c in ("region", "uf", "prov", "pop_2010", "pop_2013") if c in st.columns and c not in oc.columns]
     d = oc.merge(st[keep], on="municipio", how="inner")
     d = d[d.year.between(*years) & (d.women > 0)].copy()
     if drop_censored:
