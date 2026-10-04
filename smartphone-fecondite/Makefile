@@ -2,7 +2,7 @@
 PY ?= python
 SCRIPTS := scripts
 
-.PHONY: all check download log build estimate co br es figures tables paper test clean
+.PHONY: all check download log build estimate co br es meta figures tables paper test clean
 
 all: download build estimate figures tables paper
 
@@ -46,6 +46,9 @@ es:                 ## Espagne : idem (01_download.py --country ES d'abord)
 	$(PY) $(SCRIPTS)/15_estimate_country.py --country ES --part sample
 	$(PY) $(SCRIPTS)/15_estimate_country.py --country ES
 	$(PY) $(SCRIPTS)/12_co_figures_tables.py --country ES
+
+meta:               ## synthèse entre pays (A7) : tables/t_meta.md, figures/fig_meta.pdf
+	$(PY) $(SCRIPTS)/18_meta.py
 
 figures:
 	$(PY) $(SCRIPTS)/06_figures.py
