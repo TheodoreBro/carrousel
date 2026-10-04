@@ -1,0 +1,25 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Espagne — hétérogénéité (H6)}\label{tab:es_h6}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2013 : tercile 1 & cs & ATT[1,1] & 0.2089*** & (0.0348) & 1 ($\leq$ 2015) & 241 & 3\,856 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2013 : tercile 2 & cs & ATT[1,1] & -0.0670** & (0.0310) & 1 ($\leq$ 2014) & 240 & 3\,840 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2013 : tercile 3 & cs & ATT[1,0] &  &  & 0 ($\leq$ 2013) & 241 & 3\,856 \\
+H6 & log(naissances de rang 1+0,5 / 1 000 f. 15-49) & rang 1 & cs & ATT[1,1] & 0.5446*** & (0.0457) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H6 & log(naissances de rang 2++0,5 / 1 000 f. 15-49) & rang 2 et plus & cs & ATT[1,1] & -0.4236*** & (0.0412) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2013 : tercile 1 & unités avec covariables & cs & ATT[1,1] (Holm) & 0.2089*** & (0.0348) & 1 ($\leq$ 2015) & 241 & 3\,856 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2013 : tercile 2 & unités avec covariables & cs & ATT[1,1] (Holm) & -0.0670** & (0.0310) & 1 ($\leq$ 2014) & 240 & 3\,840 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2013 : tercile 3 & unités avec covariables & cs & ATT[1,0] (Holm) &  &  & 0 ($\leq$ 2013) & 241 & 3\,856 \\
+H6 & log(naissances de rang 1+0,5 / 1 000 f. 15-49) — rang 1 & unités avec covariables & cs & ATT[1,1] (Holm) & 0.5446*** & (0.0457) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H6 & log(naissances de rang 2++0,5 / 1 000 f. 15-49) — rang 2 et plus & unités avec covariables & cs & ATT[1,1] (Holm) & -0.4236*** & (0.0412) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country ES. p Holm dans la colonne notes du fichier est\_<pays>\_all.csv. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

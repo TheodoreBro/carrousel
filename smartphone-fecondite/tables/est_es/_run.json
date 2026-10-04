@@ -1,0 +1,27 @@
+{
+  "generated": "2026-10-04 15:36:03",
+  "commit": "937700b",
+  "args": {
+    "country": "ES",
+    "part": [
+      "h1",
+      "h2",
+      "h3",
+      "h5",
+      "h6",
+      "robust",
+      "summary"
+    ],
+    "boot": 999,
+    "nboot": 50,
+    "fast": false
+  },
+  "n_rows": 959,
+  "inputs": {
+    "es_outcomes_mun.parquet": "2026-10-04 15:29:16",
+    "es_outcomes_mun_age.parquet": "2026-10-04 15:29:16",
+    "es_static.parquet": "2026-10-04 15:29:16",
+    "es_treatment.parquet": "2026-10-04 14:59:36",
+    "es_treatment_static.parquet": "2026-10-04 14:59:36"
+  }
+}

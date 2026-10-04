@@ -1,0 +1,47 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Espagne — effet de la bascule 4G sur les naissances : effet total (H1) et 25-39 ans (H2b)}\label{tab:es_main}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & primaire : unités avec covariables & cs & ATT[1,1] & 0.2050*** & (0.0224) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & primaire : unités avec covariables & cs & ATT[1,1] & 0.2050 & (0.1302) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & primaire : unités avec covariables ; agrégation à composition constante & cs & ATT[1,5] (composition constante) &  &  & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, comparaisons ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & sunab & ATT[1,2] & 0.0716** & (0.0308) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, comparaisons ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & did2s & ATT[1,2] & -0.1387 & (0.1562) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, comparaisons ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT[1,2] & -0.3145 & (0.2256) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, comparaisons ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT & -0.0121 & (0.0141) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, comparaisons ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.0146** & (0.0065) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, comparaisons ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 1.4700** & (0.6589) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables & cs & ATT[1,2] & 0.0732*** & (0.0282) & 2 ($\leq$ 2015) & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & sunab & ATT[1,2] & 0.0716** & (0.0308) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & did2s & ATT[1,2] & -0.1387 & (0.1562) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT[1,2] & -0.3145 & (0.2256) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT & -0.0121 & (0.0141) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.0146** & (0.0065) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 1.4700** & (0.6589) &  & 722 & 11\,552 \\
+H1 & naissances / 1 000 f. 15-49 (taux brut) & unités avec covariables & cs & ATT[1,1] & 2.9184*** & (0.6715) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H1 & asinh(taux) & unités avec covariables & cs & ATT[1,1] & 0.2083*** & (0.0226) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & ATT[1,1] & 0.3654*** & (0.0349) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & ATT[1,1] & 0.3654** & (0.1837) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; agrégation à composition constante & cs & ATT[1,5] (composition constante) &  &  & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & sunab & ATT[1,2] & 0.0964*** & (0.0363) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & did2s & ATT[1,2] & -0.1190 & (0.1475) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT[1,2] & -0.2849 & (0.2142) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT & -0.0083 & (0.0139) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.0091 & (0.0057) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 0.9151 & (0.5787) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités, sans covariables & cs & ATT[1,2] & 0.0932** & (0.0370) & 2 ($\leq$ 2015) & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités, sans covariables ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT[1,2] & -0.2849 & (0.2142) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités, sans covariables ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT & -0.0083 & (0.0139) &  & 722 & 11\,552 \\
+H2b & naissances / 1 000 f. 25-39 (taux brut) & unités avec covariables, bascule 4G & cs & ATT[1,1] & 16.8524*** & (1.8656) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H2b & asinh(naissances / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & ATT[1,1] & 0.3698*** & (0.0353) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country ES. cs = Callaway \& Sant'Anna (écart-type avec covariance complète des coefficients). ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

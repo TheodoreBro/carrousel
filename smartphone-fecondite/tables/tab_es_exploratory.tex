@@ -1,0 +1,37 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Espagne — analyses complémentaires hors préregistration (addendum A6)}\label{tab:es_exploratory}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, comparaisons ; fenêtre complète & twfe & ATT & 0.0118 & (0.0096) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables ; fenêtre complète & twfe & ATT & 0.0118 & (0.0096) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, référence $-$2 (anticipation = 1) & cs & ATT[1,0] &  &  & 0 ($\leq$ 2014) & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, régression de résultat seule (est\_method = reg) & cs & ATT[1,2] & -0.0391** & (0.0179) & 2 ($\leq$ 2015) & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0040 & (0.0092) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités, sans covariables ; fenêtre complète & twfe & ATT & 0.0040 & (0.0092) &  & 722 & 11\,552 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G, référence $-$2 (anticipation = 1) & cs & ATT[1,0] &  &  & 0 ($\leq$ 2014) & 722 & 11\,552 \\
+H2a & log(naissances+0,5 / 1 000 f. 15-19) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0491 & (0.0349) &  & 722 & 11\,552 \\
+H2a & log(naissances+0,5 / 1 000 f. 20-24) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0118 & (0.0211) &  & 722 & 11\,552 \\
+H2c & log(naissances+0,5 / 1 000 f. 25-29) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0186 & (0.0128) &  & 722 & 11\,552 \\
+H2c & log(naissances+0,5 / 1 000 f. 30-34) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & -0.0006 & (0.0099) &  & 722 & 11\,552 \\
+H2c & log(naissances+0,5 / 1 000 f. 35-39) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0025 & (0.0111) &  & 722 & 11\,552 \\
+H2c & log(naissances+0,5 / 1 000 f. 40-49) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0269 & (0.0220) &  & 722 & 11\,552 \\
+H3a & log(mariages de femmes+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G, fenêtre 2008-2022 ; fenêtre complète & twfe & ATT & 0.0261** & (0.0111) &  & 722 & 10\,830 \\
+H3a & log(mariages de femmes+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G, fenêtre 2008-2022 ; fenêtre complète & twfe & ATT & -0.0021 & (0.0332) &  & 722 & 10\,830 \\
+H3b & log(naissances de mères mariées+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & -0.0072 & (0.0099) &  & 722 & 11\,552 \\
+H3b complément & log(naissances de mères non mariées+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & ATT[1,1] & 0.3564*** & (0.0423) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H3b & log(naissances de mères mariées+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0199 & (0.0355) &  & 722 & 11\,552 \\
+H3b complément & log(naissances de mères non mariées+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G & cs & ATT[1,1] & -0.9133*** & (0.1477) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre complète & twfe & ATT & -0.0116 & (0.0211) &  & 722 & 5\,041 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & grappes = province (52) ; fenêtre complète & twfe & ATT & 0.0118 & (0.0072) &  & 722 & 11\,552 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & pondéré par les femmes 15-49, CS sans covariables & cs & ATT[1,2] & 0.0658** & (0.0276) & 2 ($\leq$ 2015) & 722 & 11\,552 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country ES. Analyses marquées « exploratoire » ; aucune n'entre dans les règles de décision. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

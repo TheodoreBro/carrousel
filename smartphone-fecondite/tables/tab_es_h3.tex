@@ -1,0 +1,29 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Espagne — canal (H3) et règle de décision §6}\label{tab:es_h3}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H3a & log(mariages de femmes+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G, fenêtre 2008-2022 & cs & ATT[1,1] & 0.4349*** & (0.0495) & 1 ($\leq$ 2015) & 722 & 10\,830 \\
+H3a & log(mariages de femmes+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G, fenêtre 2008-2022 ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT[1,2] & 0.0178 & (0.0540) &  & 722 & 10\,830 \\
+H3a & log(mariages de femmes+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G, fenêtre 2008-2022 ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT & 0.0155 & (0.0121) &  & 722 & 10\,830 \\
+H3a & log(mariages de femmes+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G, fenêtre 2008-2022 & cs & ATT[1,1] & 2.0119*** & (0.1957) & 1 ($\leq$ 2015) & 722 & 10\,830 \\
+H3a & log(mariages de femmes+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G, fenêtre 2008-2022 ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT[1,2] & -0.1665 & (0.2402) &  & 722 & 10\,830 \\
+H3a & log(mariages de femmes+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G, fenêtre 2008-2022 ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT & -0.0104 & (0.0349) &  & 722 & 10\,830 \\
+H3b & log(naissances de mères mariées+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & ATT[1,1] & 0.3454*** & (0.0397) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H3b & log(naissances de mères mariées+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT[1,2] & -0.3208 & (0.1998) &  & 722 & 11\,552 \\
+H3b & log(naissances de mères mariées+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT & -0.0161 & (0.0143) &  & 722 & 11\,552 \\
+H3b & log(naissances de mères mariées+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G & cs & ATT[1,1] & -2.2731*** & (0.2281) & 1 ($\leq$ 2015) & 722 & 11\,552 \\
+H3b & log(naissances de mères mariées+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT[1,2] & -0.2977* & (0.1666) &  & 722 & 11\,552 \\
+H3b & log(naissances de mères mariées+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G ; fenêtre identifiée ≤ 2015, cohorte 2016 = contrôle & twfe & ATT & -0.0032 & (0.0361) &  & 722 & 11\,552 \\
+H3c & naissances par femme en couple & municipio (> 10 000 habitants) & — & non testable &  &  &  & 0 & 0 \\
+§6 & ATT H3a $-$ ATT H3b (25-39) & unités avec covariables, bascule 4G & cs & différence (bootstrap conjoint) & 0.0895 & (0.1332) &  & 722 & 32\,490 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country ES. Hypothèses non testables indiquées en ligne (A6). ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
