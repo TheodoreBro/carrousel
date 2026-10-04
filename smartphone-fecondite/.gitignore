@@ -19,3 +19,4 @@ __pycache__/
 .pytest_cache/
 tables/est_smoke/
 figures/smoke/
+tables/est_co_smoke/

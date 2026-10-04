@@ -322,10 +322,6 @@ SOURCES: list[Source] = [
     Source("br_sidra_casamentos", "BR", "resultat", "IBGE SIDRA — Tabela 4412, casamentos por idade dos cônjuges, município", "manual",
            "https://apisidra.ibge.gov.br/values/t/4412/n6/all", "IBGE", granularity="município × âge",
            notes="apisidra.ibge.gov.br bloqué au 02/10/2026."),
-    Source("co_mintic_cobertura", "CO", "traitement", "MinTIC — Cobertura móvil por tecnología, departamento y municipio por proveedor", "socrata",
-           "9mey-c8s8", "datos.gov.co (CC BY)", years="≈2013 →", granularity="municipio × opérateur × technologie, trimestriel"),
-    Source("co_dane_nacimientos", "CO", "resultat", "DANE — EEVV nacimientos, microdonnées", "manual",
-           "https://microdatos.dane.gov.co/index.php/catalog/843", "DANE (usage public)", years="1998-2024", granularity="naissance, municipio"),
 ]
 
 BY_ID = {s.id: s for s in SOURCES}
