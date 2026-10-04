@@ -199,8 +199,8 @@ def fig_event(allr: pd.DataFrame, key: str, hyp: str, outcome_re: str, sample_re
 def fig_h2_age(allr: pd.DataFrame) -> None:
     rows = allr[(allr.aggregation == "post_avg") & (allr.estimator == "cs") & (allr.exploratory == False)]  # noqa: E712
     groups = ["15-19", "20-24", "25-29", "30-34", "35-39", "40-49"]
-    panels = [("H2", r"naissances / 1 000 f\. (?:\d\d-\d\d)\)$", "département, bascule D3 ≥ 50 %", "Naissances pour 1 000 femmes (H2)"),
-              ("H3a", r"mariages de femmes / 1 000 f\. (?:\d\d-\d\d)\)$", "département, bascule D3 ≥ 50 %", "Mariages de femmes pour 1 000 femmes (H3a)")]
+    panels = [("H2", r"^log\(naissances / 1 000 f\. (?:\d\d-\d\d)\)$", "département, bascule D3 ≥ 50 %", "Naissances pour 1 000 femmes (H2)"),
+              ("H3a", r"^log\(mariages de femmes / 1 000 f\. (?:\d\d-\d\d)\)$", "département, bascule D3 ≥ 50 %", "Mariages de femmes pour 1 000 femmes (H3a)")]
     fig, axes = plt.subplots(1, 2, figsize=(8, 3.2), sharey=False)
     for ax, (fam, pat, samp, title) in zip(axes, panels):
         sub = rows[rows.hypothesis.str.startswith(fam[:2]) & rows.outcome.str.contains(pat, regex=True) & (rows["sample"] == samp)]
@@ -217,7 +217,8 @@ def fig_h2_age(allr: pd.DataFrame) -> None:
         ax.axhline(0, color=INK2, lw=0.8)
         ax.set_xticks(x, [p[0] for p in pts])
         ax.set_title(title, loc="left", fontsize=9)
-        ax.set_ylabel("ATT[1,k], log-points (≈ %) ; IC 95 %")
+        ks = sorted(set(int(k) for k in sub.k_post.dropna())) if "k_post" in sub else []
+        ax.set_ylabel(f"ATT[1,{','.join(map(str, ks)) if ks else 'k'}], log-points (≈ %) ; IC 95 %")
         ax.set_xlabel("groupe d'âge")
     save(fig, "fig_h2_age.pdf")
 

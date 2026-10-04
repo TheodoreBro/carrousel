@@ -186,3 +186,33 @@ def test_mde_permutation_is_positive(panel):
 def test_meta_random_effects():
     r = did.meta_random_effects([-0.05, -0.04, -0.06], [0.0001, 0.0002, 0.00015], ["A", "B", "C"])
     assert -0.06 < r["estimate"] < -0.04 and r["ci_low"] < r["estimate"] < r["ci_upp"]
+
+
+def test_balanced_post_matches_full_when_all_cohorts_observed():
+    q = make_panel(n_units=200, seed=5, t0=2004, t1=2025)       # toutes les cohortes observées jusqu'à +5
+    r = did.cs_event_study(q, "y", "unit", "year")
+    b = did.cs_balanced_post(r)
+    assert np.isclose(b["tidy"]["estimate"].iloc[0], r["post_avg"]["estimate"].iloc[0])
+    assert abs(b["tidy"]["se"].iloc[0] - r["post_avg"]["se"].iloc[0]) < 0.1 * r["post_avg"]["se"].iloc[0]
+    p = make_panel(n_units=200, seed=2)                             # cohorte 2016 non observée jusqu'à +5 (fin 2019)
+    rb = did.cs_balanced_post(did.cs_event_study(p, "y", "unit", "year"))
+    assert 2016 not in rb["cohorts"] and rb["k"] == 5
+    q2 = make_panel(n_units=150, never_share=0.0, seed=3)           # sans jamais traités : identification tronquée
+    r2 = did.cs_event_study(q2, "y", "unit", "year")
+    assert all(g + 5 <= r2["info"]["years_model"][1] for g in did.cs_balanced_post(r2)["cohorts"])
+
+
+def test_event_dummies_only_with_support():
+    p = make_panel(n_units=100, seed=1, t1=2012)
+    d = did.add_rel_time(p, "year", "cohort")
+    d, names = did._event_dummies(d)
+    assert "ev_p8" not in names and "ev_p2" in names
+
+
+def test_poisson_pct_row_carries_coefficient_p():
+    rng = np.random.default_rng(3)
+    p = make_panel(n_units=100, effect=-0.08)
+    p["women"] = rng.integers(200, 2000, len(p))
+    p["births"] = rng.poisson(np.exp(p["y"] - 1.0 + np.log(p["women"]) - 3.0))
+    t = did.twfe_att(p, "births", "unit", "year", poisson=True, exposure="women")
+    assert "p" in t.columns and np.isclose(t["p"].iloc[0], t["p"].iloc[1])

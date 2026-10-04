@@ -258,7 +258,10 @@ def interpolate_years(df: pd.DataFrame, value_cols: list[str], years: list[int])
     wide = df.pivot(index="unit", columns="rp_year", values=value_cols)
     out = {}
     for c in value_cols:
-        w = wide[c].reindex(columns=sorted(set(wide[c].columns) | set(years)))
+        # grille d'années contiguë avant d'interpoler : DataFrame.interpolate(method="linear") traite les colonnes comme
+        # équidistantes, et sans l'année 2007 le segment 2006 → 2011 était interpolé en positions, pas en années (A2.5)
+        full = list(range(min(set(wide[c].columns) | set(years)), max(set(wide[c].columns) | set(years)) + 1))
+        w = wide[c].reindex(columns=full)
         w = w.interpolate(axis=1, limit_area="inside")
         w = w.ffill(axis=1, limit=2).bfill(axis=1, limit=2)
         out[c] = w[years].stack(future_stack=True)

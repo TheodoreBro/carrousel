@@ -106,3 +106,32 @@ Ajoutées à la relecture, **sans changement du primaire** :
 
 Aucune de ces décisions ne modifie les hypothèses H1-H6, les résultats primaires, les seuils ni les règles de
 décision du §6 de la préregistration.
+
+### A2.5 Deuxième relecture adversariale (04/10/2026, après une première exécution partielle)
+
+Une première exécution complète a été lancée le 02/10 (commit `c297ba9`) ; les parties département (H2, H3, IV) ont abouti
+et ont été vues ; la partie commune a été interrompue (processus tué) après le test primaire H1 et son bootstrap. Une
+deuxième relecture adversariale (24 constats, 14 confirmés par vérification contradictoire, les autres non vérifiés
+faute de quota) a conduit aux corrections suivantes, appliquées **avant** la ré-exécution complète et **sans changer**
+les hypothèses, les résultats primaires ni les seuils :
+
+| Point | Constat | Décision |
+|---|---|---|
+| Dénominateurs communaux 2008-2010 | `interpolate_years` interpolait les millésimes RP **en positions** de colonnes, pas en années : sans colonne 2007, le segment 2006 → 2011 donnait à 2008 un quart (au lieu de deux cinquièmes) de la variation (écart relatif du dénominateur 2008 de ±5 % aux centiles 5/95) | **Corrigé** (grille d'années contiguë avant interpolation ; correction d'erreur manifeste) ; `fr_outcomes_commune` régénéré, toutes les parties communales ré-estimées |
+| Agrégat « composition constante » | Calculé par restriction de l'échantillon à partir de la dernière année observée (2024) et non de la dernière année identifiée (2017 au département) : identique au primaire au département, et modifiant le groupe de contrôle au niveau commune | Agrégation **restreinte, pas l'échantillon** : à partir des ATT(g,t) et de leurs fonctions d'influence, cohortes g telles que g + 5 ≤ dernière année identifiée, poids fixes = tailles de cohortes ; « non calculable » quand aucune cohorte ne satisfait la condition (département) ; effets par période écrits dans la note |
+| Sun & Abraham, did2s, TWFE, Poisson sans unité jamais traitée | Déclarés « non estimables » alors qu'ils le sont avec la convention de Callaway & Sant'Anna (dernière cohorte = contrôle, fenêtre ≤ année précédente) ; TWFE et Poisson estimés sur 1998-2024 alors que CS ne porte que sur ≤ 2017 | Comparaisons estimées sur la **fenêtre identifiée** (années < dernière cohorte, dernière cohorte recodée contrôle), dit dans l'échantillon ; TWFE statique sur la fenêtre complète gardé en complément exploratoire ; les indicatrices d'event study sans support ne sont plus créées |
+| Niveau département sans covariables | H2 et H3 étaient estimés sans les contrôles de pré-période (§5 : doublement robuste pour H1, H2, H3) ; déviation non consignée | Covariables **agrégées au département** (moyennes communales pondérées par les femmes 15-44 de 2011 : log revenu médian, diplômées du supérieur, chômage 15-24, parts de densité ; tendance 2008-2011 du log du taux du groupe) ajoutées pour H2b, H2 par âge (avec Holm), H3a et H3b 25-39, **en plus** de la version sans covariables. Transparence : la version sans covariables avait été codée et exécutée (02/10) avant l'ajout ; la version avec covariables est la forme préenregistrée ; les deux sont rapportées, et le papier dit laquelle il désigne comme primaire et pourquoi (forme préenregistrée), les écarts entre les deux étant discutés |
+| Bandes sup-t | Valeur critique calculée sur toutes les périodes relatives renvoyées par `differences` (jusqu'à −16..+11) | Max |t| restreint aux coefficients rapportés (−8..+8) |
+| Agrégat « simple » | Écart-type du paquet, non groupé quand grappe ≠ unité | Fonctions d'influence sommées par grappe comme pour l'event study |
+| Poisson en % | p recalculée sur l'échelle en % (≠ p du coefficient) | p du coefficient β = 0 reportée sur les deux lignes ; écart-type en % par la méthode delta |
+| Covariables dans Sun & Abraham / TWFE / Poisson | Constantes dans le temps, absorbées en silence par les effets fixes unité | Retirées de ces régressions et dites « absorbées » ; les chocs concurrents entrent par les effets fixes année × densité |
+| Robustesse ARCEP | Cohorte « 2019 » = site déjà présent au premier trimestre observé (2018-T4) : censure à gauche (12 840 communes), traitée comme une vraie cohorte | Cohortes datées **≥ 2020** seulement ; la cohorte 2019 est **exclue** (pas recodée « jamais traitée ») |
+| Robustesse DOM | Filosofi 2012 ne couvre pas les DOM : la variante « DOM inclus » était vide (0 commune d'outre-mer) | Variante communale avec les covariables **sans le revenu médian** ; variante H2b au département avec les 4 DOM (971-974, D3 disponible) |
+| Terme de Holm | « ATT[1,k] (Holm) » littéral, k non reporté | Terme réel, k et années identifiées dans la ligne ; note si k diffère dans la famille |
+| IV | Adoption « 20-24 » = classe 18-24 ans du Baromètre, non dite ; « vide » pour un intervalle non calculé ; p CRV1 et p wild bootstrap mélangées | Étiquettes corrigées (« 18-24 (Baromètre) → naissances 20-24 ») ; colonne `p_type` ; « non calculé » pour le modèle poolé |
+| H4 (first stage) | Inférence CRV1 à 9 grappes seulement | p du wild cluster bootstrap (Webb, 9 999 tirages, modèle non pondéré) ajoutée dans `t_firststage_fr` |
+| Résultats préenregistrés absents | H3a(iii) au département ; H3c sans les naissances ; sensibilité à la transformation pour H2b ; fenêtre 2008-2019 au département ; H5c au département | Ajoutés (différences longues des parts en couple au département ; H3c pour les naissances 25-39 ; taux brut et asinh pour H2b ; fenêtre 2008-2019 ; ligne H5c département) ; les fenêtres « 1998-2019 » et « sans 2020-2021 » au département sont identiques au primaire par construction (ATT identifiés ≤ 2017), dit |
+| Analyses hors préregistration | Agrégat 20-34, compléments « parents mariés » par groupe et part des naissances de parents mariés, D3 continu par groupe, « hors densité 1 », TWFE fenêtre complète | Marquées **exploratoires** |
+
+Comme pour A2, ces décisions ont été prises à la lecture du code et des sorties partielles du 02/10 (H2, H3, IV vues ; H1
+primaire vu), avant la ré-exécution complète ; elles sont rapportées dans la section 5 du papier.

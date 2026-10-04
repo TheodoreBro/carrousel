@@ -35,10 +35,11 @@ def fmt(x, nd=3) -> str:
     return "" if x is None or (isinstance(x, float) and not np.isfinite(x)) else f"{x:.{nd}f}"
 
 
-def stars(p) -> str:
+def stars(p, p_type=None) -> str:
     if p is None or not np.isfinite(p):
         return ""
-    return "***" if p < 0.01 else "**" if p < 0.05 else "*" if p < 0.10 else ""
+    st = "***" if p < 0.01 else "**" if p < 0.05 else "*" if p < 0.10 else ""
+    return st + ("$^{w}$" if st and isinstance(p_type, str) and p_type.startswith("wild") else "")
 
 
 def write(name: str, header: list[str], rows: list[list[str]], caption: str, label: str, note: str = "", align: str | None = None) -> None:
@@ -107,9 +108,15 @@ def _row(r, with_sample=True) -> list[str]:
     cells = [esc(r.hypothesis), esc(r.outcome)]
     if with_sample:
         cells.append(esc(r["sample"]))
-    est = fmt(r.estimate, 4) + stars(r.p) if np.isfinite(r.se) else (fmt(r.estimate, 2) if np.isfinite(r.estimate) else "")
+    ptype = r.get("p_type", None) if hasattr(r, "get") else None
+    est = fmt(r.estimate, 4) + stars(r.p, ptype) if np.isfinite(r.se) else (fmt(r.estimate, 2) if np.isfinite(r.estimate) else "")
     se = f"({fmt(r.se, 4)})" if np.isfinite(r.se) else (f"p = {fmt(r.p, 3)}" if np.isfinite(r.p) else "")
-    cells += [esc(r.estimator), esc(r.term), est, se, f"{int(r.n_units):,}".replace(",", "\\,"), f"{int(r.n_obs):,}".replace(",", "\\,")]
+    if str(r.get("aggregation", "")) == "timing":
+        est, se = ("aucune" if not np.isfinite(r.estimate) else f"+{int(r.estimate)}"), ""
+    k = r.get("k_post", np.nan)
+    ym = r.get("years_model_max", np.nan)
+    kcol = (f"{int(k)}" if np.isfinite(k) else "") + (f" ($\\leq$ {int(ym)})" if np.isfinite(ym) and np.isfinite(k) else "")
+    cells += [esc(r.estimator), esc(r.term), est, se, kcol, f"{int(r.n_units):,}".replace(",", "\\,"), f"{int(r.n_obs):,}".replace(",", "\\,")]
     return cells
 
 
@@ -118,9 +125,10 @@ def tab_from(allr: pd.DataFrame, name: str, mask, caption: str, label: str, note
     if sub.empty:
         return
     rows = [_row(r) for _, r in sub.iterrows()]
-    write(name, ["Hyp.", "Résultat", "Échantillon", "Estimateur", "Terme", "Estimation", "É.-t.", "Unités", "Obs."], rows, caption, label,
-          note + " ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\\leq$ 5). * p<0,10, ** p<0,05, *** p<0,01 "
-          "(p d'un test z sur l'écart-type indiqué ; pour les tests de Wald et les p bootstrap, la p est donnée à la place de l'écart-type).", align="llllrrrrr")
+    write(name, ["Hyp.", "Résultat", "Échantillon", "Estimateur", "Terme", "Estimation", "É.-t.", "k (années id.)", "Unités", "Obs."], rows, caption, label,
+          note + " ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) "
+          "sont identifiés pour Callaway \\& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster "
+          "bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).", align="llllrrrrrr")
 
 
 def main() -> int:
@@ -142,7 +150,8 @@ def main() -> int:
              "Source : scripts/05\\_estimate.py. Familles corrigées par Holm : 15-19, 20-24 (H2a) ; 25-29, 30-34, 35-39, 40-49 (H2c) ; p Holm dans est\\_fr\\_all.csv.")
     tab_from(allr, "tab_h3.tex", allr.aggregation.isin(key_aggs + ["long_diff", "decision", "timing", "note"]) & allr.hypothesis.str.startswith(("H3", "§6")),
              "Décomposition du canal (H3) et règle de décision §6", "tab:h3", "Source : scripts/05\\_estimate.py.")
-    tab_from(allr, "tab_placebo.tex", allr.aggregation.isin(key_aggs + ["pre_test"]) & allr.hypothesis.str.startswith("H5"),
+    tab_from(allr, "tab_placebo.tex", (allr.aggregation.isin(key_aggs + ["pre_test"]) & allr.hypothesis.str.startswith("H5"))
+             | ((allr.aggregation == "pre_test") & allr.hypothesis.isin(["H1", "H2b"]) & (allr.estimator == "cs") & (allr.family != "robustesse")),
              "Placebos (H5)", "tab:placebo", "Source : scripts/05\\_estimate.py. H5c : test de Wald joint des coefficients $-8$ à $-2$ (covariance des fonctions d'influence) ; "
              "la p est reportée pour chaque spécification dans est\\_fr\\_all.csv.")
     tab_from(allr, "tab_h6.tex", allr.aggregation.isin(["post_avg", "post_avg_holm", "note"]) & allr.hypothesis.str.startswith("H6"),

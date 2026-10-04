@@ -117,22 +117,27 @@ def cs_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str =
     IF = np.column_stack([np.asarray(e.influence_func, float) for e in evl])
     n_units = IF.shape[0]
     n_clusters = n_units
+    cl_codes = None
     if cluster and cluster != unit:
         # grappes ≠ unités : sommer les fonctions d'influence par grappe (sandwich groupé usuel, (1/n²) Σ_c S_c S_c' ;
         # ``differences`` utilise des moyennes par grappe, identique à grappes de taille égale)
         cl = d.groupby(unit)[cluster].first().sort_index()
         if len(cl) != n_units:
             raise RuntimeError(f"fonctions d'influence : {n_units} lignes pour {len(cl)} unités")
-        IF = pd.DataFrame(IF).groupby(cl.to_numpy()).sum().to_numpy()
+        cl_codes = cl.to_numpy()
+        IF = pd.DataFrame(IF).groupby(cl_codes).sum().to_numpy()
         n_clusters = IF.shape[0]
     V = IF.T @ IF / n_units ** 2
     se_if = np.sqrt(np.diag(V))
     est_all = np.array([float(e.ATT) for e in evl])
-    # bandes simultanées sup-t (bootstrap multiplicateur Rademacher sur les fonctions d'influence)
+    ref = -1 - int(anticipation)
+    sel = (rels_all >= window[0]) & (rels_all <= window[1]) & (rels_all != ref)
+    # bandes simultanées sup-t (bootstrap multiplicateur Rademacher sur les fonctions d'influence), valeur critique prise
+    # sur les seuls coefficients rapportés (fenêtre ``window``)
     cband = None
     if boot and boot > 0:
         rng = np.random.default_rng(seed)
-        ok = se_if > 0
+        ok = (se_if > 0) & sel
         tmax_draws = []
         for _ in range(int(boot)):
             w = rng.choice([-1.0, 1.0], size=IF.shape[0])
@@ -149,8 +154,6 @@ def cs_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str =
     treated_units = d[d[cohort].notna()].groupby(cohort)[unit].nunique()
     comp = gt.groupby("rel").agg(n_cohorts=("cohort", "nunique"),
                                  n_units_rel=("cohort", lambda s: int(sum(treated_units.get(g, 0) for g in s.unique()))))
-    ref = -1 - int(anticipation)
-    sel = (rels_all >= window[0]) & (rels_all <= window[1]) & (rels_all != ref)
     tidy_ev = _tidy(rels_all[sel], est_all[sel], se_if[sel], "cs")
     tidy_ev["n_cohorts"] = [int(comp.n_cohorts.get(r, 0)) for r in rels_all[sel]]
     tidy_ev["n_units_rel"] = [int(comp.n_units_rel.get(r, 0)) for r in rels_all[sel]]
@@ -172,7 +175,11 @@ def cs_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str =
     pre_mask = (rels_all >= window[0]) & (rels_all <= ref - 1)
     pre_w = _wald(est_all[pre_mask], V[np.ix_(pre_mask, pre_mask)])
     simple = _normalise_agg(att.aggregate("simple"))
-    tidy_simple = _tidy(["ATT"], simple["estimate"].values[:1], simple["se"].values[:1], "cs")
+    sIF = np.asarray(ag.simple[0].influence_func, float).reshape(n_units, -1)[:, 0]
+    if cl_codes is not None:
+        sIF = pd.Series(sIF).groupby(cl_codes).sum().to_numpy()
+    tidy_simple = _tidy(["ATT"], simple["estimate"].values[:1], [float(np.sqrt(sIF @ sIF) / n_units)], "cs")
+    cohort_sizes = d[d[cohort].notna()].groupby(cohort)[unit].nunique()
     info = {"years": (int(d[time].min()), int(d[time].max())), "years_model": (int(gt.time.min()), int(gt.time.max())),
             "cohorts": sorted(int(c) for c in gt.cohort.unique()), "rel_available": (int(rels_all.min()), int(rels_all.max())),
             "n_units": int(n_units), "n_clusters": int(n_clusters), "n_never": int(d.loc[d[cohort].isna(), unit].nunique()), "n_recoded_never_after_window": int(late),
@@ -180,7 +187,49 @@ def cs_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str =
             "as_rcs": bool(getattr(att, "_as_rcs", False)), "k_post": k, "ref": ref, "n_obs": int(len(d)),
             "cband_crit": cband[2] if cband else np.nan}
     return {"event": tidy_ev, "simple": tidy_simple, "post_avg": tidy_post, "pre_wald_p": pre_w["p_value"], "pre_wald": pre_w,
-            "info": info, "model": att, "gt": gt, "V": V, "rels": rels_all, "est": est_all}
+            "info": info, "model": att, "gt": gt, "V": V, "rels": rels_all, "est": est_all, "cl_codes": cl_codes,
+            "n_units": n_units, "cohort_sizes": cohort_sizes}
+
+
+def cs_balanced_post(r: dict, kmax: int = POST_AVG[1], kmin: int = POST_AVG[0]) -> dict:
+    """Agrégat +kmin..+kmax à **composition constante** : seules les cohortes g observées jusqu'à g + kmax parmi les
+    ATT(g,t) identifiés (g + kmax ≤ dernière année identifiée) entrent, avec des poids fixes = tailles de cohortes (mêmes
+    poids que l'agrégation par période de ``differences``). Écart-type par les fonctions d'influence des ATT(g,t)
+    (sommées par grappe si besoin ; les poids sont traités comme fixes). Renvoie ``{"tidy", "cohorts", "k"}`` ou
+    ``{"tidy": None, ...}`` si aucune cohorte n'est observée jusqu'à +kmax."""
+    att = r["model"]
+    ntl = att._result_dict[att.sample_names[0]]["ATTgt_ntl"]
+    t_id = r["info"]["years_model"][1]
+    sizes = r["cohort_sizes"]
+    cohorts = sorted(int(g) for g in sizes.index if int(g) + kmax <= t_id)
+    if not cohorts:
+        return {"tidy": None, "cohorts": [], "k": 0, "t_id": t_id}
+    n = r["n_units"]
+
+    def _if(x):
+        v = x.influence_func
+        v = v.toarray() if hasattr(v, "toarray") else np.asarray(v, float)
+        return np.asarray(v, float).reshape(n, -1)[:, 0]
+
+    by = {(int(x.cohort), int(x.time)): x for x in ntl if x.exception is None}
+    ests, ifs = [], []
+    for k in range(kmin, kmax + 1):
+        cells = [(g, by.get((g, g + k))) for g in cohorts]
+        cells = [(g, x) for g, x in cells if x is not None]
+        if not cells:
+            return {"tidy": None, "cohorts": cohorts, "k": 0, "t_id": t_id}
+        w = np.array([sizes[g] for g, _ in cells], float)
+        w = w / w.sum()
+        ests.append(float(sum(wi * float(x.ATT) for wi, (_, x) in zip(w, cells))))
+        ifs.append(sum(wi * _if(x) for wi, (_, x) in zip(w, cells)))
+    IF = np.column_stack(ifs)
+    if r["cl_codes"] is not None:
+        IF = pd.DataFrame(IF).groupby(r["cl_codes"]).sum().to_numpy()
+    V = IF.T @ IF / n ** 2
+    wk = np.ones(IF.shape[1]) / IF.shape[1]
+    tidy = _tidy([f"ATT[{kmin},{kmax}]"], [float(np.mean(ests))], [float(np.sqrt(wk @ V @ wk))], "cs")
+    tidy["k_periods"] = IF.shape[1]
+    return {"tidy": tidy, "cohorts": cohorts, "k": IF.shape[1], "t_id": t_id, "by_k": ests}
 
 
 def _wald(b: np.ndarray, V: np.ndarray) -> dict:
@@ -255,8 +304,11 @@ def _event_dummies(d: pd.DataFrame, rel: str = "rel", window=EVENT_WINDOW, ref: 
     for r in range(window[0], window[1] + 1):
         if r == ref:
             continue
+        mask = (d[rel] == r)
+        if not mask.any():          # période relative sans support (fenêtre identifiée courte) : pas d'indicatrice
+            continue
         n = f"ev_m{abs(r)}" if r < 0 else f"ev_p{r}"
-        d[n] = (d[rel] == r).astype(int)
+        d[n] = mask.astype(int)
         names.append(n)
     return d, names
 
@@ -455,6 +507,7 @@ def twfe_att(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str = "coho
                             "se": [100 * np.exp(b) * s], "ci_low": [100 * (np.exp(b - 1.959964 * s) - 1)],
                             "ci_high": [100 * (np.exp(b + 1.959964 * s) - 1)], "estimator": [lab]})
         out = pd.concat([out, pct], ignore_index=True)
+        out["p"] = p_from_z(b, s)                 # même test (β = 0) pour les deux lignes ; l'écart-type en % est la méthode delta
     return out
 
 

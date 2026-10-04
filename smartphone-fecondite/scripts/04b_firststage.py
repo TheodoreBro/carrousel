@@ -21,6 +21,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from common import did  # noqa: E402
 from common.download import raw_files  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -77,16 +78,23 @@ def fit(df: pd.DataFrame, y: str, label: str) -> list[dict]:
     m = pf.feols(f"{y} ~ d3 | zone + year + age", data=d, weights="w", vcov={"CRV1": "zone"})
     t = m.tidy().reset_index()
     r = t[t.Coefficient == "d3"].iloc[0]
+    # p du wild cluster bootstrap (Webb, 9 999 tirages ; 9 ou 13 grappes) sur le modèle non pondéré : pyfixest refuse le
+    # bootstrap sauvage avec pondération (A2.5) ; le modèle non pondéré est aussi rapporté
+    d["zone_id"] = pd.factorize(d.zone)[0]                      # codes entiers : exigés par wildboottest
+    mu = pf.feols(f"{y} ~ d3 | zone + year + age", data=d, vcov={"CRV1": "zone_id"})
+    p_wild = did.wild_p(mu, "d3", reps=9999)
     out.append({"échantillon": label, "résultat": y, "terme": "D3", "coef": r.Estimate, "se": r["Std. Error"],
-                "p": r["Pr(>|t|)"], "n": int(m._N), "zones": d.zone.nunique(), "années": f"{d.year.min()}-{d.year.max()}",
-                "moyenne y": float(np.average(d[y], weights=d.w))})
+                "p": r["Pr(>|t|)"], "p_wild": p_wild, "coef non pondéré": float(mu.coef().loc["d3"]), "n": int(m._N),
+                "zones": d.zone.nunique(), "années": f"{d.year.min()}-{d.year.max()}", "moyenne y": float(np.average(d[y], weights=d.w))})
     d["d3_u40"] = d.d3 * d.under40
     m2 = pf.feols(f"{y} ~ d3 + d3_u40 | zone + year + age", data=d, weights="w", vcov={"CRV1": "zone"})
+    m2u = pf.feols(f"{y} ~ d3 + d3_u40 | zone + year + age", data=d, vcov={"CRV1": "zone_id"})
     t2 = m2.tidy().reset_index()
     for term, lab in (("d3", "D3 (40 ans et plus)"), ("d3_u40", "D3 × moins de 40 ans")):
         r = t2[t2.Coefficient == term].iloc[0]
         out.append({"échantillon": label, "résultat": y, "terme": lab, "coef": r.Estimate, "se": r["Std. Error"],
-                    "p": r["Pr(>|t|)"], "n": int(m2._N), "zones": d.zone.nunique(), "années": f"{d.year.min()}-{d.year.max()}",
+                    "p": r["Pr(>|t|)"], "p_wild": did.wild_p(m2u, term, reps=9999), "coef non pondéré": float(m2u.coef().loc[term]),
+                    "n": int(m2._N), "zones": d.zone.nunique(), "années": f"{d.year.min()}-{d.year.max()}",
                     "moyenne y": float(np.average(d[y], weights=d.w))})
     return out
 
