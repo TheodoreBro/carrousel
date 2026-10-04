@@ -336,6 +336,10 @@ def resolve(src: Source) -> list[str]:
         return [f"https://ourworldindata.org/grapher/{src.ref}.csv?v=1&csvType=full&useColumnShortNames=true"]
     if src.resolver == "socrata":
         return [f"https://www.datos.gov.co/resource/{src.ref}.csv?$limit=5000000"]
+    if src.resolver == "nada":
+        # catalogue NADA (DANE) : « <id de catalogue>/<id de fichier>=<nom à donner> | … » ; les URL de téléchargement
+        # se terminent par un identifiant numérique et servent toutes le même nom (Nacimientos.zip)
+        return [f"https://microdatos.dane.gov.co/index.php/catalog/{item.split('=')[0]}" for item in src.ref.split("|")]
     raise DownloadBlocked(
         f"{src.id} : résolution « {src.resolver} » non automatisée ({src.ref}). "
         "Écrire le résolveur ou documenter la raison dans data_log.md avant de continuer."
@@ -352,10 +356,13 @@ def _subdir_for(src: Source, url: str) -> str | None:
 
 def download_source(src: Source, verbose: bool = True) -> list[Path]:
     paths = []
+    names = {}
+    if src.resolver == "nada":
+        names = {f"https://microdatos.dane.gov.co/index.php/catalog/{item.split('=')[0]}": item.split("=")[1] for item in src.ref.split("|")}
     for url in resolve(src):
         if verbose:
             print(f"  ↓ {url}")
-        paths.append(fetch(src, url, subdir=_subdir_for(src, url)))
+        paths.append(fetch(src, url, subdir=_subdir_for(src, url), filename=names.get(url)))
     return paths
 
 

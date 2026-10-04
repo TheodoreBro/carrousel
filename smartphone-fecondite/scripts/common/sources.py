@@ -283,6 +283,35 @@ SOURCES: list[Source] = [
     Source("se_scb_civilstand", "SE", "resultat", "SCB — Nyblivna gifta, skilda och änkor/änklingar efter region, typ av par, ålder och kön (CivilstandTypPar)",
            "manual", "https://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0101/BE0101L/CivilstandTypPar", "SCB (CC0)", years="2000-2024",
            granularity="kommun × groupe d'âge quinquennal × sexe", notes="Métadonnées vérifiées le 04/10/2026. Non téléchargé : pays exclu (A3)."),
+    # Colombie (vérifié le 04/10/2026 ; addendum A4)
+    Source("co_mintic_cobertura", "CO", "traitement",
+           "MinTIC — Cobertura móvil por tecnología, departamento y municipio por proveedor (centro poblado × trimestre × opérateur, 2015-T4 →)",
+           "socrata", "9mey-c8s8", "datos.gov.co (CC BY-SA 4.0)", years="2015-T4 → 2023-T3", granularity="centro poblado (cabecera / resto)",
+           notes="Export CSV complet par l'API Socrata (407 281 lignes au 04/10/2026). Drapeaux S/N par technologie ; « cobertuta_4g » (sic) et « cobertura_lte »."),
+    Source("co_divipola", "CO", "geo", "DANE — DIVIPOLA, códigos de municipios (via datos.gov.co)", "socrata", "gdxc-w37w",
+           "datos.gov.co (CC BY-SA 4.0)", granularity="municipio"),
+    Source("co_dane_eevv_nacimientos", "CO", "resultat",
+           "DANE — Estadísticas Vitales (EEVV), microdonnées des naissances 1998-2024 (catalogue NADA microdatos.dane.gov.co)",
+           "nada",
+           "366/download/5599=nacimientos_1998.zip|366/download/5601=nacimientos_1999.zip|366/download/5603=nacimientos_2000.zip|"
+           "366/download/5605=nacimientos_2001.zip|366/download/5607=nacimientos_2002.zip|366/download/5609=nacimientos_2003.zip|"
+           "366/download/5611=nacimientos_2004.zip|366/download/5613=nacimientos_2005.zip|366/download/5615=nacimientos_2006.zip|"
+           "366/download/5617=nacimientos_2007.zip|375/download/21415=nacimientos_2008_2011.zip|377/download/5824=nacimientos_2012_2013_txt.zip|"
+           "420/download/21435=nacimientos_2014.zip|475/download/21432=nacimientos_2015.zip|519/download/21429=nacimientos_2016.zip|"
+           "652/download/21423=nacimientos_2017_2018.zip|696/download/21426=nacimientos_2019.zip|732/download/21085=nacimientos_2020.zip|"
+           "775/download/22160=nacimientos_2021.zip|807/download/23133=nacimientos_2022.zip|876/download/24250=nacimientos_2023.zip|"
+           "878/download/24461=nacimientos_2024.zip",
+           "DANE (microdonnées anonymisées en accès public, termes d'utilisation du catalogue)", years="1998-2024",
+           granularity="naissance : municipio de résidence de la mère, âge de la mère (groupes quinquennaux), état civil",
+           notes="Études DANE-DCD-EEVV-1998-2007 (366), 2008-2011 (375), 2012-2013 (377), 2014 (420), 2015 (475), 2016 (519), 2017-2018 (652), "
+                 "2019 (696), 2020 (732), 2021 (775), 2022 (807), 2023 (876), 2024 (878). Téléchargement direct constaté le 04/10/2026."),
+    Source("co_dane_proyecciones", "CO", "resultat",
+           "DANE — Proyecciones de población municipal por área, sexo y edad simple (base CNPV 2018) : 1995-2004, 2005-2017, 2018-2042",
+           "direct",
+           "https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-sexo-edad-proypoblacion-Mun-1995-2004.xlsx|"
+           "https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-sexo-edad-proypoblacion-Mun-2005-2017_VP.xlsx|"
+           "https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaSexoEdadMun-2018-2042_VP.xlsx",
+           "DANE (document public)", years="1995-2042", granularity="municipio × área × sexe × âge simple"),
     Source("br_anatel_acessos", "BR", "traitement", "Anatel — Acessos SMP por município e tecnologia (mensuel)", "manual",
            "https://www.anatel.gov.br/dadosabertos/PDA/Acessos/", "Dados abertos (licence à vérifier)", years="2007 →", granularity="município"),
     Source("br_anatel_cobertura", "BR", "traitement", "Anatel — Cobertura da telefonia móvel por setor censitário", "manual",

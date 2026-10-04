@@ -153,3 +153,34 @@ pourrait rouvrir le dossier, hors de ce papier : les tabellbilagor des rapports 
 kartläggning), si PTS les remet en ligne ou les fournit sur demande (PTSbredband@pts.se) — ils dateraient l'extension 4G de 2010-2014 et
 la pré-période existerait (naissances SCB depuis 1968). Une exposition continue construite sur la couverture surfacique ≥ 10 Mbit/s
 (2016-2024) n'est pas un traitement échelonné au sens du §4.2 et n'est pas utilisée.
+
+## A4 — Colombie : addendum de mesure et décision d'inclusion (04/10/2026, avant toute estimation)
+
+Rédigé fichiers en main (`docs/data_log.md`, sources `co_mintic_cobertura`, `co_divipola`, `co_dane_eevv_nacimientos`,
+`co_dane_proyecciones`). Aucune estimation n'a été lancée sur la Colombie avant ce commit.
+
+### Critères d'inclusion (§4.3)
+
+| Critère | Constat | Verdict |
+|---|---|---|
+| (1) traitement infranational daté, ≥ 3 ans de pré-période pour ≥ 30 % des unités | MinTIC, « Cobertura móvil por tecnología, departamento y municipio por proveedor » (datos.gov.co `9mey-c8s8`, CC BY-SA 4.0) : drapeaux de couverture 2G/3G/HSPA/4G/LTE/5G par centro poblado × opérateur × trimestre, **2015-T4 → 2023-T3**, 1 102-1 121 municipios. Au 2015-T4, **361 municipios sur 1 102 (33 %) ont déjà de la 4G à la cabecera** (lancement commercial 2014 : censure à gauche) ; 537 au 2016-T4, 712 au 2017-T4, 979 au 2018-T4, 1 070 au 2019-T4, 1 101 au 2023-T3. Les naissances existent depuis 1998 : les municipios dont la 4G arrive après 2015-T4 (≈ 67 %) ont ≥ 3 ans de pré-période | rempli |
+| (2) naissances par âge au niveau de l'unité, annuelles, couvrant la pré-période | DANE EEVV, microdonnées des naissances 1998-2024 (catalogue NADA, téléchargement direct) : municipio de **résidence de la mère** (`CODPTORE`, `CODMUNRE`), âge de la mère en groupes quinquennaux (`EDAD_MADRE` : 10-14 … 50-54), état civil de la mère (`EST_CIVM`), nombre d'enfants nés vivants (`N_HIJOSV`) ; mêmes variables de 1998 (fichiers texte tabulés) à 2024 (CSV) | rempli |
+| (3) téléchargement scriptable, licence | API Socrata (CSV complet), URL de téléchargement NADA stables (`catalog/<id>/download/<n>`, sans identification), fichiers Excel DANE ; licences CC BY-SA 4.0 (datos.gov.co) et conditions du catalogue DANE (microdonnées anonymisées d'usage public) | rempli |
+| (4) dénominateurs par sexe et âge | DANE, projections de population municipales par área (cabecera / centros poblados y rural disperso), sexe et **âge simple**, base CNPV 2018 : 1995-2004, 2005-2017, 2018-2042 | rempli |
+
+Décision : **Colombie incluse** dans la partie causale.
+
+### Décisions de mesure (§4.2 ; catégories §10)
+
+| Point | Ce que disent les fichiers | Décision |
+|---|---|---|
+| Unité | naissances par municipio de résidence × groupe d'âge ; couverture par centro poblado | **municipio** (1 102 au 2015-T4 ; codes DIVIPOLA à 5 chiffres) × groupe d'âge ; unité d'inférence (grappes) = municipio |
+| Traitement (§4.2 : « première année où la couverture 4G de la population atteint 50 % ») | Couverture binaire par centro poblado et opérateur ; pas de population par centro poblado dans le jeu ; les projections DANE donnent la population de la **cabecera** et celle de l'ensemble « centros poblados + rural disperso » | Part de population couverte en 4G (au moins un opérateur, drapeau `cobertuta_4g` ou `cobertura_lte`) = [pop. cabecera × 1(cabecera couverte) + pop. hors cabecera × (part des centros poblados couverts)] / pop. totale, au **dernier trimestre observé de l'année** ; cohorte = première année avec part ≥ 50 % (variante 90 %). Les municipios déjà ≥ 50 % au **2015-T4** sont **censurés à gauche** : exclus du primaire (« toujours traités », comme la cohorte ARCEP 2019 en France) ; en robustesse, cohorte 2015 (borne haute) |
+| Années | couverture 2015-T4 → 2023-T3 ; naissances 1998-2024 ; projections 1995-2042 | Fenêtre d'estimation **1998-2024** (cohortes 2016-2023 ; 2024 sans couverture observée : cohortes ≥ 2024 recodées « pas encore traitées » sur la fenêtre, dit) |
+| Groupes d'âge | `EDAD_MADRE` quinquennal 10-14 … 50-54 ; « sans information » (99) | 15-19, 20-24, 25-29, 30-34, 35-39, 40-49 (= 40-44 + 45-49) ; mères < 15 ans et ≥ 50 ans hors périmètre (comptées dans `t_outcomes_co.md`) ; âge manquant exclu et compté |
+| Résultats de canal (H3) | Pas de série de mariages par municipio × âge ; `EST_CIVM` à la naissance : en union libre ≥ 2 ans / < 2 ans, séparée-divorcée, veuve, célibataire, mariée | H3a non testable (dit) ; **H3b** = naissances de mères **en union** (mariée ou union libre) pour 1 000 femmes du groupe d'âge (dénominateur : toutes les femmes, faute de femmes en union par âge au municipio — même limite qu'en France, dit) et part des naissances hors union ; H3c non testable |
+| Dénominateurs | Projections par âge simple et área | Femmes par groupe d'âge au 30 juin ; pas d'interpolation nécessaire |
+| Contrôles de pré-période (§4.1) | Pas de Filosofi ni RP communal ; projections DANE par área | part de population en cabecera en 2015 (densité), log de la population 2015, part des naissances de mères de niveau d'éducation supérieur en 2013-2015 (`NIV_EDUM`), tendance 2010-2014 du log du taux ; liste écrite ici, avant estimation |
+| Placebo H5b | Décès par municipio : DANE EEVV « defunciones » non téléchargées à ce stade | H5b non construit (dit) ; H5a et H5c estimés |
+| Hétérogénéité H6 | densité (part cabecera, terciles), population (terciles), **rang de naissance** (`N_HIJOSV` disponible toute la période : rang 1 vs 2+) | H6 : densité, taille, rang 1 vs 2+ ; pas de revenu ni de ZDP |
+| COVID | 2020-2021 | robustesse « sans 2020-2021 » comme en France |
