@@ -120,6 +120,7 @@ def _ine_births_urls() -> str:
 def _ine_marriages_urls() -> str:
     items = [f"https://www.ine.es/ftp/microdatos/mnp_matri/datos_{y}.zip@@datos_matrimonios{y}.zip" for y in range(2008, 2025)]
     items.append("https://www.ine.es/ftp/microdatos/mnp_matri/dr_MNPmatrim_Desde2016.xlsx")
+    items.append("https://www.ine.es/ftp/microdatos/mnp_matri/disreg_matrim.zip")
     return "|".join(items)
 
 
