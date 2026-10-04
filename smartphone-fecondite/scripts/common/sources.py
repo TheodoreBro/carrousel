@@ -105,7 +105,7 @@ def _ibge_estimates_urls() -> str:
 
 def _ibge_marriages_urls() -> str:
     return "|".join(f"{IBGE_API}/4412/periodos/{y}/variaveis/221?localidades=N6[all]&classificacao=244[0]%7C664[0]%7C665[0]%7C666[0]%7C667[{g}]"
-                    f"@@ibge4412_casamentos_{y}_{k}.json" for y in range(2013, 2025) for k, g in enumerate(_chunks(IBGE_4412_WIFE_AGE_IDS, 6)))
+                    f"@@ibge4412_casamentos_{y}_{k}.json" for y in range(2013, 2025) for k, g in enumerate(_chunks(IBGE_4412_WIFE_AGE_IDS, 7)))
 
 
 # ----------------------------------------------------------------------------- Espagne : microdonnées INE (MNP)
