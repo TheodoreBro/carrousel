@@ -1,17 +1,26 @@
-% Squelette du working paper. Chaque chiffre, tableau et figure provient d'un script de scripts/.
-% Compilation : make paper (latexmk -pdf). Les tableaux sont inclus depuis tables/*.tex, les figures
-% depuis figures/*.pdf ; rien n'est saisi à la main.
+% Working paper. Chaque chiffre, tableau et figure provient d'un script de scripts/ (tables/*.tex, figures/*.pdf) ;
+% les chiffres cités dans le texte sont repris des fichiers tables/t_estimates_*.md, t_meta.md, t_sample_*.md, t_mde_*.md,
+% t_treatment_*.md, t_outcomes_*.md, t_world_inflection.md. Compilation : make paper (latexmk -pdf).
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[french,english]{babel}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+\DeclareUnicodeCharacter{0394}{\ensuremath{\Delta}}
+\DeclareUnicodeCharacter{2212}{\ensuremath{-}}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{00B2}{\ensuremath{^2}}
+\usepackage[english,french]{babel}
 \usepackage{lmodern,microtype}
 \usepackage[margin=2.5cm]{geometry}
-\usepackage{amsmath,amssymb,booktabs,graphicx,setspace,threeparttable,longtable}
+\usepackage{amsmath,amssymb,booktabs,graphicx,setspace,threeparttable,longtable,rotating}
 \usepackage[hidelinks]{hyperref}
 \usepackage[authoryear,round]{natbib}
 \graphicspath{{../figures/}}
 \onehalfspacing
+\setlength{\tabcolsep}{4pt}
 
 \title{Smartphones, réseaux sociaux, applications de rencontre et fécondité :\\
 y a-t-il un effet causal au-delà des adolescentes ?}
@@ -19,55 +28,288 @@ y a-t-il un effet causal au-delà des adolescentes ?}
 \date{\today\ --- version de travail, ne pas citer}
 
 \begin{document}
-\selectlanguage{french}
 \maketitle
 
 \begin{abstract}
 \selectlanguage{english}
-\noindent\textbf{Abstract.} [À rédiger à l'Étape 4, à partir des seuls résultats du papier.]
+\noindent\textbf{Abstract.} Does the diffusion of smartphones, and through them of social media and dating apps, reduce fertility beyond the teenage years? We preregistered a staggered difference-in-differences design based on the municipal timing of 4G coverage and estimated it with the same code in four countries that met file-in-hand inclusion criteria (France, Colombia, Brazil, Spain; Sweden was examined and excluded). Births by age of the mother come from vital statistics; the estimator is the doubly robust Callaway--Sant'Anna event study with not-yet-treated controls. The preregistered primary test, the effect on births to women aged 25--39, is not rejected in France (+1.8\%, $p=0.12$) nor in Colombia ($-1.4$\%, $p=0.72$); it is rejected in Brazil ($-4.7$\%, $p=0.03$ analytic, $p=0.10$ with cluster bootstrap) and, with a failed pre-trend test and a degenerate control group, in Spain. The random-effects pooled estimate across the four countries is $+9.7$\% ($p=0.40$, $I^2=96$\%); the preregistered decision rule therefore concludes that a net effect on women aged 25 and over is \emph{not established}. Where effects appear (Brazil, and the exploratory Colombia--Brazil pool), they are concentrated on women under 30. No country allows the channel (union formation versus fertility within unions) to be identified. We state what would move the smartphone from an indeterminate to a first-order factor.
 \selectlanguage{french}
 
-\medskip\noindent\textbf{Résumé.} [À rédiger à l'Étape 4.]
+\medskip\noindent\textbf{Résumé.} La diffusion des smartphones, et à travers eux des réseaux sociaux et des applications de rencontre, réduit-elle la fécondité au-delà des adolescentes ? Nous avons préenregistré un dessin de différences-de-différences échelonnées fondé sur le calendrier municipal de la couverture 4G, puis estimé avec le même code dans les quatre pays remplissant les critères d'inclusion fixés à l'avance (France, Colombie, Brésil, Espagne ; la Suède a été examinée et exclue). Les naissances par âge de la mère viennent de l'état civil ; l'estimateur est l'event study doublement robuste de Callaway et Sant'Anna avec contrôle « pas encore traité ». Le test primaire préenregistré, l'effet sur les naissances des femmes de 25 à 39 ans, n'est rejeté ni en France ($+1{,}8$~\%, $p=0{,}12$) ni en Colombie ($-1{,}4$~\%, $p=0{,}72$) ; il l'est au Brésil ($-4{,}7$~\%, $p=0{,}03$ analytique, $0{,}10$ par bootstrap) et, avec un pré-test rejeté et un groupe de contrôle dégénéré, en Espagne. L'estimation poolée à effets aléatoires vaut $+9{,}7$~\% ($p=0{,}40$, $I^2=96$~\%) : la règle de décision préenregistrée conclut qu'un effet net sur les 25 ans et plus n'est \emph{pas établi}. Là où des effets apparaissent (Brésil, synthèse exploratoire Colombie-Brésil), ils se concentrent sur les femmes de moins de 30 ans. Aucun pays ne permet d'identifier le canal. Nous énonçons ce qui ferait passer le smartphone du statut de facteur indéterminé à celui de cause de premier ordre.
 \end{abstract}
 
 \section{Introduction}
-% question, contribution, résultat principal en une phrase
+
+La fécondité des pays à revenu élevé a baissé après 2008-2010 dans la plupart d'entre eux, au moment même où le smartphone, les réseaux sociaux et les applications de rencontre se diffusaient. La coïncidence est frappante ; elle n'est pas une preuve. Ce papier pose une question étroite et y répond avec un dessin fixé avant de voir les résultats : la bascule d'un territoire dans la couverture 4G, qui conditionne l'usage mobile d'Internet, change-t-elle le nombre de naissances des femmes de 25 ans et plus, et non seulement des adolescentes ? Si oui, l'effet passe-t-il par la mise en couple ou par la fécondité au sein des couples ?
+
+Poser la question ainsi a deux conséquences. La première est que le traitement n'est pas l'usage du smartphone, impossible à dater au niveau local, mais la bascule d'un territoire dans la couverture 4G, datée par le régulateur ; l'effet mesuré est celui de la possibilité d'un usage mobile intensif, pas celui de l'usage lui-même, et nous le rappelons à chaque étape. La seconde est que la réponse doit être lue groupe d'âge par groupe d'âge : les travaux existants mesurent surtout des effets sur les adolescentes, dont les naissances pèsent peu dans l'indice synthétique de fécondité des pays à revenu élevé ; un facteur de premier ordre de la baisse récente devrait toucher les femmes de 25 à 39 ans, qui en font l'essentiel. C'est pourquoi le test primaire porte sur elles, et pourquoi la règle de décision ne compte pas un effet sur les adolescentes comme une réponse à la question posée.
+
+La contribution est triple. D'abord, le dessin est préenregistré (\texttt{docs/preregistration.md}, gelé au commit \texttt{c4002c6}) avec des hypothèses, des tailles d'effet minimales détectables, des familles de tests et une règle de décision écrites avant toute estimation ; les décisions de mesure prises à la lecture des fichiers sont consignées dans des addenda datés. Ensuite, le même code est appliqué à quatre pays retenus par des critères fixés à l'avance et vérifiés fichiers en main, ce qui évite de choisir le pays qui « marche ». Enfin, chaque chiffre du papier est produit par un script du dépôt ; aucune donnée n'est inventée, aucun résultat n'est emprunté.
+
+Le résultat principal tient en une phrase : avec un dessin capable de détecter des effets de 1~\% en France et au Brésil, de 2~\% en Espagne et de 5~\% en Colombie, l'effet net de la 4G sur les naissances des femmes de 25 à 39 ans n'est pas établi ; les seuls effets négatifs crédibles apparaissent au Brésil et se concentrent sur les femmes de moins de 30 ans.
+
+La suite est organisée comme suit. La section 2 situe le papier dans la littérature ; la section 3 expose le cadre conceptuel et les hypothèses préenregistrées ; la section 4 décrit les faits stylisés, les pays examinés et les données ; la section 5 la stratégie empirique ; les sections 6 à 8 donnent les résultats par âge, la décomposition du canal et la robustesse ; la section 9 discute les mécanismes, la section 10 les limites, et la section 11 énonce le statut du smartphone comme facteur explicatif et les critères qui le réviseraient. Les annexes donnent les tableaux complets, le dictionnaire des variables, les sources exactes et la liste des pays examinés.
 
 \section{Positionnement}
-% ≤ 600 mots ; références vérifiées uniquement (references.bib)
+
+Les études causales existantes portent presque toutes sur le haut débit \emph{fixe} ou sur les moins de 25 ans. \citet{guldi2017} trouvent qu'aux États-Unis la diffusion du haut débit fixe réduit la fécondité adolescente ; \citet{bellou2015} que le même haut débit élève les mariages des 21-30 ans ; \citet{billari2019} qu'en Allemagne il élève la fécondité des femmes diplômées de 25-45 ans, par le télétravail. Aucune de ces trois études ne traite de l'Internet mobile ni, pour les deux premières, des femmes de plus de 25 ans. Du côté de la rencontre, \citet{rosenfeld2019} documentent qu'aux États-Unis la rencontre en ligne est devenue vers 2013 le premier mode de rencontre des couples hétérosexuels, et \citet{potarca2020} décrit en Suisse les intentions de cohabitation et de fécondité des couples formés via des applications ; ces travaux sont descriptifs.
+
+Des travaux plus récents se rapprochent de notre question. \citet{myers2026} exploite le monopole d'AT\&T sur l'iPhone (2007-2011) et mesure des effets sur les naissances des 15-19 et 20-24 ans aux États-Unis ; \citet{hudson2026} relient la chute de la fécondité adolescente au Royaume-Uni à la couverture 4G ; \citet{ershov2026} étudient ce que change le passage de la rencontre en ligne des sites aux applications sur les marchés matrimoniaux américains ; \citet{jung2026} relient applications de rencontre et taux de mariage ; \citet{si2025} examinent le haut débit et les décisions de fécondité en Chine ; \citet{liu2026} l'Internet mobile et la fécondité en Afrique subsaharienne ; \citet{churchill2026} le haut débit et la santé mentale des adolescents. Le constat qui motive ce papier est que l'effet \emph{net} de l'Internet mobile sur les femmes de 25 ans et plus — celles dont les naissances font l'essentiel de l'indice synthétique de fécondité — reste à mesurer avec un dessin de couverture échelonnée, dans plusieurs pays, et avec une règle de décision écrite à l'avance.
+
+Méthodologiquement, nous nous appuyons sur les estimateurs robustes à l'adoption échelonnée : \citet{callaway2021} pour l'estimateur primaire, \citet{sun2021} et \citet{gardner2022} pour les comparaisons, \citet{dechaisemartin2020} et \citet{roth2023} pour les biais du modèle à deux effets fixes et la synthèse de cette littérature.
 
 \section{Cadre conceptuel et hypothèses}
-% reprend docs/preregistration.md (hash du commit de gel : à insérer)
+
+Le cadre est celui de la préregistration (version 1.0, commit \texttt{c4002c6}, section 3), résumé ici. Le smartphone peut agir sur la fécondité par cinq canaux : (a) l'élargissement du marché de l'appariement, qui élève le coût d'opportunité de s'engager et reporte la mise en couple ; (b) le déplacement du temps vers l'écran et la baisse de l'activité sexuelle ; (c) la diffusion de normes et d'aspirations qui dévalorisent la parentalité précoce ; (d) le coût d'opportunité du temps parental ; (e) la santé mentale. Les canaux (a) et (b) prédisent un effet qui passe par la mise en couple ; (c) à (e) un effet au sein des couples. Le traitement observable n'est pas l'usage mais la \emph{possibilité} d'usage : l'arrivée de la 4G dans une unité géographique, datée par le régulateur.
+
+Ces canaux n'ont pas les mêmes prédictions par âge ni les mêmes traces observables. L'élargissement du marché de l'appariement (a) et le déplacement du temps (b) devraient toucher d'abord les femmes jeunes, pas encore en couple, et se traduire par un recul des mariages et des mises en couple avant celui des naissances ; les canaux (c) à (e) peuvent toucher toutes les femmes en âge de procréer, y compris celles déjà en couple, et se traduire par une baisse des naissances par femme en couple sans recul des unions. C'est ce contraste qui fonde H3 : si l'effet sur les naissances passe par la mise en couple, l'effet sur les mariages devrait être négatif et précéder celui sur les naissances ; s'il passe par la fécondité des couples, l'effet sur les naissances par femme en couple devrait être négatif à unions constantes. Le smartphone peut aussi agir en sens contraire : l'accès à l'information et aux services de santé reproductive peut réduire les naissances non désirées, ce qui est un effet négatif pour un autre motif, et la rencontre en ligne peut accélérer la mise en couple de personnes isolées géographiquement. Le signe net n'est donc pas donné par la théorie, ce qui justifie des tests bilatéraux et une règle de décision qui exige la concordance des signes entre pays.
+
+Les hypothèses, numérotées comme dans la préregistration, sont les suivantes. H1 : la bascule 4G réduit les naissances pour 1\,000 femmes en âge de procréer. H2 : l'effet est hétérogène par âge ; H2a sur les 15-19 et 20-24 ans, H2b sur les 25-39 ans (\emph{test primaire du papier}), H2c par groupe quinquennal au-delà de 25 ans, H2d : l'effet des 15-24 ans est plus négatif que celui des 25-39 ans. H3 : le canal ; H3a sur les mariages et la mise en couple, H3b sur la fécondité des femmes en couple, H3c sur le calendrier relatif des deux. H4 : premier étage, la couverture élève la possession de smartphone et l'usage des réseaux sociaux. H5 : placebos ; H5a bascule fictive décalée de trois ans, H5b résultat sans lien attendu (décès), H5c tendances pré-traitement. H6 : hétérogénéité par densité, revenu, diplôme, zone de déploiement prioritaire, rang de naissance. La règle de décision de la section 6 de la préregistration stipule qu'un effet net sur les 25 ans et plus est « établi » si H2b est rejetée avec le même signe dans au moins deux pays de niveau 1, si l'estimation poolée est significative et si H5a-c ne sont pas rejetées dans ces pays.
+
+Les critères d'inclusion d'un pays (section 4.3) sont fixés à l'avance : (1) un traitement infranational daté avec au moins trois années de pré-période pour au moins 30~\% des unités ; (2) des naissances annuelles par âge au niveau de l'unité ; (3) un téléchargement scriptable sous licence permettant la reproduction ; (4) des dénominateurs par sexe et âge. La décision est prise et committée avant toute estimation et n'est jamais révisée. Les déviations et décisions de mesure sont dans \texttt{docs/preregistration\_addenda.md} (A1 à A8).
 
 \section{Données}
-% sources, construction, descriptives, limites de mesure ; tables/t_sample.tex ; docs/data_log.md
+
+\subsection{Faits stylisés}
+
+La figure~\ref{fig:world} rapproche, par groupe de revenu de la Banque mondiale, l'indice synthétique de fécondité, les abonnements mobiles et l'usage d'Internet depuis 1990. Les pays à revenu élevé et intermédiaire supérieur, où les abonnements mobiles dépassent 120 pour 100 habitants, ont un indice proche ou inférieur au seuil de remplacement depuis le début de la période ; la baisse récente y est faible en niveau. Parmi les 114 pays dont l'indice synthétique était inférieur à 2,5 en 2000 (estimations des Nations unies, tableau \texttt{t\_world\_inflection.md}), 66 (58~\%) atteignent leur maximum local entre 2008 et 2015 avant de baisser ; la baisse médiane depuis ce maximum est de 20~\%. Pour les pays souvent cités, le maximum est en 2007 aux États-Unis, 2008 en Espagne, 2009 en Norvège, 2010 en Finlande, en France et en Italie, 2015 en Allemagne et au Japon ; la Corée du Sud et le Brésil baissent de façon continue depuis 2000. Cette datation est descriptive : elle dit que l'inflexion coïncide avec la diffusion du smartphone (figure~\ref{fig:eu}, panneau de gauche : la part des individus accédant à Internet depuis un téléphone mobile passe de 22~\% à 76~\% en France et de 17~\% à 86~\% en Espagne entre 2011 et 2019), elle n'en dit pas la cause.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{fig_world_tfr_income.pdf}
+\caption{Indice synthétique de fécondité, abonnements mobiles et usage d'Internet par groupe de revenu (Banque mondiale, 1990-2024). Source : \texttt{scripts/19\_world\_facts.py}.}\label{fig:world}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{fig_world_asfr.pdf}
+\caption{Taux de fécondité par âge dans les quatre pays d'étude, 1995-2023 (Nations unies, WPP 2024). Source : \texttt{scripts/19\_world\_facts.py}.}\label{fig:asfr}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{fig_eu_mobile_internet.pdf}
+\caption{Accès à Internet depuis un téléphone mobile et taux de fécondité par âge, France et Espagne (Eurostat). Source : \texttt{scripts/19\_world\_facts.py}.}\label{fig:eu}
+\end{figure}
+
+La figure~\ref{fig:asfr} montre les taux de fécondité par âge dans les quatre pays d'étude. En France et en Espagne, la fécondité des 25-29 ans baisse depuis 2010 tandis que celle des 30-34 et des 35-39 ans se maintient ; en Colombie et au Brésil, la baisse est générale et antérieure à la 4G pour les moins de 25 ans. C'est cette superposition de tendances séculaires qu'un dessin causal doit séparer de l'effet propre de la couverture.
+
+\subsection{Pays examinés et retenus}
+
+Le balayage de l'Étape 0 (\texttt{docs/etape0\_pays.md}) a classé 47 pays. Cinq étaient de niveau 1 (réplication causale possible) : France, Espagne, Suède, Brésil, Colombie. Chacun a été vérifié fichiers en main, dans l'ordre préenregistré, avec une check-list des quatre critères (\texttt{docs/data\_log.md}). La Suède a été exclue au critère 1 : le régulateur ne publie plus les cartographies 2010-2014 par commune et, dès la première année disponible (2015), 96~\% des communes sont couvertes (addendum A3). Les quatre autres pays sont inclus (A1-A2, A4, A5, A6). Le tableau~\ref{tab:countries} en annexe liste les 47 pays et leur statut ; le tableau~\ref{tab:design} résume le dessin par pays.
+
+\input{../tables/tab_design.tex}
+
+\subsection{Traitement}
+
+\textbf{France.} Le traitement principal (D1) est la première année civile où une commune compte au moins un émetteur 4G en service, d'après l'observatoire des installations radioélectriques de l'ANFR et ses archives annuelles (2018-2025). Sur 34\,833 unités communales harmonisées au Code officiel géographique 2026, 21\,392 basculent entre 2013 et 2024 et 13\,312 ne basculent pas sur la fenêtre (\texttt{t\_treatment\_fr.md}). Au niveau du département, D3 est la part des femmes de 15-44 ans (recensement 2011) résidant dans une commune couverte ; la cohorte départementale est la première année où D3 atteint 50~\% ; les 96 départements métropolitains basculent entre 2013 et 2018, de sorte qu'aucun ne sert de contrôle jamais traité. Les variantes (observatoire seul, deuxième opérateur, sites ARCEP, 3G) sont dans le tableau de robustesse.
+
+\textbf{Colombie.} Le ministère des TIC publie par centro poblado, opérateur et trimestre (2015-T4 à 2023-T3) la présence de chaque technologie. Nous construisons la part de la population municipale couverte en 4G par au moins un opérateur, avec les populations 2015 des projections du DANE ; la cohorte est la première année où cette part atteint 50~\%. Les 189 municipios déjà couverts au premier trimestre observé sont censurés à gauche et exclus du primaire ; les cohortes vont de 2016 à 2023 et 67 municipios ne basculent pas (A4).
+
+\textbf{Brésil.} L'Anatel publie par município, opérateur et technologie la présence du service (instantanés de décembre 2013-2016, mensuels ensuite). Le régulateur ne publiant pas de part de population couverte avant fin 2021, le traitement est la présence de la 4G par au moins un opérateur ; la cohorte est la première année de présence (2014 : 189 municípios, 2015 : 298, 2016 : 551, 2017 : 2\,739, 2018 : 680, puis 1\,113 jusqu'en 2023). L'instantané de décembre 2013 ne contient aucune présence 4G, y compris à São Paulo où elle était commercialisée : la cohorte 2014 peut contenir des municípios couverts dès 2013, ce qui est traité en robustesse (A5).
+
+\textbf{Espagne.} Le ministère publie par municipio la part de la population couverte en LTE aux instantanés de décembre 2013, 2014 et 2015 puis de juin 2016 à 2020. Parmi les 8\,131 municipios, 210 atteignent 50~\% dès décembre 2013, 1\,051 en 2014, 2\,795 en 2015, 7\,948 en 2020. Mais les naissances ne sont identifiables que pour les municipios de plus de 10\,000 habitants, où la bascule est concentrée : 179 dès 2013, 580 en 2014, 749 en 2015 et tous en 2016 (A6).
+
+\subsection{Résultats}
+
+Les naissances viennent de l'état civil : fichiers détail de l'INSEE au département par âge de la mère (1998-2024) et naissances par commune (2008-2024) en France ; microdonnées des Estadísticas Vitales du DANE par municipio de résidence de la mère et groupe d'âge quinquennal (1998-2024) en Colombie ; table 2609 du registre civil de l'IBGE par município de résidence, année de naissance et groupe d'âge (2003-2024) au Brésil, en recomposant l'année d'occurrence à partir des enregistrements de l'année et de l'année suivante ; microdonnées de l'INE par municipio de résidence (codé si plus de 10\,000 habitants), âge, état civil et rang (2007-2024) en Espagne. Les dénominateurs sont les femmes par groupe d'âge : estimations de population de l'INSEE, projections municipales du DANE par âge simple, interpolation entre les recensements 2000, 2010 et 2022 de l'IBGE calée sur la population totale annuelle, et Padrón continu au 1\textsuperscript{er} janvier (2003-2022) en Espagne, ce qui borne la fenêtre espagnole à 2022.
+
+Le résultat primaire est $\log$(naissances $+\,0{,}5$ pour 1\,000 femmes du groupe d'âge) au niveau de l'unité $\times$ âge ; au département français, où les cellules ne sont jamais nulles, $\log$(naissances pour 1\,000 femmes). Les groupes d'âge sont 15-19, 20-24, 25-29, 30-34, 35-39 et 40-49 ans. Les mesures du canal sont les mariages de femmes par âge (INSEE ; INE ; IBGE, mais seulement 2013-2016 au moment de l'exécution, l'API de l'IBGE ne répondant plus pour 2017 et au-delà), les PACS et les parts de personnes en couple entre millésimes du recensement (France), les naissances de mères en union libre ou mariées (Colombie) ou mariées (Espagne).
+
+\subsection{Descriptives, échantillons et puissance}
+
+Le tableau~\ref{tab:sample} donne les échantillons français ; ses équivalents colombien, brésilien et espagnol sont en annexe. En France, le panel communal compte 34\,704 communes sur 2008-2024 (31\,194 avec les cinq covariables de pré-période) et le panel départemental 96 départements sur 1998-2024. En Colombie, 932 municipios (907 après équilibrage) sur 1998-2024 ; au Brésil, 5\,558 municípios sur 2003-2024 ; en Espagne, 722 municipios codés toutes les années 2007-2022.
+
+La taille d'effet minimale détectable (puissance 80~\%, seuil 5~\%) a été calculée avant toute estimation par permutation des cohortes entre unités (tableau~\ref{tab:mde}) : pour le test primaire H2b, 1,3~\% en France, 5,0~\% en Colombie, 1,4~\% au Brésil et 2,4~\% en Espagne. Un effet de quelques pour cent n'est donc pas détectable en Colombie ; les intervalles de confiance le rappelleront.
+
+\input{../tables/tab_sample.tex}
+\input{../tables/tab_mde.tex}
+
+\subsection{Limites de mesure}
+
+Trois limites sont dites avant les résultats. (i) Le traitement est la couverture, pas l'usage : le premier étage (H4) n'est mesuré qu'en France, au niveau de neuf zones d'étude et d'aménagement du territoire. (ii) Les dénominateurs brésiliens sont lissés entre recensements ; le taux n'y capte que les variations du numérateur. (iii) En Espagne, l'unité est le municipio de plus de 10\,000 habitants, où la 4G est arrivée en deux ans ; en Colombie et au Brésil, la première observation du régulateur suit le lancement commercial, de sorte que les premières cohortes sont bornées. Les cellules à zéro naissance sont traitées par le $+\,0{,}5$ ; une régression de Poisson à effets fixes avec offset sert de comparaison.
 
 \section{Stratégie empirique}
 
+L'estimateur primaire est celui de \citet{callaway2021} : pour chaque cohorte $g$ et année $t$, l'ATT$(g,t)$ compare l'évolution du résultat depuis l'année de référence (base universelle, $t=g-1$) entre les unités de la cohorte $g$ et les unités pas encore traitées en $t$, avec une pondération doublement robuste sur des covariables de pré-période fixées par pays (France : cinq covariables communales dont le chômage, la part de diplômées, le revenu et une tendance de pré-période ; Colombie : part de population en cabecera, population, part de mères diplômées, tendance 2010-2014 ; Brésil : population 2010, part des femmes 15-49, niveau et tendance 2008-2013 ; Espagne : population 2013, part des femmes 15-49, part de mères nées à l'étranger, tendance 2008-2012). L'agrégat rapporté, ATT$[1,k]$, est la moyenne des effets des années $+1$ à $+k$, avec $k$ la dernière période identifiée jusqu'à 5 ; sa variance utilise la covariance complète des coefficients, calculée à partir des fonctions d'influence sommées par grappe (unité géographique). Lorsqu'aucune unité n'est jamais traitée (France au département, Brésil, Espagne), la dernière cohorte sert de contrôle et la fenêtre identifiée se termine avant elle, ce qui est dit dans chaque ligne de résultat.
+
+L'hypothèse d'identification est celle des tendances parallèles conditionnelles : à covariables de pré-période données, les unités basculant en $g$ auraient suivi, sans la 4G, la même évolution que les unités pas encore couvertes. Elle est plus faible que celle du modèle à deux effets fixes à deux titres. D'abord, le groupe de contrôle est formé des unités pas encore traitées à la date $t$, jamais des unités déjà traitées, ce qui évite les comparaisons dont \citet{dechaisemartin2020} et \citet{roth2023} montrent qu'elles peuvent inverser le signe d'un effet hétérogène dans le temps. Ensuite, la comparaison est conditionnelle : les covariables servent à la fois à pondérer les unités de contrôle et à modéliser le résultat, de sorte que l'estimateur reste convergent si l'un des deux modèles est correct. La base universelle $t = g-1$ signifie que chaque coefficient d'event study se lit par rapport à l'année précédant la bascule, pour les périodes pré comme post ; les coefficients pré ne sont pas des paramètres de l'effet mais un test de l'hypothèse, et c'est pourquoi chaque résultat est accompagné de la $p$ du test de Wald joint des coefficients $-8$ à $-2$.
+
+Nous rapportons avec chaque estimation : les coefficients d'event study de $-8$ à $+8$ avec une bande simultanée à 95~\% (bootstrap multiplicateur) ; le test de Wald joint de nullité des coefficients $-8$ à $-2$ (H5c) ; pour les spécifications primaires, un écart-type par bootstrap par grappes stratifié par cohorte (50 tirages) et un agrégat à composition constante ; les comparaisons de \citet{sun2021}, de \citet{gardner2022} (deux étapes) et du modèle à deux effets fixes, sur la fenêtre identifiée. Les tests par groupe d'âge sont corrigés par Holm dans deux familles (H2a : 15-19, 20-24 ; H2c : 25-29 à 40-49) ; H2d est testée par bootstrap conjoint de la différence des deux agrégats. La règle de décision de la section 6 de la préregistration et la synthèse entre pays (méta-analyse à effets aléatoires des ATT en pourcentage du taux contrefactuel, REML, intervalle de prédiction, $I^2$ ; addendum A7) sont appliquées mécaniquement par \texttt{scripts/18\_meta.py}. Les variables instrumentales (couverture comme instrument de la possession de smartphone, France) sont secondaires et ne sont pas interprétées.
+
+L'inférence est à deux niveaux. Au premier, les écarts-types analytiques viennent des fonctions d'influence sommées par unité, l'équivalent d'un regroupement par unité ; au second, pour les spécifications primaires, un bootstrap par grappes stratifié par cohorte rééchantillonne des unités entières et ré-estime la chaîne complète, pondérations comprises. Lorsque les deux diffèrent sensiblement, c'est le second qui guide la lecture. L'agrégat ATT$[1,k]$ est une moyenne simple des effets dynamiques de $+1$ à $+k$ ; comme les cohortes tardives ne sont pas observées aux horizons longs, il mélange des cohortes différentes selon l'horizon, et l'agrégat à composition constante, qui ne retient que les cohortes observées jusqu'à $+k$, en donne la contrepartie. Les tests par groupe d'âge sont corrigés dans des familles fermées, ce qui garde le taux d'erreur de famille à 5~\% sans supposer l'indépendance des tests.
+
+La synthèse entre pays convertit chaque ATT$[1,k]$ primaire en pourcentage du taux contrefactuel, $100\,(\exp(\mathrm{ATT})-1)$, avec un écart-type par la méthode delta, puis combine les quatre pays par effets aléatoires. L'intervalle de prédiction, qui dit où tomberait l'effet d'un cinquième pays, et $I^2$, part de la variance entre pays non imputable à l'échantillonnage, sont rapportés parce que quatre pays aux dessins différents n'ont aucune raison d'avoir le même effet. La règle de décision n'a que deux sorties, « établi » ou « non établi » ; elle ne pondère pas les pays selon la qualité de leur dessin. L'addendum A8, écrit avant la synthèse, fixe la présentation d'un pays dont l'identification a échoué : ses résultats sont donnés avec leurs diagnostics, sans interprétation de signe, et il entre dans la synthèse comme prévu.
+
 \section{Résultats : effet causal par âge}
-% figures/f_event_*.pdf ; tables/t_main_*.tex — aucun résultat externe dans les sections 6 à 11
+
+\subsection{France}
+
+Le tableau~\ref{tab:main} et les figures~\ref{fig:fr_h1} et \ref{fig:fr_h2b} donnent les résultats français. Au niveau communal, l'ATT$[1,5]$ de la spécification primaire sur les naissances pour 1\,000 femmes de 15-44 ans vaut $+0{,}002$ (écart-type $0{,}005$, $p = 0{,}64$ ; bootstrap par grappes $p = 0{,}67$), avec un pré-test non rejeté ($p = 0{,}14$) ; l'intervalle de confiance exclut une baisse de plus de 0,7~\%. Les comparaisons sur le même échantillon donnent $+0{,}001$ (Sun \& Abraham), $+0{,}003$ (deux étapes) et $+0{,}001$ (deux effets fixes, event study) ; le modèle à deux effets fixes statique, biaisé en adoption échelonnée, donne $-0{,}005$ ($p = 0{,}09$) et $-0{,}013$ ($p < 0{,}001$) sans covariables, où le pré-test rejette ($p = 0{,}015$).
+
+Au niveau départemental, le test primaire H2b donne un ATT$[1,4]$ de $+0{,}018$ (écart-type $0{,}011$, $p = 0{,}12$ ; bootstrap $p = 0{,}10$) sur les naissances pour 1\,000 femmes de 25-39 ans : un effet positif, non significatif, dont l'intervalle exclut une baisse de plus de 0,4~\%. Le test de Wald pré est toutefois rejeté ($p = 0{,}004$) : les coefficients de $-8$ à $-2$ ne sont pas conjointement nuls, ce qui fragilise l'hypothèse de tendances parallèles au département. La variante au seuil de 90~\% de couverture, dont le pré-test n'est pas rejeté ($p = 0{,}30$), donne $+0{,}002$ ($p = 0{,}74$). Par groupe d'âge (tableau~\ref{tab:h2age}, figure~\ref{fig:fr_age}), aucun effet ne survit à la correction de Holm : $-0{,}085$ pour les 15-19 ans ($p$ brut $0{,}22$), $-0{,}017$ pour les 20-24 ans, $-0{,}018$ pour les 25-29 ans, $+0{,}024$ pour les 30-34 ans, $+0{,}045$ pour les 35-39 ans ($p$ brut $0{,}037$, Holm $0{,}15$), $+0{,}056$ pour les 40-49 ans. La différence 15-24 moins 25-39 (H2d) vaut $-0{,}021$ ($p = 0{,}41$).
+
+\input{../tables/tab_main.tex}
+\input{../tables/tab_h2_age.tex}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.85\linewidth]{fig_event_h1_primaire.pdf}
+\caption{France, H1 : event study de la spécification primaire (communes, log des naissances pour 1\,000 femmes de 15-44 ans) et comparaisons. Source : \texttt{scripts/06\_figures.py}.}\label{fig:fr_h1}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.85\linewidth]{fig_event_h2b.pdf}
+\caption{France, H2b : event study au département, naissances pour 1\,000 femmes de 25-39 ans. Source : \texttt{scripts/06\_figures.py}.}\label{fig:fr_h2b}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{fig_h2_age.pdf}
+\caption{France : ATT$[1,4]$ par groupe d'âge, naissances et mariages de femmes (départements). Source : \texttt{scripts/06\_figures.py}.}\label{fig:fr_age}
+\end{figure}
+
+\subsection{Colombie}
+
+Le tableau~\ref{tab:co_main} et la figure~\ref{fig:co_h1} donnent les résultats colombiens. La spécification primaire H1 donne un ATT$[1,5]$ de $-0{,}013$ (écart-type $0{,}040$, $p = 0{,}75$), pré-test non rejeté ($p = 0{,}22$) ; H2b donne $-0{,}014$ (écart-type $0{,}039$, $p = 0{,}72$ ; bootstrap $p = 0{,}76$), pré-test non rejeté ($p = 0{,}54$). Les intervalles couvrent des effets de $\pm 8$~\% : la Colombie n'exclut pas un effet modéré, elle ne le détecte pas. Les comparaisons sans covariables de pré-période (Sun \& Abraham $-0{,}025$, deux étapes $-0{,}105$, deux effets fixes $-0{,}098$) donnent des effets négatifs croissants dans le temps, mais leur pré-test rejette ($p \le 0{,}01$) : les coefficients pré lointains y sont positifs, ce qui ressemble à une tendance différentielle que la tendance 2010-2014 incluse dans les covariables absorbe. Par âge, deux coefficients ont une $p$ brute inférieure à 5~\% — $-0{,}085$ pour les 30-34 ans et $+0{,}178$ pour les 40-49 ans — mais aucun ne survit à Holm ($0{,}12$ et $0{,}11$) ; H2d vaut $-0{,}013$ ($p = 0{,}72$).
+
+\input{../tables/tab_co_main.tex}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.85\linewidth]{fig_event_co_h1_primaire.pdf}
+\caption{Colombie, H1 : event study de la spécification primaire (municipios, log des naissances $+\,0{,}5$ pour 1\,000 femmes de 15-49 ans) et comparaisons. Source : \texttt{scripts/12\_co\_figures\_tables.py}.}\label{fig:co_h1}
+\end{figure}
+
+\subsection{Brésil}
+
+Le Brésil est le pays où le dessin est le plus favorable : 5\,558 municípios, onze années de pré-période, des cohortes étalées de 2014 à 2023 et une taille d'effet détectable de 1,3~\%. La spécification primaire H1 donne $-0{,}036$ (écart-type $0{,}019$, $p = 0{,}06$ ; bootstrap par grappes : écart-type $0{,}027$, $p = 0{,}18$), pré-test non rejeté ($p = 0{,}66$) ; l'agrégat à composition constante vaut $-0{,}024$ ($p = 0{,}28$). Le test primaire H2b donne $-0{,}048$ (écart-type $0{,}022$, $p = 0{,}03$ ; bootstrap $p = 0{,}10$), pré-test non rejeté ($p = 0{,}82$), agrégat à composition constante $-0{,}033$ ($p = 0{,}19$). La figure~\ref{fig:br_h1} montre des coefficients nuls jusqu'à $+3$ puis décroissants jusqu'à $-0{,}5$ à $+8$ ; les périodes lointaines ne sont observées que pour les cohortes 2014-2016 et la bande simultanée y est large. Les comparaisons donnent $-0{,}073$ (Sun \& Abraham, $p = 0{,}004$), $-0{,}033$ (deux étapes, $p = 0{,}08$) et $+0{,}035$ (deux effets fixes, $p = 0{,}003$) : le signe du modèle à deux effets fixes est inversé, illustration des biais de pondération en adoption échelonnée.
+
+Par groupe d'âge (tableau~\ref{tab:br_h2age}, figure~\ref{fig:br_age}), les effets sont concentrés sur les moins de 30 ans : $-0{,}096$ pour les 15-19 ans ($p$ Holm $< 0{,}01$), $-0{,}049$ pour les 20-24 ans (Holm $0{,}03$), $-0{,}075$ pour les 25-29 ans (Holm $0{,}01$), $-0{,}030$ pour les 30-34 ans (Holm $0{,}72$), $-0{,}090$ pour les 35-39 ans (Holm $0{,}09$) et $-0{,}010$ pour les 40-49 ans. La différence 15-24 moins 25-39 (H2d) vaut $-0{,}010$ ($p = 0{,}46$) : les moins de 25 ans ne sont pas significativement plus touchées que les 25-39 ans.
+
+\input{../tables/tab_br_main.tex}
+\input{../tables/tab_br_h2_age.tex}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.85\linewidth]{fig_event_br_h1_primaire.pdf}
+\caption{Brésil, H1 : event study de la spécification primaire (municípios) et comparaisons. Source : \texttt{scripts/12\_co\_figures\_tables.py --country BR}.}\label{fig:br_h1}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{fig_br_h2_age.pdf}
+\caption{Brésil : ATT$[1,5]$ par groupe d'âge. Source : \texttt{scripts/12\_co\_figures\_tables.py --country BR}.}\label{fig:br_age}
+\end{figure}
+
+\subsection{Espagne : identification échouée}
+
+L'Espagne remplit les critères d'inclusion mais son dessin est dégénéré (addendum A8) : parmi les 722 municipios du panel, 175 sont couverts dès décembre 2013, 388 en 2014, 156 en 2015 et 3 en 2016, et aucun ne reste non couvert. L'estimateur n'identifie donc qu'une année post-traitement, et l'ATT de la cohorte 2015 repose sur 3 municipios de contrôle. Les résultats (tableau~\ref{tab:es_main}) en portent la marque : ATT$[1,1]$ de $+0{,}205$ pour H1 et $+0{,}365$ pour H2b avec des pré-tests rejetés partout ($p < 0{,}001$), des coefficients pré absurdes (jusqu'à $+7{,}8$ à $-8$) et un écart-type bootstrap six fois supérieur à l'écart-type analytique ($0{,}130$, $p = 0{,}12$). La régression de résultat seule, exploratoire, donne $-0{,}039$ (ATT$[1,2]$, $p = 0{,}03$) avec un pré-test également rejeté. Aucun de ces chiffres n'est interprétable comme un effet ; ils sont rapportés parce que la préregistration l'exige, et l'Espagne entre dans la synthèse avec son estimation et son écart-type, comme prévu à l'avance.
+
+\input{../tables/tab_es_main.tex}
+
+\subsection{Synthèse entre pays et règle de décision}
+
+Le tableau~\ref{tab:meta} et la figure~\ref{fig:meta} donnent la synthèse. Les ATT$[1,k]$ primaires des 25-39 ans, convertis en pourcentage du taux contrefactuel, valent $+1{,}8$~\% en France ($p = 0{,}12$), $-1{,}4$~\% en Colombie ($p = 0{,}72$), $-4{,}7$~\% au Brésil ($p = 0{,}03$) et $+44{,}1$~\% en Espagne. L'estimation poolée à effets aléatoires des quatre pays vaut $+9{,}7$~\% (intervalle de confiance $[-12{,}6 ; +31{,}9]$, $p = 0{,}40$, $I^2 = 96$~\%, intervalle de prédiction $[-99 ; +118]$) ; elle est dominée par l'Espagne, dont l'écart-type analytique est petit. Avec les écarts-types bootstrap, le poolé vaut $-0{,}0$~\% ($[-9{,}0 ; +8{,}9]$, $p = 0{,}99$, $I^2 = 61$~\%).
+
+La règle de décision préenregistrée est appliquée telle quelle : H2b est rejetée dans deux pays mais avec des signes opposés (Brésil et Espagne), l'estimation poolée n'est pas significative, et l'Espagne ne satisfait pas la condition sur les placebos. \textbf{Conclusion de la règle : l'effet net sur les 25 ans et plus n'est pas établi.} En sensibilité exploratoire décidée avant le calcul (A7), le poolé sans les pays dont le pré-test rejette (France, Espagne), c'est-à-dire Colombie et Brésil, vaut $-3{,}9$~\% ($[-7{,}5 ; -0{,}3]$, $p = 0{,}03$, $I^2 = 0$) pour les 25-39 ans, $-8{,}5$~\% ($p < 0{,}001$) pour les 15-19 ans, $-5{,}2$~\% ($p = 0{,}004$) pour les 15-24 ans et $-5{,}1$~\% ($p = 0{,}05$) pour les 30-34 ans. Cette sensibilité n'entre pas dans la règle de décision.
+
+\input{../tables/tab_meta_national.tex}
+\input{../tables/tab_meta.tex}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{fig_meta.pdf}
+\caption{ATT$[1,k]$ par pays et estimation poolée (REML) par groupe d'âge, en pourcentage du taux contrefactuel. Source : \texttt{scripts/18\_meta.py}.}\label{fig:meta}
+\end{figure}
 
 \section{Résultats : décomposition du canal}
 
+La question (2) ne peut être tranchée que là où H3a et H3b sont estimées sur la même fenêtre, et seulement si leurs réponses se distinguent statistiquement. En France (tableau~\ref{tab:h3}), l'ATT$[1,4]$ sur les mariages de femmes de 25-39 ans vaut $+0{,}005$ ($p = 0{,}73$) ; par âge, $+0{,}085$ pour les 30-34 ans ($p = 0{,}005$) et $-0{,}046$ pour les 35-39 ans ($p = 0{,}049$), $+0{,}151$ pour les 15-24 ans ($p = 0{,}034$) ; les PACS pour 1\,000 femmes de 15-49 ans (2007-2016) donnent $-0{,}028$ ($p = 0{,}13$) ; les parts de personnes en couple en différences longues entre les recensements 2011, 2016 et 2021 ne bougent pas (toutes les différences sont inférieures à 0,002 en valeur absolue). Les naissances pour 1\,000 femmes en couple de 25-39 ans (H3b, femmes en couple interpolées entre millésimes) donnent $+0{,}018$ ($p = 0{,}098$). La différence préenregistrée entre l'effet sur les mariages et l'effet sur la fécondité des femmes en couple (règle de la section 6) vaut $-0{,}013$ ($p = 0{,}56$) : les deux canaux ne se distinguent pas, et aucun n'est différent de zéro. H3c, le calendrier relatif, n'est pas testable faute d'effet daté.
+
+En Colombie, les mariages par municipio n'existent pas ; les naissances de mères en union libre ou mariées pour 1\,000 femmes de 25-39 ans donnent $+0{,}001$ ($p = 0{,}98$) et celles des 15-24 ans $-0{,}019$ ($p = 0{,}74$). Au Brésil, les mariages par âge de l'épouse n'ont pu être obtenus que pour 2013-2016 et H3a n'est pas estimée ; l'état civil de la mère n'est pas dans la table des naissances. En Espagne, H3a et H3b sont estimées mais dans le dessin dégénéré décrit plus haut (différence $+0{,}089$, $p = 0{,}50$, non interprétable). La réponse à la question (2) est donc : dans le seul pays où le canal est mesurable avec un dessin non dégénéré, la France, ni la mise en couple ni la fécondité au sein des couples ne réagissent, ce qui est cohérent avec l'absence d'effet total.
+
+\input{../tables/tab_h3.tex}
+
 \section{Robustesse}
+
+\subsection{Placebos et tendances pré-traitement}
+
+En France, la bascule fictive décalée de trois ans sur les années pré-traitement (H5a) donne $+0{,}001$ au niveau communal ($p = 0{,}87$) et $-0{,}007$ au département ($p = 0{,}35$, mais avec un pré-test rejeté, $p < 0{,}001$). Les décès pour 1\,000 habitants (H5b, communes) donnent $+0{,}015$ ($p = 0{,}001$) sans covariables et $+0{,}005$ ($p = 0{,}27$) avec ; la première valeur rappelle que la couverture 4G est arrivée dans des communes dont la démographie évoluait différemment, et que les covariables de pré-période absorbent cette différence. Le pré-test de la spécification primaire communale n'est pas rejeté ($p = 0{,}14$) ; celui du département l'est ($p = 0{,}004$). En Colombie, H5a donne $-0{,}037$ ($p = 0{,}15$) et les pré-tests primaires ne sont pas rejetés. Au Brésil, H5a donne $-0{,}145$ ($p = 0{,}036$) — \emph{le placebo est rejeté} — alors que le pré-test de la spécification primaire ne l'est pas ($p = 0{,}66$) ; la lecture prudente est que les municípios couverts tôt avaient une fécondité en baisse plus rapide trois ans avant leur bascule réelle, ce que les covariables de niveau et de tendance 2008-2013 n'absorbent qu'en partie. En Espagne, tout est rejeté. H5b n'est construit qu'en France.
+
+\input{../tables/tab_placebo.tex}
+
+\subsection{Fenêtres, définitions du traitement, pondération, grappes}
+
+En France (tableau~\ref{tab:robust}), l'ATT$[1,5]$ communal vaut $+0{,}015$ sur la fenêtre préenregistrée 2008-2019 ($p = 0{,}09$), $-0{,}003$ sans 2020-2021, $-0{,}002$ hors cohortes 2013-2014, $-0{,}007$ hors cohortes 2013-2017, $+0{,}002$ avec grappes au département, $-0{,}001$ France entière, $+0{,}001$ avec l'observatoire seul, $+0{,}001$ avec le deuxième opérateur, $+0{,}004$ avec le premier site ARCEP, $-0{,}009$ avec la 3G ($p = 0{,}20$). Au département, H2b est insensible aux fenêtres ($+0{,}018$ partout) et vaut $+0{,}015$ avec les départements d'outre-mer. En Colombie, l'ATT primaire vaut $-0{,}024$ sans l'année provisoire 2024, $-0{,}010$ au seuil de 90~\%, $+0{,}027$ avec la seule cabecera, $-0{,}017$ avec la 3G, $+0{,}010$ en incluant les municipios censurés avec une cohorte 2015. Au Brésil, il vaut $-0{,}007$ sur 2003-2019 ($p = 0{,}84$), $-0{,}030$ sans 2020-2021 ($p = 0{,}27$), $-0{,}036$ avec grappes par État ($p = 0{,}25$), $-0{,}027$ avec au moins deux opérateurs ($p = 0{,}16$), $-0{,}017$ avec la 3G ($p = 0{,}43$) et $-0{,}035$ hors cohorte 2014 ($p = 0{,}08$) : l'effet brésilien est porté par les années 2020-2024 et par les cohortes tardives, et il s'affaiblit dès que l'inférence tient compte de la corrélation au sein des États.
+
+\input{../tables/tab_robust.tex}
+
+\subsection{Hétérogénéité}
+
+En France (tableau~\ref{tab:h6}), aucun sous-groupe — densité, revenu médian, part de diplômées, zone de déploiement prioritaire — ne donne d'effet ($p$ Holm égales à 1) ; le sous-groupe des zones de déploiement prioritaire donne un estimateur doublement robuste instable, et sa ligne « régression de résultat seule » sert de lecture. En Colombie, les terciles de part de population en cabecera donnent des ATT positifs au premier ($+0{,}158$) et au troisième ($+0{,}201$, Holm $0{,}002$) et nul au deuxième, sans monotonie, et le tercile des municipios les plus peuplés donne $-0{,}054$ (Holm $0{,}013$). Au Brésil, l'effet est concentré dans le tercile des municípios les plus peuplés ($-0{,}232$, Holm $< 0{,}01$) et au Centro-Oeste ($-0{,}136$) ; il est nul au Nordeste et positif au Sudeste ($+0{,}072$). Les naissances de rang 1 et de rang 2 et plus ne se distinguent ni en Colombie ni en Espagne.
+
+\input{../tables/tab_h6.tex}
+
+\subsection{Premier étage et variables instrumentales (France)}
+
+Dans le Baromètre du numérique (tableau~\ref{tab:firststage}), passer de 0 à 100~\% de couverture 4G de la zone est associé à $+10$ points de possession de smartphone ($p = 0{,}04$ analytique, $0{,}50$ par wild bootstrap sur 9 grappes) et $+15$ points de participation aux réseaux sociaux ($p = 0{,}001$, wild $0{,}09$), l'association étant portée par les 40 ans et plus. Avec neuf grappes, le premier étage des 25-39 ans ($+0{,}11$, $p = 0{,}42$) est trop faible pour instrumenter ; l'estimation IV ($+0{,}15$, $p = 0{,}40$) n'est pas interprétée. Le test partiel de la restriction d'exclusion montre que la couverture est associée à une baisse de 1,6 point du taux d'emploi des femmes de 25-54 ans entre millésimes du recensement ($p < 0{,}001$) : la couverture n'arrive pas au hasard dans les trajectoires locales d'emploi, ce qui interdit de lire l'IV comme l'effet du smartphone seul.
+
+\input{../tables/tab_iv.tex}
 
 \section{Discussion et mécanismes}
 
+Ce que le papier établit est négatif et précis. Dans trois des quatre pays, un dessin capable de détecter des effets de l'ordre de 1 à 2~\% (France, Brésil, Espagne) ou de 5~\% (Colombie) ne montre pas d'effet de la couverture 4G sur les naissances des femmes de 25 à 39 ans qui résiste à la fois au pré-test, au bootstrap par grappes et à la correction pour tests multiples. Le Brésil est l'exception partielle : un effet négatif de 4 à 5~\% sur les 25-39 ans, à la limite de la significativité par bootstrap, concentré sur les 25-29 ans, dans les grands municípios et dans les années 2020-2024, avec un placebo rejeté.
+
+Le cas français est le plus informatif par ce qu'il exclut. Avec 31\,194 communes, douze cohortes et un pré-test non rejeté, l'intervalle de confiance communal exclut une baisse des naissances de plus de 0,7~\% à l'horizon de cinq ans ; au département, où la couverture se mesure par la part de femmes couvertes, l'intervalle exclut une baisse de plus de 0,4~\% sur les 25-39 ans, mais le pré-test y est rejeté. Dans un pays où la fécondité des 25-29 ans baisse depuis 2010, la bascule locale dans la 4G n'explique pas cette baisse, sauf à supposer que l'effet est entièrement national, porté par des usages qui ne dépendent pas de la couverture locale ; cette dernière hypothèse n'est pas testable avec un dessin infranational, et c'est la limite la plus importante de l'approche.
+
+Le cas brésilien mérite une lecture en deux temps. D'un côté, c'est le seul pays où la spécification primaire donne un effet négatif sur les 25-39 ans avec un pré-test non rejeté, où les effets par âge survivent à Holm pour les 15-19, 20-24 et 25-29 ans, et où un groupe de contrôle non dégénéré existe jusqu'en 2022. De l'autre, trois signes invitent à ne pas en faire une conclusion : le placebo décalé est rejeté, l'effet disparaît sur la fenêtre arrêtée en 2019 et s'atténue dès que les grappes sont les États, et la cohorte 2014 contient des municípios couverts en 2013 que l'instantané du régulateur ne distingue pas. L'effet brésilien est donc compatible avec deux lectures, un effet causal de la 4G qui ne se matérialise qu'après plusieurs années, ou une tendance différentielle des grands municípios couverts tôt que les covariables de pré-période ne capturent qu'en partie ; nos données ne tranchent pas entre elles.
+
+Les mécanismes (a) à (e) du cadre conceptuel ne sont pas tous testés. Le canal de la mise en couple (a) est testé en France et n'y réagit pas : ni les mariages des 25-39 ans, ni les PACS, ni les parts de personnes en couple. Le canal de la fécondité au sein des couples (b à e) y est testé par les naissances pour femme en couple et ne réagit pas non plus. En Colombie, la part des naissances de mères en union ne bouge pas. Le déplacement du temps (b), les normes (c), le coût d'opportunité (d) et la santé mentale (e) ne sont pas distingués par nos données ; ils restent des conjectures compatibles avec un effet concentré sur les moins de 30 ans, que les travaux cités en section 2 sur les adolescentes rendent plausible mais que ce papier ne mesure qu'au Brésil.
+
+Trois faits appellent une interprétation prudente plutôt qu'une conclusion. D'abord, les comparaisons sans covariables de pré-période (modèle à deux effets fixes, estimateurs de Sun et Abraham ou de Gardner) donnent en Colombie et au Brésil des effets négatifs plus grands, mais avec des pré-tests rejetés : une partie de ce que la littérature pourrait lire comme un effet du mobile est une tendance différentielle des territoires couverts tôt. Ensuite, la couverture est corrélée à d'autres trajectoires locales (emploi des femmes en France, mortalité communale), ce que les covariables de pré-période absorbent dans nos spécifications primaires, sans garantie que tout soit absorbé. Enfin, le premier étage mesuré en France est faible au niveau où nous pouvons le mesurer ; la couverture 4G est une condition nécessaire de l'usage mobile, pas une mesure de l'intensité d'usage, et l'absence d'effet de la couverture n'exclut pas un effet de l'usage qu'un autre dessin pourrait révéler.
+
 \section{Limites}
 
+(i) Le traitement est la possibilité d'usage, pas l'usage ; en France, le premier étage est mesuré sur neuf zones et n'est pas significatif par wild bootstrap. (ii) Les cohortes sont bornées par la première observation du régulateur (Colombie 2015, Brésil 2014) ou concentrées sur deux ans (Espagne) ; dans les pays sans unité jamais traitée, la dernière cohorte sert de contrôle et les effets au-delà de quatre ou cinq ans reposent sur peu de cohortes. (iii) Les dénominateurs brésiliens sont interpolés entre recensements et les naissances de 2024 sont provisoires en Colombie et au Brésil. (iv) Le pré-test est rejeté pour le test primaire français au département et pour toutes les spécifications espagnoles ; le placebo H5a est rejeté au Brésil. (v) H5b (décès) n'est construit qu'en France ; H3a n'est estimée ni en Colombie (pas de série) ni au Brésil (API indisponible pour 2017 et au-delà au moment de l'exécution). (vi) La Suède, pays de niveau 1, est exclue faute d'archives publiques de la couverture 2010-2014 ; les pays de niveau 2 n'ont pas été vérifiés. (vii) La synthèse entre pays mélange des unités, des mesures du traitement et des horizons différents ; son $I^2$ de 96~\% le dit. (viii) Le bootstrap par grappes compte 50 tirages, nombre imposé par le temps de calcul des spécifications complètes ; ses $p$ sont grossières et ne servent qu'à signaler les cas où l'écart-type analytique est trompeur. (ix) Les fenêtres post-traitement incluent les années 2020-2021, dont la perturbation des naissances n'est traitée qu'en robustesse. (x) Les covariables de pré-période, fixées par pays avant estimation, ne sont pas identiques d'un pays à l'autre, parce que les sources ne le permettent pas ; la synthèse compare donc des effets conditionnels à des ensembles différents.
+
 \section{Conclusion et critères de révision}
-% (i) statut du smartphone comme facteur (premier ordre / second ordre / indéterminé) selon la règle préenregistrée ;
-% (ii) seuil de révision à la hausse ; (iii) ce qui ferait rétrograder l'hypothèse.
+
+Au vu des résultats de ce papier, et selon la règle de décision écrite avant de les connaître, le statut du smartphone comme facteur explicatif de la baisse de fécondité des femmes de 25 ans et plus est \textbf{indéterminé} : il n'est ni établi comme cause de premier ordre (le test primaire n'est rejeté de façon concordante dans aucune paire de pays et le poolé n'est pas significatif), ni écarté (les intervalles colombiens couvrent $\pm 8$~\%, l'effet brésilien sur les 25-29 ans survit à Holm, et la sensibilité exploratoire Colombie-Brésil donne $-3{,}9$~\% sur les 25-39 ans). Pour les moins de 25 ans, les résultats brésiliens et la synthèse exploratoire vont dans le sens des travaux existants sur les adolescentes, sans que ce papier ait été conçu pour en faire sa conclusion.
+
+Seuil de révision à la hausse : si des études causales indépendantes, avec un traitement daté au niveau infranational, un pré-test non rejeté et une correction pour tests multiples, répliquent un effet négatif sur les 25 ans et plus — et pas seulement sur les adolescentes — dans au moins deux pays de plus, ou si la relance de ce dessin avec les mariages brésiliens complets et un pays de niveau 2 vérifié fichiers en main (Royaume-Uni, Finlande, Norvège) rejette H2b de façon concordante, le smartphone devra être reclassé comme cause de premier ordre de la baisse de fécondité. Ce qui ferait rétrograder l'hypothèse au rang de cause de second ordre ou de non-cause : une réplication du dessin brésilien avec un placebo non rejeté donnant un effet nul sur les 25-29 ans, ou l'absence d'effet sur les moins de 25 ans dans des pays où le premier étage est fort ; et, pour les 25 ans et plus, deux pays supplémentaires avec un intervalle de confiance excluant $-2$~\% sur les 25-39 ans.
+
+Tout ce qui précède est reproductible : le dépôt contient les scripts de téléchargement, de construction du traitement et des résultats, d'estimation et de mise en forme, les empreintes des fichiers téléchargés, la préregistration gelée et ses addenda datés. Un lecteur qui doute d'un chiffre peut le recalculer ; un lecteur qui dispose d'un pays de niveau 2 vérifié fichiers en main peut l'ajouter au même code et relancer la synthèse, ce qui est la suite naturelle de ce travail.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
 
 \appendix
 \section{Tableaux complets}
+\input{../tables/tab_co_sample.tex}
+\input{../tables/tab_co_mde.tex}
+\input{../tables/tab_br_sample.tex}
+\input{../tables/tab_br_mde.tex}
+\input{../tables/tab_es_sample.tex}
+\input{../tables/tab_es_mde.tex}
+\input{../tables/tab_firststage.tex}
+\input{../tables/tab_co_h2_age.tex}
+\input{../tables/tab_co_h3.tex}
+\input{../tables/tab_co_placebo.tex}
+\input{../tables/tab_co_h6.tex}
+\input{../tables/tab_co_robust.tex}
+\input{../tables/tab_br_h3.tex}
+\input{../tables/tab_br_placebo.tex}
+\input{../tables/tab_br_h6.tex}
+\input{../tables/tab_br_robust.tex}
+\input{../tables/tab_es_h2_age.tex}
+\input{../tables/tab_es_h3.tex}
+\input{../tables/tab_es_placebo.tex}
+\input{../tables/tab_es_h6.tex}
+\input{../tables/tab_es_robust.tex}
+\input{../tables/tab_exploratory.tex}
+\input{../tables/tab_co_exploratory.tex}
+\input{../tables/tab_br_exploratory.tex}
+\input{../tables/tab_es_exploratory.tex}
+
 \section{Dictionnaire des variables}
+\input{../tables/tab_dictionary.tex}
+
 \section{Sources exactes}
-% généré depuis docs/data_log.md par scripts/06_tables.py
+\input{../tables/tab_sources.tex}
+
 \section{Pays examinés et exclus}
-% préregistration §4.3
+\input{../tables/tab_countries.tex}
 
 \end{document}

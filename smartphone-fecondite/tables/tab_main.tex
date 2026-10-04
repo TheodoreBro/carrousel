@@ -1,8 +1,8 @@
-\begin{table}[htbp]\centering
+\begin{sidewaystable}[htbp]\centering
 \begin{threeparttable}
 \caption{Effet de la bascule 4G sur les naissances : effet total (H1, communes) et 25-39 ans (H2b, départements)}\label{tab:main}
-\small
-\begin{tabular}{llllrrrrrr}
+\scriptsize
+\begin{tabular}{lp{3.8cm}p{6.5cm}lp{3.5cm}rrrrr}
 \toprule
 Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
 \midrule
@@ -42,4 +42,4 @@ H2b & asinh(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \%
 \item Source : scripts/05\_estimate.py. cs = Callaway \& Sant'Anna (écart-type avec covariance complète des coefficients). ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
 \end{tablenotes}
 \end{threeparttable}
-\end{table}
+\end{sidewaystable}

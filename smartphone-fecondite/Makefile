@@ -58,7 +58,7 @@ tables:
 
 paper:              ## paper/paper.pdf (latexmk) et paper/paper.md (pandoc)
 	cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error paper.tex
-	cd paper && pandoc paper.tex -o paper.md --wrap=none
+	$(PY) scripts/22_paper_md.py
 
 test:
 	$(PY) -m pytest -q tests

@@ -42,15 +42,49 @@ def stars(p, p_type=None) -> str:
     return st + ("$^{w}$" if st and isinstance(p_type, str) and p_type.startswith("wild") else "")
 
 
+def _visible_len(cell: str) -> int:
+    """Longueur approximative du texte affiché (commandes LaTeX et espaces fines retirés)."""
+    import re
+    t = re.sub(r"\\[a-zA-Z]+\*?(\[[^\]]*\])?(\{[^}]*\})?", "", cell)
+    return len(t.replace("\\,", "").replace("$", "").replace("{", "").replace("}", ""))
+
+
+def auto_align(header: list[str], rows: list[list[str]], align: str, landscape: bool) -> str:
+    """Convertit en colonnes `p{}` (texte renvoyé à la ligne) les colonnes dont une cellule dépasse 30 caractères, en répartissant la
+    largeur disponible (16 cm en portrait, 24 cm en paysage) entre elles ; les alignements déjà explicites (`p{}`) sont conservés."""
+    import re
+    cols = re.findall(r"[lcr]|p\{[^}]*\}", align)
+    if len(cols) != len(header) or any(c.startswith("p") for c in cols):
+        return align
+    maxlen = [max([_visible_len(h)] + [_visible_len(r[i]) for r in rows if i < len(r)]) for i, h in enumerate(header)]
+    long_idx = [i for i, m in enumerate(maxlen) if m > 30]
+    if not long_idx:
+        return align
+    char_cm = 0.13 if landscape else 0.16           # largeur moyenne d'un caractère (scriptsize / footnotesize), avec marge
+    total = 24.0 if landscape else 16.0
+    short = sum(char_cm * maxlen[i] + 0.35 for i in range(len(header)) if i not in long_idx)
+    avail = max(total - short, 3.5 * len(long_idx))
+    weights = [min(maxlen[i], 120) ** 0.5 for i in long_idx]
+    widths = {i: max(3.5, min(7.5, avail * w / sum(weights))) for i, w in zip(long_idx, weights)}
+    return "".join(f"p{{{widths[i]:.1f}cm}}" if i in widths else c for i, c in enumerate(cols))
+
+
 def write(name: str, header: list[str], rows: list[list[str]], caption: str, label: str, note: str = "", align: str | None = None) -> None:
+    """Tableau LaTeX (threeparttable). Au-delà de 8 colonnes le tableau est tourné (sidewaystable, scriptsize) ; les colonnes de texte long
+    sont renvoyées à la ligne (auto_align) pour tenir dans la page."""
     align = align or "l" + "r" * (len(header) - 1)
-    lines = [r"\begin{table}[htbp]\centering", r"\begin{threeparttable}", rf"\caption{{{caption}}}\label{{{label}}}", r"\small",
+    landscape = len(header) >= 9
+    align = auto_align(header, rows, align, landscape)
+    has_p = "p{" in align
+    env = "sidewaystable" if landscape else "table"
+    size = r"\scriptsize" if landscape else (r"\footnotesize" if has_p else r"\small")
+    lines = [rf"\begin{{{env}}}[htbp]\centering", r"\begin{threeparttable}", rf"\caption{{{caption}}}\label{{{label}}}", size,
              rf"\begin{{tabular}}{{{align}}}", r"\toprule", " & ".join(esc(h) for h in header) + r" \\", r"\midrule"]
     lines += [" & ".join(r) + r" \\" for r in rows]
     lines += [r"\bottomrule", r"\end{tabular}"]
     if note:
         lines += [r"\begin{tablenotes}\footnotesize", rf"\item {note}", r"\end{tablenotes}"]
-    lines += [r"\end{threeparttable}", r"\end{table}", ""]
+    lines += [r"\end{threeparttable}", rf"\end{{{env}}}", ""]
     out = (TABLES / "est_smoke" / "tex") if SMOKE else TABLES
     out.mkdir(parents=True, exist_ok=True)
     (out / name).write_text("\n".join(lines), encoding="utf-8")

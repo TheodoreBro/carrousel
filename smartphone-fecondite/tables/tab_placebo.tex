@@ -1,8 +1,8 @@
-\begin{table}[htbp]\centering
+\begin{sidewaystable}[htbp]\centering
 \begin{threeparttable}
 \caption{Placebos (H5)}\label{tab:placebo}
-\small
-\begin{tabular}{llllrrrrrr}
+\scriptsize
+\begin{tabular}{lp{4.1cm}p{7.2cm}lrrrrrr}
 \toprule
 Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
 \midrule
@@ -46,4 +46,4 @@ H5c & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% &
 \item Source : scripts/05\_estimate.py. H5c : test de Wald joint des coefficients $-8$ à $-2$ (covariance des fonctions d'influence) ; la p est reportée pour chaque spécification dans est\_fr\_all.csv. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
 \end{tablenotes}
 \end{threeparttable}
-\end{table}
+\end{sidewaystable}

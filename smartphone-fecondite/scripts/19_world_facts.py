@@ -77,7 +77,7 @@ def fig_tfr_income() -> None:
         f6.label_ends(ax, items)
         ax.set_title(title, loc="left", fontsize=9)
         ax.set_ylabel(ylab)
-        f6.int_ticks(ax, 6)
+        f6.int_ticks(ax, 4)
     fig.suptitle("Groupes de revenu de la Banque mondiale, 1990-2024 (agrégats WB ; descriptif)", fontsize=9, x=0.01, ha="left")
     fig.tight_layout()
     f6.save(fig, "fig_world_tfr_income.pdf")
@@ -145,6 +145,7 @@ def fig_eu() -> None:
     fr = eurostat("eu_demo_frate")
     fr = fr[(fr.unit == "NR") & (fr.agedef == "COMPLET") & fr.geo.isin(["FR", "ES"]) & fr.age.isin(["Y25-29", "Y30-34", "Y15-19"]) & fr.year.between(2005, 2023)]
     fig, axes = plt.subplots(1, 2, figsize=(8.6, 3.2))
+    fig.subplots_adjust(wspace=0.3)
     ax = axes[0]
     items = []
     for geo, lab, col in (("FR", "France", f6.COLORS["cs"]), ("ES", "Espagne", f6.COLORS["sunab"]), ("EU27_2020", "UE-27", f6.COLORS["twfe"]), ("EU28", "UE-28", f6.COLORS["twfe"])):
@@ -156,7 +157,7 @@ def fig_eu() -> None:
     if items:
         ax.set_xlim(2011, 2021.5)
         f6.label_ends(ax, items)
-    ax.set_title("Accès à Internet depuis un téléphone mobile (% des individus, isoc_ci_im_i)", loc="left", fontsize=9)
+    ax.set_title("Internet depuis un téléphone mobile (% des individus)", loc="left", fontsize=9)
     f6.int_ticks(ax, 6)
     ax = axes[1]
     items = []
@@ -169,7 +170,7 @@ def fig_eu() -> None:
             items.append((s.year.iloc[-1], s.value.iloc[-1], f"{lab} {age[1:]}", col))
     ax.set_xlim(2005, 2027)
     f6.label_ends(ax, items)
-    ax.set_title("Taux de fécondité par âge (Eurostat demo_frate)", loc="left", fontsize=9)
+    ax.set_title("Taux de fécondité par âge (naissances par femme)", loc="left", fontsize=9)
     f6.int_ticks(ax, 6)
     fig.tight_layout()
     f6.save(fig, "fig_eu_mobile_internet.pdf")

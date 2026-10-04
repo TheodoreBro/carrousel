@@ -1,8 +1,8 @@
-\begin{table}[htbp]\centering
+\begin{sidewaystable}[htbp]\centering
 \begin{threeparttable}
 \caption{Brésil — placebos (H5)}\label{tab:br_placebo}
-\small
-\begin{tabular}{llllrrrrrr}
+\scriptsize
+\begin{tabular}{lp{4.3cm}p{7.0cm}lrrrrrr}
 \toprule
 Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
 \midrule
@@ -31,4 +31,4 @@ H5c & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables (H2b) & cs
 \item Source : scripts/15\_estimate\_country.py --country BR. H5b (décès) non construit (A5). H5c : test de Wald joint des coefficients $-8$ à $-2$. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
 \end{tablenotes}
 \end{threeparttable}
-\end{table}
+\end{sidewaystable}

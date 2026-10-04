@@ -31,11 +31,11 @@ _spec.loader.exec_module(t7)
 esc = t7.esc
 
 
-def longtab(name: str, header: list[str], rows: list[list[str]], caption: str, label: str, note: str, align: str) -> None:
+def longtab(name: str, header: list[str], rows: list[list[str]], caption: str, label: str, note: str, align: str, note_width: str = "15cm") -> None:
     lines = [rf"\begin{{longtable}}{{{align}}}", rf"\caption{{{caption}}}\label{{{label}}}\\", r"\toprule", " & ".join(esc(h) for h in header) + r" \\", r"\midrule", r"\endfirsthead",
              r"\toprule", " & ".join(esc(h) for h in header) + r" \\", r"\midrule", r"\endhead", r"\bottomrule", r"\endfoot"]
     lines += [" & ".join(r) + r" \\" for r in rows]
-    lines += [r"\bottomrule", rf"\multicolumn{{{len(header)}}}{{p{{0.95\linewidth}}}}{{\footnotesize {note}}}", r"\end{longtable}", ""]
+    lines += [r"\bottomrule", rf"\multicolumn{{{len(header)}}}{{p{{{note_width}}}}}{{\footnotesize {note}}}", r"\end{longtable}", ""]
     (TABLES / name).write_text("\n".join(lines), encoding="utf-8")
     print("annexe :", name, len(rows), "lignes")
 
@@ -47,7 +47,7 @@ def tab_sources() -> None:
         s = by.setdefault(v["source"], {"n": 0, "bytes": 0, "first": "9999", "last": "0000"})
         s["n"] += 1
         s["bytes"] += int(v.get("bytes", 0))
-        acc = str(v.get("accessed", v.get("date", "")))[:10]
+        acc = str(v.get("accessed_utc", v.get("accessed", "")))[:10]
         s["first"], s["last"] = min(s["first"], acc), max(s["last"], acc)
     rows = []
     for src in SOURCES:
@@ -56,11 +56,11 @@ def tab_sources() -> None:
             continue
         n = f"{st['n']} ({st['bytes'] / 1e6:,.0f} Mo)".replace(",", "\\,") if st else "non téléchargée"
         acc = (st["first"] if st and st["first"] == st["last"] else f"{st['first']} – {st['last']}") if st else ""
-        rows.append([esc(src.country), rf"\texttt{{{esc(src.id)}}}", esc(src.title), esc(src.years), esc(src.license), esc(n), esc(acc)])
+        rows.append([esc(src.country), r"\texttt{" + esc(src.id).replace(r"\_", r"\_\allowbreak{}") + "}", esc(src.title).replace(r"\_", r"\_\allowbreak{}"), esc(src.years), esc(src.license), esc(n), esc(acc)])
     longtab("tab_sources.tex", ["Pays", "Identifiant", "Source", "Années", "Licence", "Fichiers", "Accès"], rows,
             "Sources exactes : registre des sources et fichiers téléchargés", "tab:sources",
             "Source : scripts/common/sources.py et data/raw/manifest.json (empreintes SHA-256 et URL de chaque fichier dans docs/data\\_log.md). "
-            "Les sources vérifiées mais non téléchargées (Suède, SCB) sont dans docs/data\\_log.md.", r"lp{2.6cm}p{5.2cm}p{1.6cm}p{2.4cm}p{1.6cm}p{1.8cm}")
+            "Les sources vérifiées mais non téléchargées (Suède, SCB) sont dans docs/data\\_log.md.", r"lp{2.2cm}p{3.9cm}p{2.1cm}p{1.9cm}p{1.4cm}p{1.6cm}", note_width="14.8cm")
 
 
 def tab_countries() -> None:
@@ -68,7 +68,7 @@ def tab_countries() -> None:
     sec = txt.split("## 1. Classement")[1].split("## 2.")[0]
     lvl1 = re.findall(r"^\| \*\*([^*]+)\*\*", sec.split("### Niveau 2")[0], re.M)
     lvl2 = re.findall(r"^\| \*\*([^*]+)\*\*", sec.split("### Niveau 2")[1].split("### Niveau 3")[0], re.M)
-    lvl3 = [c.strip() for c in re.sub(r"\(.*?\)", "", sec.split("### Niveau 3 — descriptif seulement")[1]).replace("\n", " ").split(",") if c.strip() and "voir" not in c]
+    lvl3 = [c.strip() for c in re.sub(r"\(.*?\)", "", sec.split("### Niveau 3 — descriptif seulement")[1].replace("\n", " ")).split(",") if c.strip() and "voir" not in c]
     verdict = {"France": "incluse (A1-A2) ; estimée", "Espagne": "incluse (A6) ; estimée, identification échouée (A8)", "Suède": "exclue, critère 1 (A3)",
                "Brésil": "inclus (A5) ; estimé (H3a non estimé, API IBGE)", "Colombie": "incluse (A4) ; estimée"}
     rows = [[esc(c.strip()), "1", esc(verdict.get(c.strip().replace(" (conditionnel)", ""), ""))] for c in lvl1]
@@ -77,7 +77,7 @@ def tab_countries() -> None:
     longtab("tab_countries.tex", ["Pays", "Niveau (Étape 0)", "Statut (préregistration §4.3, addenda)"], rows,
             "Pays examinés et statut", "tab:countries",
             "Source : docs/etape0\\_pays.md (classement du 18/09/2026, par recherche web) ; verdicts fichiers en main dans docs/data\\_log.md et docs/preregistration\\_addenda.md. "
-            "Niveau 1 = réplication causale, 2 = possible sous conditions, 3 = descriptif.", r"lcp{9cm}")
+            "Niveau 1 = réplication causale, 2 = possible sous conditions, 3 = descriptif.", r"lcp{7.5cm}", note_width="12.2cm")
 
 
 def tab_meta() -> None:
@@ -93,17 +93,17 @@ def tab_meta() -> None:
     rows = []
     for _, r in nat.iterrows():
         rows.append([esc(r.pays), esc(r.groupe), f"{r.att_pct:+.2f}", f"{r.se_pct:.2f}", str(int(r.k)) if pd.notna(r.k) else "", f"{r.p:.3f}", f"{r.p_pre:.3f}" if pd.notna(r.p_pre) else ""])
-    t7.write("tab_meta_national.tex", ["Pays", "Groupe", "ATT (\\%)", "É.-t. (\\%)", "k", "p", "p pré-test"], rows,
+    t7.write("tab_meta_national.tex", ["Pays", "Groupe", "ATT (%)", "É.-t. (%)", "k", "p", "p pré-test"], rows,
              "Estimations nationales entrant dans la synthèse (ATT[1,k] primaires, en \\% du taux contrefactuel)", "tab:meta_national",
              "Source : scripts/18\\_meta.py (règles A7). ATT = 100 (exp(ATT log) $-$ 1) ; écart-type delta.", align="llrrrrr")
     rows = []
     for _, r in pooled.iterrows():
         rows.append([esc(r.groupe), esc(r.variante), esc(r.pays), f"{r['poolé %']:+.2f}", f"[{r['IC bas']:+.2f}, {r['IC haut']:+.2f}]", f"{r.p:.3f}",
                      f"[{r['PI bas']:+.2f}, {r['PI haut']:+.2f}]", f"{100 * r.I2:.0f}"])
-    t7.write("tab_meta.tex", ["Groupe", "Variante", "Pays", "Poolé (\\%)", "IC 95 \\%", "p", "Intervalle de prédiction", "I$^2$ (\\%)"], rows,
+    t7.write("tab_meta.tex", ["Groupe", "Variante", "Pays", "Poolé (%)", "IC 95 %", "p", "Intervalle de prédiction", "I$^2$ (%)"], rows,
              "Synthèse entre pays : estimations poolées (effets aléatoires, REML)", "tab:meta",
              "Source : scripts/18\\_meta.py. Primaire = tous les pays inclus, écarts-types analytiques ; « es bootstrap » = écarts-types du bootstrap par grappes ; "
-             "« sans pays au pré-test rejeté » = sensibilité exploratoire (A7), hors règle de décision.", align="llp{3.2cm}rrrrr")
+             "« sans pays au pré-test rejeté » = sensibilité exploratoire (A7), hors règle de décision.", align="p{1.4cm}p{2.4cm}p{2.6cm}rp{2.3cm}rp{2.3cm}r")
 
 
 def tab_design() -> None:
