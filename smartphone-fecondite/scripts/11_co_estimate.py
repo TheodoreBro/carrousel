@@ -106,7 +106,8 @@ def aggregate(d: pd.DataFrame, groups: list[str], label: str) -> pd.DataFrame:
 
 
 def with_covs(d: pd.DataFrame, cov: pd.DataFrame) -> pd.DataFrame:
-    return d.merge(cov, on="municipio", how="left")
+    dup = [c for c in cov.columns if c != "municipio" and c in d.columns]
+    return d.drop(columns=dup).merge(cov, on="municipio", how="left")
 
 
 # ----------------------------------------------------------------------------- échantillon et MDE
