@@ -90,6 +90,14 @@ def _ibge_census_urls() -> str:
     return "|".join(items)
 
 
+def _ibge_census_total_urls() -> str:
+    return "|".join([
+        f"{IBGE_API}/200/periodos/2000/variaveis/93?localidades=N6[all]&classificacao=2[0]%7C1[0]%7C58[0]@@ibge200_censo2000_total.json",
+        f"{IBGE_API}/1378/periodos/2010/variaveis/93?localidades=N6[all]&classificacao=1[0]%7C2[0]%7C287[0]%7C455[0]@@ibge1378_censo2010_total.json",
+        f"{IBGE_API}/9514/periodos/2022/variaveis/93?localidades=N6[all]&classificacao=2[0]%7C287[100362]%7C286[0]@@ibge9514_censo2022_total.json",
+    ])
+
+
 def _ibge_estimates_urls() -> str:
     years = [2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2024]
     return "|".join(f"{IBGE_API}/6579/periodos/{y}/variaveis/9324?localidades=N6[all]@@ibge6579_populacao_{y}.json" for y in years)
@@ -380,6 +388,9 @@ SOURCES: list[Source] = [
     Source("br_ibge_censo_mulheres", "BR", "resultat",
            "IBGE — Recensements 2000 (table 200, échantillon), 2010 (table 1378) et 2022 (table 9514) : femmes par âge et município (API agregados)",
            "direct", _ibge_census_urls(), "IBGE (données ouvertes)", years="2000, 2010, 2022", granularity="município × âge (quinquennal en 2000, simple en 2010 et 2022)"),
+    Source("br_ibge_censo_total", "BR", "resultat",
+           "IBGE — Recensements 2000, 2010 et 2022 : population totale par município (API agregados)", "direct", _ibge_census_total_urls(),
+           "IBGE (données ouvertes)", years="2000, 2010, 2022", granularity="município"),
     Source("br_ibge_populacao_estimada", "BR", "resultat",
            "IBGE — Estimativas da população residente por município (table 6579, API agregados)", "direct", _ibge_estimates_urls(),
            "IBGE (données ouvertes)", years="2001-2006, 2008-2009, 2011-2021, 2024", granularity="município"),

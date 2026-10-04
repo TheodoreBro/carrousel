@@ -20,3 +20,5 @@ __pycache__/
 tables/est_smoke/
 figures/smoke/
 tables/est_co_smoke/
+tables/est_br_smoke/
+tables/est_es_smoke/
