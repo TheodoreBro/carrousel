@@ -1,0 +1,26 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Variables instrumentales (secondaire), ZEAT × âge × année, et test d'exclusion}\label{tab:iv}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+IV & log(naissances / 1 000 f. 20-24) & ZEAT × année 2011-2020 & 2sls & forme réduite (D3) & 0.0348 & (0.0286) &  & 9 & 83 \\
+IV & possession de smartphone 18-24 (Baromètre) → naissances 20-24 & ZEAT × année 2011-2020 & 2sls & premier étage (D3) & -0.0175 & (0.0526) &  & 9 & 83 \\
+IV & log(naissances / 1 000 f. 20-24) & ZEAT × année 2011-2020 & 2sls & IV : effet de la possession de smartphone (0→1) & -1.9964 & (5.9652) &  & 9 & 83 \\
+IV & log(naissances / 1 000 f. 25-39) & ZEAT × année 2011-2020 & 2sls & forme réduite (D3) & 0.0168 & (0.0132) &  & 9 & 83 \\
+IV & possession de smartphone 25-39 & ZEAT × année 2011-2020 & 2sls & premier étage (D3) & 0.1083 & (0.0904) &  & 9 & 83 \\
+IV & log(naissances / 1 000 f. 25-39) & ZEAT × année 2011-2020 & 2sls & IV : effet de la possession de smartphone (0→1) & 0.1548 & (0.1838) &  & 9 & 83 \\
+IV & log(naissances / 1 000 f. pooled) & ZEAT × année 2011-2020 & 2sls & forme réduite (D3) & 0.0210 & (0.0153) &  & 9 & 166 \\
+IV & possession de smartphone pooled & ZEAT × année 2011-2020 & 2sls & premier étage (D3) & 0.0785 & (0.0649) &  & 9 & 166 \\
+IV & log(naissances / 1 000 f. pooled) & ZEAT × année 2011-2020 & 2sls & IV : effet de la possession de smartphone (0→1) & 0.2680 & (0.2933) &  & 9 & 166 \\
+exclusion & taux d'emploi des femmes 25-54 (RP) & département × millésime RP 2011, 2016, 2021 & twfe\_continuous & d3 & -0.0164*** & (0.0045) &  & 96 & 288 \\
+exclusion & taux d'emploi des femmes 25-54 (RP) & département × millésime RP 2011, 2016, 2021 & twfe\_continuous & treated & -0.0030*** & (0.0010) &  & 96 & 288 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/05\_estimate.py. 9 grappes : p du wild cluster bootstrap et intervalle d'Anderson-Rubin dans est\_fr\_all.csv. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

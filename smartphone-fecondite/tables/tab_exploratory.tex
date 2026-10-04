@@ -1,0 +1,87 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Analyses complémentaires hors préregistration (addendum A2)}\label{tab:exploratory}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & communes avec covariables, régression de résultat seule (est\_method = reg) & cs & ATT[1,5] & 0.0019 & (0.0046) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & communes avec covariables, référence $-$2 (anticipation = 1) & cs & ATT[1,5] & -0.0118** & (0.0054) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & communes avec covariables, pondéré par les femmes 15-44 (RP 2011), CS sans covariables & cs & ATT[1,5] & 0.0222*** & (0.0034) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & communes avec covariables, pondéré par les femmes 15-44 (RP 2011) & twfe & ATT[1,5] & -0.0072** & (0.0036) &  & 31\,194 & 530\,298 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & communes avec covariables, pondéré par les femmes 15-44 (RP 2011) & twfe & ATT & -0.0081** & (0.0036) &  & 31\,194 & 530\,298 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0123*** & (0.0043) &  & 96 & 2\,592 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \%, référence $-$2 (anticipation = 1) & cs & ATT[1,3] & 0.0007 & (0.0074) & 3 ($\leq$ 2016) & 96 & 2\,592 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \%, covariables de pré-période agrégées & cs & ATT[1,4] & 0.0020 & (0.1022) & 2 ($\leq$ 2017) & 96 & 2\,592 \\
+H2a & log(naissances / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & -0.0516** & (0.0220) &  & 96 & 2\,592 \\
+H2a & log(naissances / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \%, covariables de pré-période agrégées & cs & ATT[1,4] & 3.0842*** & (0.4881) & 2 ($\leq$ 2017) & 96 & 2\,592 \\
+H2a & log(naissances / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & -0.0115 & (0.0125) &  & 96 & 2\,592 \\
+H2a & log(naissances / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \%, covariables de pré-période agrégées & cs & ATT[1,4] & 0.3637 & (0.5913) & 1 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0070 & (0.0068) &  & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \%, covariables de pré-période agrégées & cs & ATT[1,4] & 0.7189 & (0.7590) & 1 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0153*** & (0.0049) &  & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \%, covariables de pré-période agrégées & cs & ATT[1,4] & 4.0017*** & (0.4547) & 1 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0227*** & (0.0058) &  & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \%, covariables de pré-période agrégées & cs & ATT[1,4] & -3.6148*** & (0.5727) & 1 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0239** & (0.0105) &  & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \%, covariables de pré-période agrégées & cs & ATT[1,4] & 2.8963** & (1.3163) & 2 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & -0.0068 & (0.0074) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \%, covariables de pré-période agrégées & cs & ATT[1,4] & -1.6355** & (0.7233) & 2 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 15-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0344* & (0.0182) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-34) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0476** & (0.0198) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & 0.0413** & (0.0176) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & 0.0150 & (0.0097) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0108 & (0.0072) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.0244** & (0.0098) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 2.4657** & (1.0039) &  & 96 & 2\,592 \\
+H3a & asinh(mariages de femmes / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & -0.0185 & (0.0278) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0320* & (0.0184) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & 0.0131 & (0.0100) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & -0.0072 & (0.0105) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & -0.0332** & (0.0133) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% ; fenêtre complète & twfe & ATT & -0.0244*** & (0.0084) &  & 96 & 2\,592 \\
+H3a & part des 15-24 ans en couple (RP, deux sexes, millésimes interpolés) & commune & cs & ATT[1,5] & -0.0004 & (0.0006) & 5 ($\leq$ 2024) & 34\,258 & 582\,386 \\
+H3a & part des 15-24 ans en couple (RP, deux sexes, millésimes interpolés) & commune & twfe & ATT[1,5] & -0.0005 & (0.0006) &  & 34\,258 & 582\,386 \\
+H3a & part des 15-24 ans en couple (RP, deux sexes, millésimes interpolés) & commune & twfe & ATT & -0.0009 & (0.0007) &  & 34\,258 & 582\,386 \\
+H3a & part des 25-39 ans en couple (RP, deux sexes, millésimes interpolés) & commune & cs & ATT[1,5] & -0.0002 & (0.0006) & 5 ($\leq$ 2024) & 34\,528 & 586\,976 \\
+H3a & part des 25-39 ans en couple (RP, deux sexes, millésimes interpolés) & commune & twfe & ATT[1,5] & -0.0012** & (0.0006) &  & 34\,528 & 586\,976 \\
+H3a & part des 25-39 ans en couple (RP, deux sexes, millésimes interpolés) & commune & twfe & ATT & -0.0016** & (0.0007) &  & 34\,528 & 586\,976 \\
+H3b & log(naissances / 1 000 f. en couple 25-39) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées entre millésimes ; fenêtre complète & twfe & ATT & 0.0015 & (0.0073) &  & 96 & 2\,016 \\
+H3b & log(naissances / 1 000 f. en couple 25-39) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées, covariables de pré-période agrégées & cs & ATT[1,4] & 0.7446*** & (0.1305) & 1 ($\leq$ 2017) & 96 & 2\,016 \\
+H3b & log(naissances / 1 000 f. en couple 15-24) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées entre millésimes ; fenêtre complète & twfe & ATT & 0.0014 & (0.0136) &  & 96 & 2\,016 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 25-39) & département, 1998-2021 ; fenêtre complète & twfe & ATT & 0.0667*** & (0.0113) &  & 96 & 2\,304 \\
+H3b complément & part des naissances de parents mariés, 25-39 & département, 1998-2021 & cs & ATT[1,4] & 0.0192*** & (0.0051) & 4 ($\leq$ 2017) & 96 & 2\,304 \\
+H3b complément & part des naissances de parents mariés, 25-39 & département, 1998-2021 ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & 0.0584*** & (0.0092) &  & 96 & 2\,304 \\
+H3b complément & part des naissances de parents mariés, 25-39 & département, 1998-2021 ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & 0.0251*** & (0.0054) &  & 96 & 2\,304 \\
+H3b complément & part des naissances de parents mariés, 25-39 & département, 1998-2021 ; fenêtre complète & twfe & ATT & 0.0181*** & (0.0043) &  & 96 & 2\,304 \\
+H3b complément & naissances de parents mariés 15-19 (Poisson) & département, 1998-2021 ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.1227 & (0.0886) &  & 96 & 2\,304 \\
+H3b complément & naissances de parents mariés 15-19 (Poisson) & département, 1998-2021 ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 13.0553 & (10.0200) &  & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 20-24) & département, 1998-2021 & cs & ATT[1,4] & 0.0702 & (0.0751) & 4 ($\leq$ 2017) & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 25-29) & département, 1998-2021 & cs & ATT[1,4] & 0.0542* & (0.0285) & 4 ($\leq$ 2017) & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 30-34) & département, 1998-2021 & cs & ATT[1,4] & 0.1075*** & (0.0283) & 4 ($\leq$ 2017) & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 35-39) & département, 1998-2021 & cs & ATT[1,4] & 0.1110** & (0.0541) & 4 ($\leq$ 2017) & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 40-49) & département, 1998-2021 & cs & ATT[1,4] & 0.1033 & (0.0949) & 4 ($\leq$ 2017) & 96 & 2\,304 \\
+H5a & log(naissances / 1 000 f. 25-39) & département, bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre complète & twfe & ATT & 0.0105** & (0.0052) &  & 96 & 1\,669 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & densité : dense (grille 1) (régression de résultat seule) & cs & ATT[1,5] & -0.0071 & (0.0342) & 5 ($\leq$ 2024) & 764 & 12\,988 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & densité : intermédiaire (grille 2-4) (régression de résultat seule) & cs & ATT[1,5] & 0.0130 & (0.0087) & 5 ($\leq$ 2024) & 3\,346 & 56\,882 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & densité : rural (grille 5-7) (régression de résultat seule) & cs & ATT[1,5] & -0.0007 & (0.0052) & 5 ($\leq$ 2024) & 27\,084 & 460\,428 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & revenu médian 2012 : tercile 1 (régression de résultat seule) & cs & ATT[1,5] & 0.0091 & (0.0086) & 5 ($\leq$ 2024) & 10\,398 & 176\,766 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & revenu médian 2012 : tercile 2 (régression de résultat seule) & cs & ATT[1,5] & -0.0037 & (0.0082) & 5 ($\leq$ 2024) & 10\,398 & 176\,766 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & revenu médian 2012 : tercile 3 (régression de résultat seule) & cs & ATT[1,5] & 0.0013 & (0.0071) & 5 ($\leq$ 2024) & 10\,398 & 176\,766 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & part de diplômées du supérieur 2011 : tercile 1 (régression de résultat seule) & cs & ATT[1,5] & -0.0063 & (0.0081) & 5 ($\leq$ 2024) & 10\,461 & 177\,837 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & part de diplômées du supérieur 2011 : tercile 2 (régression de résultat seule) & cs & ATT[1,5] & 0.0074 & (0.0090) & 5 ($\leq$ 2024) & 10\,335 & 175\,695 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & part de diplômées du supérieur 2011 : tercile 3 (régression de résultat seule) & cs & ATT[1,5] & 0.0070 & (0.0076) & 5 ($\leq$ 2024) & 10\,398 & 176\,766 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & ZDP (régression de résultat seule) & cs & ATT[1,5] & 16976669.8689 & (16974207.8588) & 5 ($\leq$ 2024) & 17\,957 & 305\,269 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-44) & hors ZDP (régression de résultat seule) & cs & ATT[1,5] & 0.0022 & (0.0059) & 5 ($\leq$ 2024) & 13\,237 & 225\,029 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & fenêtre 2008-2022 (dernier millésime du dénominateur) & cs & ATT[1,5] & 0.0032 & (0.0050) & 5 ($\leq$ 2022) & 31\,194 & 467\,910 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & hors grands centres urbains (densité 1) & cs & ATT[1,5] & -0.0002 & (0.0047) & 5 ($\leq$ 2024) & 30\,430 & 517\,310 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & communes d'au moins 20 femmes 15-44 en 2011 & cs & ATT[1,5] & 0.0029 & (0.0046) & 5 ($\leq$ 2024) & 29\,353 & 499\,001 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & contrôle = jamais traitées strictes (cohortes 2025-2027 exclues) & cs & ATT[1,5] & 0.0047 & (0.0053) & 5 ($\leq$ 2024) & 29\,750 & 505\,750 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/05\_estimate.py. Analyses ajoutées à la relecture, marquées « exploratoire » ; aucune n'entre dans les règles de décision. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

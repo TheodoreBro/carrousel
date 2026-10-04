@@ -1,0 +1,49 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Placebos (H5)}\label{tab:placebo}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & primaire : communes avec covariables & cs & Wald pré (-8..-2) & 10.88 & p = 0.144 & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & toutes communes, sans covariables & cs & Wald pré (-8..-2) & 17.34 & p = 0.015 & 5 ($\leq$ 2024) & 34\,620 & 588\,540 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & covariables, contrôle = jamais traitées & cs & Wald pré (-8..-2) & 17.30 & p = 0.016 & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & naissances / 1 000 f. 15-44 (taux brut) & communes avec covariables & cs & Wald pré (-8..-2) & 14.48 & p = 0.043 & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & asinh(taux) & communes avec covariables & cs & Wald pré (-8..-2) & 21.43 & p = 0.003 & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% & cs & Wald pré (-8..-2) & 21.07 & p = 0.004 & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2b & naissances / 1 000 f. 25-39 (taux brut) & département, bascule D3 $\geq$ 50 \% & cs & Wald pré (-8..-2) & 20.76 & p = 0.004 & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2b & asinh(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% & cs & Wald pré (-8..-2) & 21.07 & p = 0.004 & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 90 \% & cs & Wald pré (-8..-2) & 8.41 & p = 0.298 & 5 ($\leq$ 2024) & 96 & 2\,592 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-44) & commune, bascule fictive $-$3 ans, années pré-traitement seules & cs & ATT[1,2] & 0.0007 & (0.0042) & 2 ($\leq$ 2024) & 34\,556 & 456\,254 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-44) & commune, bascule fictive $-$3 ans, années pré-traitement seules & cs & Wald pré (-8..-2) & 13.22 & p = 0.067 & 2 ($\leq$ 2024) & 34\,556 & 456\,254 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-44) & commune, bascule fictive $-$3 ans, années pré-traitement seules & twfe & ATT[1,2] & -0.0042 & (0.0042) &  & 34\,556 & 456\,254 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-44) & commune, bascule fictive $-$3 ans, années pré-traitement seules & twfe & Wald pré (-8..$-$2) & 17.01 & p = 0.017 &  & 34\,556 & 456\,254 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-44) & commune, bascule fictive $-$3 ans, années pré-traitement seules & twfe & ATT & -0.0089*** & (0.0030) &  & 34\,556 & 456\,254 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-44) & commune, bascule fictive $-$3 ans, covariables & cs & ATT[1,2] & 0.0013 & (0.0044) & 2 ($\leq$ 2024) & 31\,057 & 401\,996 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-44) & commune, bascule fictive $-$3 ans, covariables & cs & Wald pré (-8..-2) & 10.49 & p = 0.162 & 2 ($\leq$ 2024) & 31\,057 & 401\,996 \\
+H5b & log(décès+0,5 / 1 000 hab.) & commune & cs & ATT[1,5] & 0.0146*** & (0.0042) & 5 ($\leq$ 2024) & 34\,620 & 588\,540 \\
+H5b & log(décès+0,5 / 1 000 hab.) & commune & cs & Wald pré (-8..-2) & 26.05 & p = 0.000 & 5 ($\leq$ 2024) & 34\,620 & 588\,540 \\
+H5b & log(décès+0,5 / 1 000 hab.) & commune & twfe & ATT[1,5] & 0.0172*** & (0.0042) &  & 34\,620 & 588\,540 \\
+H5b & log(décès+0,5 / 1 000 hab.) & commune & twfe & Wald pré (-8..$-$2) & 19.89 & p = 0.006 &  & 34\,620 & 588\,540 \\
+H5b & log(décès+0,5 / 1 000 hab.) & commune & twfe & ATT & 0.0200*** & (0.0028) &  & 34\,620 & 588\,540 \\
+H5b & log(décès+0,5 / 1 000 hab.) & commune, covariables & cs & ATT[1,5] & 0.0053 & (0.0048) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H5b & log(décès+0,5 / 1 000 hab.) & commune, covariables & cs & Wald pré (-8..-2) & 18.73 & p = 0.009 & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-44) & primaire : communes avec covariables & cs & ATT[1,5] & 0.0022 & (0.0046) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-44) & primaire : communes avec covariables & cs & Wald pré (-8..-2) & 10.88 & p = 0.144 & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-44) & communes avec covariables sans la tendance 2008-2011 & cs & ATT[1,5] & 0.0023 & (0.0046) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-44) & communes avec covariables sans la tendance 2008-2011 & cs & Wald pré (-8..-2) & 13.37 & p = 0.064 & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H5a & log(naissances / 1 000 f. 25-39) & département, bascule fictive $-$3 ans, années pré-traitement seules & cs & ATT[1,2] & -0.0070 & (0.0074) & 2 ($\leq$ 2014) & 96 & 1\,669 \\
+H5a & log(naissances / 1 000 f. 25-39) & département, bascule fictive $-$3 ans, années pré-traitement seules & cs & Wald pré (-8..-2) & 29.72 & p = 0.000 & 2 ($\leq$ 2014) & 96 & 1\,669 \\
+H5a & log(naissances / 1 000 f. 25-39) & département, bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre identifiée ≤ 2014, cohorte 2015 = contrôle & twfe & ATT[1,2] & 0.0090 & (0.0073) &  & 96 & 1\,669 \\
+H5a & log(naissances / 1 000 f. 25-39) & département, bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre identifiée ≤ 2014, cohorte 2015 = contrôle & twfe & Wald pré (-8..$-$2) & 18.61 & p = 0.010 &  & 96 & 1\,669 \\
+H5a & log(naissances / 1 000 f. 25-39) & département, bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre identifiée ≤ 2014, cohorte 2015 = contrôle & twfe & ATT & 0.0104** & (0.0052) &  & 96 & 1\,669 \\
+H5c & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H5c & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% & cs & Wald pré (-8..-2) & 21.07 & p = 0.004 & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/05\_estimate.py. H5c : test de Wald joint des coefficients $-8$ à $-2$ (covariance des fonctions d'influence) ; la p est reportée pour chaque spécification dans est\_fr\_all.csv. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

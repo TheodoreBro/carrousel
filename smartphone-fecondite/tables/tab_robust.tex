@@ -1,0 +1,32 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Robustesse}\label{tab:robust}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & fenêtre 2008-2019 (préreg.) ; cohortes 2020-2024 = contrôle & cs & ATT[1,5] & 0.0146* & (0.0087) & 5 ($\leq$ 2019) & 31\,194 & 374\,328 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & sans 2020-2021 & cs & ATT[1,5] & -0.0034 & (0.0051) & 5 ($\leq$ 2024) & 31\,194 & 467\,910 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & hors cohortes 2013-2014 (préreg. : 2012-2014) & cs & ATT[1,5] & -0.0017 & (0.0049) & 5 ($\leq$ 2024) & 28\,768 & 489\,056 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & hors cohortes 2013-2017 (addendum A1) & cs & ATT[1,5] & -0.0068 & (0.0072) & 5 ($\leq$ 2024) & 22\,611 & 384\,387 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & grappes = département & cs & ATT[1,5] & 0.0022 & (0.0048) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & France entière, DOM inclus (112 communes d'outre-mer) ; covariables sans le revenu médian & cs & ATT[1,5] & -0.0010 & (0.0045) & 5 ($\leq$ 2024) & 34\,137 & 580\,329 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & traitement = D1 observatoire seul & cs & ATT[1,5] & 0.0006 & (0.0045) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & traitement = deuxième opérateur 4G & cs & ATT[1,5] & 0.0008 & (0.0046) & 5 ($\leq$ 2024) & 31\,194 & 530\,298 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & traitement = premier site 4G commercial ARCEP, cohortes datées $\geq$ 2020 (12563 communes censurées à gauche exclues) & cs & ATT[1,4] & 0.0038 & (0.0118) & 4 ($\leq$ 2024) & 18\,631 & 316\,727 \\
+3G & log(naissances+0,5 / 1 000 f. 15-44) & traitement = premier émetteur UMTS, cohortes 2011-2012 (préreg. : 2008-2012 ; 2008-2010 < 3 ans de pré-période) & cs & ATT[1,5] & -0.0093 & (0.0072) & 5 ($\leq$ 2024) & 16\,232 & 275\,944 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & traitement = D2 (couverture ARCEP $\geq$ 90 \% de la population) & — & non construit &  &  &  & 0 & 0 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-44) & contrôle variable : couverture très haut débit fixe (ARCEP) & — & non construit &  &  &  & 0 & 0 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, 1998-2019 & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 2\,112 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, sans 2020-2021 & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 2\,400 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, 2008-2019 (préreg.) & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 1\,152 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, 2008-2024 & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 1\,632 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, DOM inclus (4 départements d'outre-mer), 2010-2024 & cs & ATT[1,4] & 0.0150 & (0.0113) & 4 ($\leq$ 2017) & 100 & 1\,500 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/05\_estimate.py. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

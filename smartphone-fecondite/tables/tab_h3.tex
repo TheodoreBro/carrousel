@@ -1,0 +1,86 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Décomposition du canal (H3) et règle de décision §6}\label{tab:h3}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H3a & log(mariages de femmes / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0048 & (0.0139) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & -0.0219 & (0.0152) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & -0.0181** & (0.0089) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & -0.0097 & (0.0094) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & -0.9632 & (0.9341) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 15-24) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.1507** & (0.0710) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 15-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & 0.1757*** & (0.0598) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 15-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & 0.0860*** & (0.0244) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 15-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.0868** & (0.0407) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 15-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 9.0654** & (4.4349) &  & 96 & 2\,592 \\
+H3a & asinh(mariages de femmes / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0250 & (0.1008) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & asinh(mariages de femmes / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & -0.0896 & (0.0834) &  & 96 & 2\,592 \\
+H3a & asinh(mariages de femmes / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & -0.0411 & (0.0297) &  & 96 & 2\,592 \\
+H3a & asinh(mariages de femmes / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & -0.0216 & (0.0675) &  & 96 & 2\,592 \\
+H3a & asinh(mariages de femmes / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & -2.1355 & (6.6094) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.1166 & (0.0814) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & 0.1543*** & (0.0564) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & 0.0812*** & (0.0245) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.0848** & (0.0387) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 8.8516** & (4.2081) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & -0.0028 & (0.0187) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & 0.0383* & (0.0213) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & 0.0159 & (0.0125) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.0374*** & (0.0109) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 3.8120*** & (1.1326) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0850*** & (0.0300) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & -0.0083 & (0.0218) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & -0.0183 & (0.0126) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & -0.0148 & (0.0151) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & -1.4656 & (1.4871) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & -0.0456** & (0.0232) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & -0.1010*** & (0.0229) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & -0.0588*** & (0.0152) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & -0.0589*** & (0.0146) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & -5.7157*** & (1.3728) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & -0.0599* & (0.0338) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & -0.1284*** & (0.0266) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & -0.0596*** & (0.0115) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & -0.0505*** & (0.0107) &  & 96 & 2\,592 \\
+H3a & log(mariages de femmes / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & -4.9281*** & (1.0178) &  & 96 & 2\,592 \\
+H3a & log(PACS / 1 000 f. 15-49) & département, 2007-2016 (série PACS disponible) & cs & ATT[1,3] & -0.0277 & (0.0184) & 3 ($\leq$ 2016) & 96 & 960 \\
+H3a & log(PACS / 1 000 f. 15-49) & département, 2007-2016 (série PACS disponible) & twfe & ATT[1,3] & -0.0511*** & (0.0152) &  & 96 & 960 \\
+H3a & log(PACS / 1 000 f. 15-49) & département, 2007-2016 (série PACS disponible) & twfe & ATT & -0.0343*** & (0.0130) &  & 96 & 960 \\
+H3a & part des 15-24 ans en couple (RP 2011 → 2016, deux sexes) & commune, différence longue entre millésimes & long\_diff & Δ2011→2016 sur treated\_by\_2016 & -0.0004 & (0.0011) &  & 31\,192 & 31\,192 \\
+H3a & part des 15-24 ans en couple (RP 2011 → 2021, deux sexes) & commune, différence longue entre millésimes & long\_diff & Δ2011→2021 sur exposure\_2021 & -0.0004* & (0.0002) &  & 31\,191 & 31\,191 \\
+H3a & part des 25-39 ans en couple (RP 2011 → 2016, deux sexes) & commune, différence longue entre millésimes & long\_diff & Δ2011→2016 sur treated\_by\_2016 & -0.0007 & (0.0011) &  & 31\,194 & 31\,194 \\
+H3a & part des 25-39 ans en couple (RP 2011 → 2021, deux sexes) & commune, différence longue entre millésimes & long\_diff & Δ2011→2021 sur exposure\_2021 & -0.0001 & (0.0002) &  & 31\,194 & 31\,194 \\
+H3a & part des 15-24 ans en couple (RP 2011 → 2016, deux sexes) & département, différence longue entre millésimes & long\_diff & Δ2011→2016 sur treated\_by\_2016 & 0.0004 & (0.0016) &  & 96 & 96 \\
+H3a & part des 15-24 ans en couple (RP 2011 → 2021, deux sexes) & département, différence longue entre millésimes & long\_diff & Δ2011→2021 sur exposure\_2021 & 0.0004 & (0.0005) &  & 96 & 96 \\
+H3a & part des 25-39 ans en couple (RP 2011 → 2016, deux sexes) & département, différence longue entre millésimes & long\_diff & Δ2011→2016 sur treated\_by\_2016 & 0.0013 & (0.0015) &  & 96 & 96 \\
+H3a & part des 25-39 ans en couple (RP 2011 → 2021, deux sexes) & département, différence longue entre millésimes & long\_diff & Δ2011→2021 sur exposure\_2021 & 0.0008 & (0.0009) &  & 96 & 96 \\
+H3b & log(naissances / 1 000 f. en couple 25-39) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées entre millésimes & cs & ATT[1,4] & 0.0178* & (0.0107) & 4 ($\leq$ 2017) & 96 & 2\,016 \\
+H3b & log(naissances / 1 000 f. en couple 25-39) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées entre millésimes ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & -0.0331 & (0.0296) &  & 96 & 2\,016 \\
+H3b & log(naissances / 1 000 f. en couple 25-39) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées entre millésimes ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & 0.0000 & (0.0117) &  & 96 & 2\,016 \\
+H3b & log(naissances / 1 000 f. en couple 25-39) (RP 2011 → 2016) & département, différence longue entre millésimes & long\_diff & Δ2011→2016 sur treated\_by\_2016 & 0.0097 & (0.0099) &  & 96 & 96 \\
+H3b & log(naissances / 1 000 f. en couple 25-39) (RP 2011 → 2021) & département, différence longue entre millésimes & long\_diff & Δ2011→2021 sur exposure\_2021 & -0.0062 & (0.0041) &  & 96 & 96 \\
+H3b & log(naissances / 1 000 f. en couple 15-24) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées entre millésimes & cs & ATT[1,4] & 0.0176 & (0.0233) & 4 ($\leq$ 2017) & 96 & 2\,016 \\
+H3b & log(naissances / 1 000 f. en couple 15-24) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées entre millésimes ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & -0.0620* & (0.0320) &  & 96 & 2\,016 \\
+H3b & log(naissances / 1 000 f. en couple 15-24) & département, bascule D3 $\geq$ 50 \%, femmes en couple interpolées entre millésimes ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & -0.0140 & (0.0177) &  & 96 & 2\,016 \\
+H3b & log(naissances / 1 000 f. en couple 15-24) (RP 2011 → 2016) & département, différence longue entre millésimes & long\_diff & Δ2011→2016 sur treated\_by\_2016 & -0.0096 & (0.0300) &  & 96 & 96 \\
+H3b & log(naissances / 1 000 f. en couple 15-24) (RP 2011 → 2021) & département, différence longue entre millésimes & long\_diff & Δ2011→2021 sur exposure\_2021 & -0.0211** & (0.0091) &  & 96 & 96 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 25-39) & département, 1998-2021 & cs & ATT[1,4] & 0.0922*** & (0.0188) & 4 ($\leq$ 2017) & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 25-39) & département, 1998-2021 ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT[1,4] & 0.1973*** & (0.0260) &  & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 25-39) & département, 1998-2021 ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe & ATT & 0.0927*** & (0.0145) &  & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 25-39) & département, 1998-2021 ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT (log du taux contrefactuel) & 0.1131*** & (0.0202) &  & 96 & 2\,304 \\
+H3b complément & log(naissances de parents mariés / 1 000 f. 25-39) & département, 1998-2021 ; fenêtre identifiée ≤ 2017, cohorte 2018 = contrôle & twfe\_poisson & ATT en \% du taux contrefactuel & 11.9720*** & (2.2654) &  & 96 & 2\,304 \\
+H3c & mariages 25-39 & département, bascule D3 $\geq$ 50 \% & cs & première période négative (IC 95 \% < 0) & aucune &  &  & 0 & 0 \\
+H3c & naissances / f. en couple 25-39 & département, bascule D3 $\geq$ 50 \% & cs & première période négative (IC 95 \% < 0) & aucune &  &  & 0 & 0 \\
+H3c & naissances 25-39 (H2b) & département, bascule D3 $\geq$ 50 \% & cs & première période négative (IC 95 \% < 0) & aucune &  &  & 0 & 0 \\
+§6 canal & ATT mariages 25-39 $-$ ATT naissances / f. en couple 25-39 & département, bascule D3 $\geq$ 50 \% & cs & différence (bootstrap conjoint) & -0.0129 & (0.0222) &  & 96 & 7\,776 \\
+H3 & famille H3 & département, bascule D3 $\geq$ 50 \% & — & note &  &  &  & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/05\_estimate.py. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,38 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Effet par groupe d'âge (H2), départements}\label{tab:h2age}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H2b & log(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2b & naissances / 1 000 f. 25-39 (taux brut) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 1.3268 & (1.0607) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2b & asinh(naissances / 1 000 f. 25-39) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2a & log(naissances / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & -0.0853 & (0.0688) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2a & log(naissances / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & -0.0168 & (0.0202) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & -0.0181 & (0.0156) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0245 & (0.0169) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0454** & (0.0217) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & 0.0556 & (0.0382) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 25-29) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] (Holm) & -0.0181 & (0.0156) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 30-34) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] (Holm) & 0.0245 & (0.0169) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 35-39) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] (Holm) & 0.0454** & (0.0217) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2c & log(naissances / 1 000 f. 40-49) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] (Holm) & 0.0556 & (0.0382) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2a & log(naissances / 1 000 f. 15-19) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] (Holm) & -0.0853 & (0.0688) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2a & log(naissances / 1 000 f. 20-24) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] (Holm) & -0.0168 & (0.0202) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2d & log(naissances / 1 000 f. 15-24) & département, bascule D3 $\geq$ 50 \% & cs & ATT[1,4] & -0.0027 & (0.0215) & 4 ($\leq$ 2017) & 96 & 2\,592 \\
+H2d & ATT 15-24 $-$ ATT 25-39 & département, bascule D3 $\geq$ 50 \% & cs & différence (bootstrap conjoint) & -0.0205 & (0.0251) &  & 96 & 12\,960 \\
+H2 continu & log(naissances / 1 000 f.), tous âges & département × âge, D3 continu & twfe\_continuous & d3 & -0.0226 & (0.0350) &  & 96 & 15\,552 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, 1998-2019 & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 2\,112 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, sans 2020-2021 & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 2\,400 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, 2008-2019 (préreg.) & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 1\,152 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, 2008-2024 & cs & ATT[1,4] & 0.0178 & (0.0113) & 4 ($\leq$ 2017) & 96 & 1\,632 \\
+H2b & log(naissances / 1 000 f. 25-39) & département, DOM inclus (4 départements d'outre-mer), 2010-2024 & cs & ATT[1,4] & 0.0150 & (0.0113) & 4 ($\leq$ 2017) & 100 & 1\,500 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/05\_estimate.py. Familles corrigées par Holm : 15-19, 20-24 (H2a) ; 25-29, 30-34, 35-39, 40-49 (H2c) ; p Holm dans est\_fr\_all.csv. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,6 +1,6 @@
 {
-  "generated": "2026-10-04 10:50:06",
-  "commit": "331362e",
+  "generated": "2026-10-04 12:11:35",
+  "commit": "d16e5f0",
   "python": "3.11.15",
   "packages": {
     "differences": "0.3.0",
@@ -9,6 +9,10 @@
     "numpy": "2.4.6"
   },
   "parts": {
+    "h1": {
+      "rows": 287,
+      "modified": "2026-10-04 11:52:34"
+    },
     "h2": {
       "rows": 611,
       "modified": "2026-10-04 10:06:24"
@@ -17,9 +21,21 @@
       "rows": 646,
       "modified": "2026-10-04 10:10:52"
     },
+    "h5": {
+      "rows": 176,
+      "modified": "2026-10-04 11:55:44"
+    },
+    "h6": {
+      "rows": 430,
+      "modified": "2026-10-04 11:59:20"
+    },
     "iv": {
       "rows": 11,
       "modified": "2026-10-04 10:12:26"
+    },
+    "robust": {
+      "rows": 349,
+      "modified": "2026-10-04 12:11:33"
     }
   },
   "args": {
@@ -32,8 +48,8 @@
     "fast": false,
     "sample": null
   },
-  "n_rows": 1268,
-  "n_key_rows": 283,
+  "n_rows": 2510,
+  "n_key_rows": 447,
   "inputs": {
     "fr_check_births_vs_official.parquet": "2026-10-04 09:51:24",
     "fr_covariates_commune.parquet": "2026-10-04 09:55:21",
