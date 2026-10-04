@@ -1,4 +1,4 @@
-# Passation — état du projet au 2 octobre 2026 (soir)
+# Passation — état du projet au 2 octobre 2026 (nuit)
 
 Ce fichier permet à une nouvelle session (ou à un nouvel agent) de reprendre le travail sans la
 conversation d'origine. Il est mis à jour à chaque étape.
@@ -11,62 +11,46 @@ Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prim
 
 - Étape 0 livrée : `docs/etape0_plan.md`, `docs/etape0_pays.md`.
 - Étape 1 livrée : `docs/preregistration.md` (v1.0, **gelée**, commit `c4002c6`). Déviations et décisions
-  de mesure : `docs/preregistration_addenda.md` (addendum A1 France, écrit **avant toute estimation**).
-- **Étape 2 France : données téléchargées, traitement et résultats construits, échantillons et MDE calculés,
-  first stage estimé.** Aucune estimation H1-H6 n'a été lancée.
-  - Réseau (02/10) : les sources du cœur France sont joignables (data.gouv.fr instable, insee.fr, api.insee.fr,
-    data.anfr.fr, data.arcep.fr, arcep.fr), ainsi qu'Eurostat, UN, SCB, PTS, INE, DANE, Anatel, doi.org et la
-    plupart des éditeurs. **Restent refusés** : api.worldbank.org, ourworldindata.org, datahub.itu.int (panel
-    descriptif mondial), datos.gob.es (Espagne), apisidra.ibge.gov.br (Brésil), legifrance.gouv.fr (contourné via
-    arcep.fr), stats.justice.gouv.fr (HTTP 5xx, remplacé par l'API Melodi). Rien n'a été remplacé par des valeurs
-    de substitution ; ces sources sont vides tant que l'accès n'est pas ouvert (réglage : menu de l'environnement
-    → Edit → Network access).
-  - 130 fichiers bruts (1,46 Go) consignés dans `data/raw/manifest.json` et `docs/data_log.md` (URL exacte, date,
-    SHA-256, licence). Le journal contient aussi, à la main, toutes les corrections du registre constatées sur
-    les pages des producteurs (section « Corrections du registre »), dont deux pièges : le slug data.gouv de
-    l'Étape 0 pointait vers un jeu régional, et le suffixe « -COM » des bases INSEE désigne les collectivités
-    d'outre-mer, pas les communes.
-  - `scripts/02_treatment.py` → `data/processed/fr_treatment_commune.parquet` (34 833 unités × 2004-2026),
-    `fr_treatment_dep.parquet` (D3), `tables/t_treatment_fr.md`. D1 = premier émetteur LTE en service (observatoire
-    ANFR courant ∪ archives annuelles 2018-2025) ; 21 392 unités avec 4G, 13 312 jamais (surtout densité 6-7 :
-    communes sans antenne propre, **couvertes par les sites voisins** — c'est la limite « site ≠ couverture »,
-    D2 non construit, voir addendum A1) ; cohortes 2013-2027 ; 3G ; 2e opérateur ; recoupement sites ARCEP
-    (écart ≤ 1 an dans 95 % des cas datés) ; ZDP (21 184 unités) et zones blanches extraites du PDF ARCEP
-    2012-0039 ; densité ; D3 par département (bascule 50 % : 2013-2018, médiane 2015 ; 90 % : 44 départements).
-  - `scripts/03_outcomes.py` → `fr_outcomes_commune.parquet` (naissances 2008-2025, décès, femmes 15-44 RP
-    interpolées, parts en couple par âge deux sexes), `fr_outcomes_dep_age.parquet` (département × 6 groupes
-    d'âge × 1998-2024 : naissances, naissances de parents mariés jusqu'en 2021, rang 1 jusqu'en 2012, épouses par
-    âge, femmes au 1er janvier, taux pour 1 000), `fr_outcomes_dep.parquet` (mariages domiciliés 1975-2024, PACS
-    2007-2016), `tables/t_outcomes_fr.md`. Contrôle : naissances des fichiers détail / série officielle = 1,000 à
-    partir de 2010, 1,004-1,011 en 1998-2009 (enfants sans vie inclus, non corrigés, dit).
-  - `scripts/04_sample_mde.py` → `tables/t_sample_fr.md|csv` (unités-années par spécification) et
-    `tables/t_mde_fr.md|csv` (MDE par permutation, 200 tirages). Résultats : voir ces tables (résumé en §1 bis).
-  - `scripts/04b_firststage.py` → `tables/t_firststage_fr.md|csv`, `tables/t_barometre_age_year.csv`. Baromètre du
-    numérique × D3 par ZEAT (2011-2020) : +9,8 points de possession de smartphone (es 4,0, 9 groupes) et +14,9
-    points d'usage des réseaux sociaux (es 3,0) pour 0 → 100 % de couverture ; l'interaction « moins de 40 ans »
-    est **négative** (contraire à la prédiction H4 « davantage chez les moins de 40 ans »), rapportée telle quelle.
-    Au niveau région 2020-2025 : imprécis (D3 ≥ 0,74 partout).
-- `make test` vert (8 tests, panel synthétique). `make build` = 02 → 03 → 04 → 04b.
-- Transparence : lors du débogage de `04_sample_mde.py` (02/10), un ATT TWFE statique sur le taux 25-29 ans a été
-  affiché une fois à l'écran ; il n'a été ni enregistré ni utilisé, et le script ne calcule que des ATT placebo
-  (cohortes permutées). Aucune autre estimation sur données réelles n'a eu lieu avant l'Étape 3.
-- Pas encore fait : D2 (croisement SIG des cartes ARCEP), estimations (Étape 3), pays de niveau 1 et 2, panel
-  mondial (hôtes bloqués), références (`references.bib` vide).
+  de mesure : `docs/preregistration_addenda.md` (A1 France, écrit avant toute estimation ; **A2** France, écrit
+  à la relecture du code d'estimation, avant son exécution complète).
+- Étape 2 France livrée (données, traitement, résultats, échantillons, MDE, first stage) : voir §1 bis et les
+  tables `t_treatment_fr.md`, `t_outcomes_fr.md`, `t_sample_fr.md`, `t_mde_fr.md`, `t_firststage_fr.md`.
+- **Étape 3 France : estimations exécutées** (`scripts/05_estimate.py`, commit indiqué dans `tables/est/_run.json`).
+  - Sorties : `tables/est/<partie>.csv` (h1, h2, h3, h5, h6, robust, iv), `tables/est_fr_all.csv` (toutes les lignes,
+    event studies comprises), `tables/t_estimates_fr.md` (synthèse lisible), `tables/est/_run.json` (manifeste :
+    commit, versions des paquets, dates des entrées), `figures/fig_event_*.pdf|png`, `figures/fig_h2_age.*`,
+    `tables/tab_*.tex` (`07_tables.py`).
+  - Ce que fait `05_estimate.py` (détails dans son en-tête et dans A2) : Callaway & Sant'Anna (`differences`, base
+    universelle, panel équilibré, contrôle pas-encore-traités, doublement robuste avec les 5 covariables de
+    pré-période), écarts-types et test de Wald pré avec la covariance des fonctions d'influence, bandes sup-t par
+    bootstrap multiplicateur, bootstrap par grappes stratifié par cohorte pour les primaires, comparaisons Sun &
+    Abraham / did2s / TWFE / Poisson (offset), effets fixes année × densité dans les régressions ; H2 par âge avec
+    Holm (H2a et H2c), H2d et règle §6 par bootstrap conjoint ; H3a (mariages, PACS, parts en couple par
+    différences longues entre millésimes), H3b (naissances par femme en couple, interpolé et différences longues),
+    H3c ; H5a-c ; H6 ; robustesse (fenêtres, cohortes, densité, grappes département, pondération, ≥ 20 femmes, DOM,
+    D1 observatoire seul, 2e opérateur, ARCEP ≥ 2019, 3G 2011-2012, jamais traitées strictes) ; IV ZEAT × âge ×
+    année avec wild cluster bootstrap et Anderson-Rubin, test partiel d'exclusion (emploi des femmes 25-54).
+  - Chaque ligne de `est_fr_all.csv` porte sa composition (jamais traitées, cohortes recodées, unités incomplètes
+    exclues, années identifiées par CS, k de ATT[1,k]) et un drapeau `exploratory` (hors préregistration, A2).
+- `make test` vert (15 tests, panel synthétique : récupération d'un effet connu, écart-type par fonctions
+  d'influence = celui du paquet, grappes, bandes, cohortes tardives, offset Poisson = taux pondéré, bootstrap
+  stratifié, Holm/Wald).
+- Pas encore fait : rédaction (Étape 4), pays de niveau 1 et 2, panel mondial (hôtes bloqués), D2 (SIG),
+  références (`references.bib` vide).
 
-## 1 bis. Chiffres à connaître avant l'Étape 3
+## 1 bis. Chiffres à connaître
 
-Voir `tables/t_sample_fr.md` et `tables/t_mde_fr.md` (générés). Échantillons : H1 commune × année 2008-2024 =
-589 968 unités-années (34 704 unités métropolitaines, 21 392 traitées, 13 312 jamais, cohortes 2013-2027, pré-période
-médiane 10 ans) ; H2 département × année 1998-2024 = 2 592 unités-années par groupe d'âge (96 départements, tous
-basculés à D3 ≥ 50 % entre 2013 et 2018 : pas de « jamais traité » à ce niveau, le contrôle est « pas encore
-traité »). MDE par permutation (80 %, 5 %, 200 tirages, TWFE statique sur le log du taux) : H1 commune 0,8 % ;
-H2b 25-39 ans 1,3 % ; 15-19 ans 5,9 % ; 20-24 ans 2,8 % ; 25-29 ans 1,8 % ; 30-34 ans 1,7 % ; 35-39 ans 2,0 %.
-Points à garder en tête :
-- fenêtre communale 2008-2025 (pas 2004) : les cohortes 2013-2014 ont 4-5 ans de pré-période ; la règle « ≥ 3 ans »
-  les garde ;
-- femmes 15-44 communales : dernier millésime RP 2022, prolongé 2 ans (2023, 2024) ; 2025 sans dénominateur ;
-- niveau département × âge : 96 départements, 1998-2024, dénominateurs Melodi ; H3b « parents mariés » 1998-2021 ;
-- Baromètre : ZEAT disponible jusqu'en 2020 seulement, REGION à partir de 2020.
+Échantillons (`t_sample_fr.md`) : H1 commune × année 2008-2024 = 34 704 unités métropolitaines (31 194 avec les
+5 covariables, 99,7 % des femmes 15-44 de 2011), 21 392 traitées, 13 312 jamais traitées sur la fenêtre (dont
+1 604 traitées en 2025-2027), cohortes 2013-2024 ; H2 département × année 1998-2024 = 96 départements, tous
+basculés à D3 ≥ 50 % entre 2013 et 2018 → **aucun jamais traité : `differences` prend la dernière cohorte (2018)
+comme contrôle et n'identifie les ATT(g,t) que jusqu'en 2017 ; l'agrégat primaire est donc ATT[1,4]** (dit dans
+chaque ligne). MDE par permutation (80 %, 5 %) : H1 0,8 % ; H2b 1,3 %.
+
+Résultats : **ne pas les résumer de mémoire** ; lire `tables/t_estimates_fr.md` (clés) et `tables/est_fr_all.csv`.
+Les lignes qui entrent dans les règles de décision §6 sont : H2b `post_avg` (département, bascule D3 ≥ 50 %),
+H5a/H5b `post_avg` et H5c `pre_test` (spécification primaire), `§6 canal` (différence H3a − H3b par bootstrap
+conjoint, avec les deux ATT dans la note). Les p de Holm sont dans `post_avg_holm` (colonne `p_holm`).
 
 ## 2. Décisions de l'auteur
 
@@ -75,42 +59,67 @@ validés le 18/09/2026 (accès réseau, sous-dossier, cas secondaires descriptif
 robustesse, fenêtres, estimateurs, pas de clé KOSIS/NCHS, TeX Live, périmètre causal France + niveau 1 + niveau 2,
 méta-analyse, extension descriptive ~200 pays).
 
-Décisions de mesure prises à la lecture des fichiers (liste fermée §10 de la préregistration) : toutes dans
-`docs/preregistration_addenda.md` (A1). Les plus importantes : géographie COG 2026 ; fenêtre communale 2008-2025 ;
-D2 non construit à l'Étape 2 ; recoupement des cohortes avec les archives 2018-2025 (pas 2015) ; parts en couple
-deux sexes ; PACS 2007-2016 ; rang jusqu'en 2012 ; parents mariés jusqu'en 2021.
+Décisions de mesure et de mise en œuvre prises à la lecture des fichiers et du code : toutes dans
+`docs/preregistration_addenda.md` (A1 : géographie COG 2026, fenêtres, D2 non construit, poids D3, ZDP, rang,
+parents mariés, PACS, parts en couple deux sexes ; A2 : base universelle, panel équilibré, covariance par
+fonctions d'influence, bandes sup-t, grappes, offset Poisson, ATT[1,k], cohortes tardives, chômage deux sexes,
+tendance MCO, classes de densité INSEE, cellules mariages absentes = 0, H3b femmes en couple = moitié des personnes
+en couple, différences longues entre millésimes, bootstrap conjoint H2d et §6, IV à 9 grappes, exclusion sur
+l'emploi 25-54, compléments exploratoires).
 
-## 3. Prochaines étapes, dans l'ordre
+## 3. Transparence (à reporter dans la section 5 du papier)
 
-1. Relire `tables/t_sample_fr.md`, `t_mde_fr.md`, `t_treatment_fr.md`, `t_outcomes_fr.md`, `t_firststage_fr.md` et
-   l'addendum A1 ; si l'auteur veut D2 avant les estimations, construire le croisement SIG (geopandas + contours
-   communaux IGN, non téléchargés) — sinon passer à l'Étape 3.
-2. Étape 3 France : `scripts/05_estimate.py` (Callaway & Sant'Anna primaire via `differences`, Sun & Abraham,
-   did2s, TWFE, Poisson ; H1 commune ; H2 département × âge sur D3 ≥ 50 % ; H3 ; H5 placebos ; H6), puis
-   `06_figures.py`, `07_tables.py`. Les fonctions sont dans `scripts/common/did.py` (testées sur synthétique).
-3. Pays de niveau 1 : Suède (api.scb.se et statistik.pts.se joignables), Colombie (datos.gov.co joignable),
-   Brésil (anatel joignable ; SIDRA bloqué → mariages absents), Espagne (datos.gob.es bloqué → traitement absent :
-   à signaler). Check-list des critères §4.3 et addendum par pays **avant** toute estimation.
-4. Étape 4 : rédaction ; références vérifiées une par une sur la page éditeur (doi.org, Springer, PLOS, NBER,
-   RePEc joignables ; tandfonline.com et pnas.org refusent → vérifier via doi.org / crossref).
+- Avant l'exécution complète, des chiffres réels ont été vus lors de tests de fonctionnement : ATT H2b et H3a sur le
+  panel départemental complet avec bootstraps réduits (`--fast`), ATT H1 sur des sous-échantillons aléatoires de
+  3 000 et 5 000 communes, et, à l'Étape 2, un ATT TWFE statique 25-29 affiché une fois lors du débogage. Aucune
+  décision d'A2 n'a été prise à partir d'eux ; A2 a été commité avant le lancement complet (commit `c297ba9`).
+- Deux relectures adversariales du code (workflows multi-agents, 40 puis N constats vérifiés contradictoirement)
+  ont précédé l'exécution ; leurs corrections sont listées dans A2 et dans les messages de commit.
+- Les sorties de tests de fonctionnement sont confinées à `tables/est_smoke/` et `figures/smoke/` (non versionnés).
 
-## 4. Règles non négociables (rappel)
+## 4. Prochaines étapes, dans l'ordre
+
+1. Lire `tables/t_estimates_fr.md` et les figures ; vérifier les lignes « non estimé » / « non estimable » et les
+   écarts-types aberrants éventuels (sous-groupes H6 : l'estimateur doublement robuste est instable quand le groupe
+   de contrôle d'une cohorte est petit ; les lignes « régression de résultat seule » servent de contrôle).
+2. Pays de niveau 1 : Suède (api.scb.se, statistik.pts.se joignables), Colombie (datos.gov.co), Brésil (anatel ;
+   SIDRA bloqué → mariages absents), Espagne (datos.gob.es bloqué → traitement absent : à signaler). Check-list §4.3
+   et addendum par pays **avant** toute estimation ; réutiliser `did.py` et le squelette de `05_estimate.py`.
+3. Étape 4 : rédaction ; références vérifiées une par une sur la page éditeur (doi.org, Springer, PLOS, NBER, RePEc
+   joignables ; tandfonline.com et pnas.org refusent → vérifier via doi.org / crossref). Sections 6-11 sans résultat
+   externe ; règles §6 appliquées aux lignes nommées en §1 bis.
+4. Si l'auteur le veut : D2 (geopandas + contours IGN), THD fixe (ARCEP), décès par âge au département.
+
+## 5. Règles non négociables (rappel)
 
 Données réelles uniquement, téléchargées depuis les sources primaires ; toute référence vérifiée avant d'entrer
 dans `references.bib` ; aucun résultat externe dans les sections Résultats, Discussion, Conclusion ; hypothèses
 écrites avant l'analyse et non modifiées ; corrélation et causalité distinguées ; chaque figure et tableau
 produit par un script nommé.
 
-## 5. Pièges techniques de l'environnement (pour ne pas les redécouvrir)
+## 6. Pièges techniques (pour ne pas les redécouvrir)
 
 - data.gouv.fr : le relais du proxy coupe souvent la connexion ; `download.py` reprend avec `Range` et réessaie
   9 fois. Ne jamais lancer deux `01_download.py` en parallèle : ils écrasent `manifest.json` l'un de l'autre.
-- insee.fr : épisodes de HTTP 503 ; pas de Content-Length en HTTP/2 → un transfert coupé passe inaperçu : le
-  téléchargeur teste l'intégrité des zip/xls/xlsx/pdf avant de consigner.
+- insee.fr : épisodes de HTTP 503 ; pas de Content-Length en HTTP/2 → le téléchargeur teste l'intégrité des
+  zip/xls/xlsx/pdf avant de consigner.
 - `pkill -f "01_download"` depuis un shell dont la ligne de commande contient le motif tue le shell lui-même.
 - Les fichiers détail dBase se lisent avec `dbfread` (≈ 20 s par année) ; `03_outcomes.py` prend ≈ 9 minutes.
+- `differences` 0.3 : (i) `base_period` par défaut « variable » ; (ii) bascule en silence sur les coupes répétées
+  si le panel est déséquilibré (`as_repeated_cross_section=False` imposé, panels équilibrés en amont) ; (iii) ses
+  écarts-types analytiques ignorent `cluster_var` (on somme les fonctions d'influence par grappe) ; (iv)
+  `cluster_var` plante sur une Series (patch dans `did.py`) ; (v) l'estimateur doublement robuste **pondéré** n'est
+  pas invariant à l'échelle des poids et donne des écarts-types aberrants (la variante pondérée est estimée sans
+  covariables) ; (vi) sans unité jamais traitée, la dernière cohorte sert de contrôle et le panel est tronqué.
+- pyfixest 0.60 : `did2s` refuse les effets fixes « a^b » (colonnes explicites) et échoue quand un niveau d'effet
+  fixe n'existe pas parmi les non-traités (année × densité : estimé sans) ; le wild bootstrap refuse les MCP (modèle
+  non pondéré pour les p) et exige des grappes entières ; `wildboottest` n'a pas été vérifié avec plusieurs effets
+  fixes interagis (non calculé pour le modèle IV poolé).
+- `05_estimate.py` : un CS sur 31 000 communes avec covariables prend ≈ 40 s ; le bootstrap par grappes de la
+  spécification primaire (50 tirages) ≈ 45 min ; les parties sont indépendantes et peuvent tourner en parallèle
+  (deux flux sur cette machine à 4 cœurs), puis `--part summary`.
 
-## 6. Message de démarrage suggéré pour une nouvelle session
+## 7. Message de démarrage suggéré pour une nouvelle session
 
 ```
 Continue le working paper smartphones/fécondité sur la branche claude/confident-pasteur-og6cgd,
@@ -119,5 +128,5 @@ docs/preregistration.md, docs/preregistration_addenda.md, docs/etape0_plan.md, d
 Crée le venv (python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt),
 vérifie `python scripts/01_download.py --check`, puis `python scripts/01_download.py --country FR`
 (idempotent : consigne les fichiers déjà présents) et `make build`. Reprends à l'étape indiquée dans
-handover.md §3.
+handover.md §4.
 ```

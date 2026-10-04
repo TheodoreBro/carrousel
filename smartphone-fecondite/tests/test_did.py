@@ -216,3 +216,12 @@ def test_poisson_pct_row_carries_coefficient_p():
     p["births"] = rng.poisson(np.exp(p["y"] - 1.0 + np.log(p["women"]) - 3.0))
     t = did.twfe_att(p, "births", "unit", "year", poisson=True, exposure="women")
     assert "p" in t.columns and np.isclose(t["p"].iloc[0], t["p"].iloc[1])
+
+
+def test_did2s_manual_matches_pyfixest_point_estimates():
+    p = make_panel(n_units=200, seed=2, dynamic=True)
+    a = did.did2s_event_study(p, "y", "unit", "year")
+    b = did.did2s_manual(p, "y", "unit", "year", nboot=8)
+    ea, eb = a["event"].set_index("term"), b["event"].set_index("term")
+    assert (ea.estimate - eb.estimate.reindex(ea.index)).abs().max() < 1e-6
+    assert b["n_boot_ok"] == 8 and np.isfinite(b["post_avg"]["se"].iloc[0])

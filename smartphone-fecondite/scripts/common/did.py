@@ -448,12 +448,16 @@ def _materialize_fe(d: pd.DataFrame, extra_fe: str | None) -> tuple[pd.DataFrame
 
 def did2s_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str = "cohort",
                       cluster: str | None = None, window=EVENT_WINDOW, extra_fe: str | None = None,
-                      covariates: list[str] | None = None) -> dict:
+                      covariates: list[str] | None = None, max_units_pyfixest: int = 5000, nboot: int = 50, seed: int = 1) -> dict:
     """Two-stage DiD de Gardner (2022) via ``pyfixest.did2s``. Renvoie {"event", "post_avg", "pre_wald"}. Les
     covariables invariantes dans le temps sont colinéaires aux effets fixes unité du premier étage et sont retirées
-    (comptées dans ``dropped_covariates``)."""
+    (comptées dans ``dropped_covariates``). Au-delà de ``max_units_pyfixest`` unités, la matrice de covariance de
+    ``pyfixest.did2s`` (dense, n × unités) dépasse la mémoire : on passe par ``did2s_manual`` (mêmes deux étapes,
+    écarts-types par bootstrap par grappes)."""
     import pyfixest as pf
 
+    if df[unit].nunique() > max_units_pyfixest:
+        return did2s_manual(df, y, unit, time, cohort, cluster=cluster, window=window, extra_fe=extra_fe, covariates=covariates, nboot=nboot, seed=seed)
     d = add_rel_time(_recode_late(df, time, cohort), time, cohort, window=window)
     d["treat_post"] = ((d[cohort] > 0) & (d[time] >= d[cohort])).astype(int)
     d, names = _event_dummies(d, window=window)
@@ -471,6 +475,52 @@ def did2s_event_study(df: pd.DataFrame, y: str, unit: str, time: str, cohort: st
     ev = _tidy([_name_to_rel(n) for n in t["Coefficient"]], t["Estimate"], t["Std. Error"], "did2s")
     return {"event": ev, "post_avg": _post_from_model(m, by_rel, "did2s"), "pre_wald": _pre_wald_from_model(m, by_rel, window), "model": m,
             "dropped_covariates": dropped}
+
+
+def _did2s_point(d: pd.DataFrame, y: str, unit: str, time: str, names: list[str], fe: str, covs: list[str]) -> pd.Series:
+    """Deux étapes de Gardner : (1) effets fixes (et covariables) estimés sur les observations non traitées, (2) régression
+    de y − ŷ sur les indicatrices de période relative, sans constante. Renvoie les coefficients du second étage."""
+    import pyfixest as pf
+
+    fs = pf.feols(f"{y} ~ {' + '.join(covs) if covs else '1'} | {fe}", data=d[d.treat_post == 0])
+    yhat = fs.predict(newdata=d, atol=1e-8, btol=1e-8)
+    d = d.assign(_ytil=d[y].to_numpy() - np.asarray(yhat, float))
+    ss = pf.feols(f"_ytil ~ 0 + {' + '.join(names)}", data=d.dropna(subset=["_ytil"]), vcov="iid")
+    return ss.coef()
+
+
+def did2s_manual(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str = "cohort", cluster: str | None = None,
+                 window=EVENT_WINDOW, extra_fe: str | None = None, covariates: list[str] | None = None, nboot: int = 50, seed: int = 1) -> dict:
+    """did2s (Gardner 2022) implémenté directement pour les grands panels : premier étage sur les observations non traitées,
+    second étage sur y résidualisé ; écarts-types et covariance des coefficients par **bootstrap par grappes** (``cluster`` ou
+    unité, ``nboot`` tirages), qui tient compte de l'estimation du premier étage. Renvoie le même dictionnaire que
+    ``did2s_event_study`` (plus ``n_boot_ok``)."""
+    d = add_rel_time(_recode_late(df, time, cohort), time, cohort, window=window)
+    d["treat_post"] = ((d[cohort] > 0) & (d[time] >= d[cohort])).astype(int)
+    d, names = _event_dummies(d, window=window)
+    d, fe_extra = _materialize_fe(d, extra_fe)
+    dropped = [c for c in (covariates or []) if (d.groupby(unit)[c].nunique() <= 1).all()]
+    covs = [c for c in (covariates or []) if c not in dropped]
+    nests_time = bool(fe_extra) and any(t.strip().startswith(f"{time}_x_") for t in fe_extra.split("+"))
+    fe = f"{unit} + {fe_extra}" if nests_time else _fe_formula(unit, time, fe_extra)
+    coef = _did2s_point(d, y, unit, time, names, fe, covs)
+    bs = cluster_bootstrap(d, unit, lambda b: _did2s_point(b, y, unit, time, names, fe, covs).reindex(coef.index).to_numpy(),
+                           n_boot=nboot, seed=seed, cluster=cluster)
+    draws = bs["draws"]
+    V = pd.DataFrame(np.cov(draws, rowvar=False) if len(draws) > 2 else np.full((len(coef), len(coef)), np.nan), index=coef.index, columns=coef.index)
+    se = np.sqrt(np.diag(V.values))
+    by_rel = {_name_to_rel(n): n for n in names}
+    ev = _tidy([_name_to_rel(n) for n in coef.index], coef.values, se, "did2s")
+    idx = [n for r, n in by_rel.items() if POST_AVG[0] <= r <= POST_AVG[1] and n in coef.index]
+    if idx:
+        w = np.ones(len(idx)) / len(idx)
+        kmax = max(r for r, n in by_rel.items() if n in idx)
+        post = _tidy([f"ATT[{POST_AVG[0]},{kmax}]"], [float(w @ coef.loc[idx].values)], [float(np.sqrt(w @ V.loc[idx, idx].values @ w))], "did2s")
+    else:
+        post = _tidy(["ATT[1,0]"], [np.nan], [np.nan], "did2s")
+    pre = [n for r, n in by_rel.items() if window[0] <= r <= -2 and n in coef.index]
+    pw = _wald(coef.loc[pre].values, V.loc[pre, pre].values) if pre else {"stat": np.nan, "df": 0, "p_value": np.nan}
+    return {"event": ev, "post_avg": post, "pre_wald": pw, "model": None, "dropped_covariates": dropped, "n_boot_ok": bs["n_boot_ok"], "manual": True}
 
 
 def twfe_att(df: pd.DataFrame, y: str, unit: str, time: str, cohort: str = "cohort",

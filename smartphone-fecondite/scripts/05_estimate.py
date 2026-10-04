@@ -442,12 +442,15 @@ def run_block(col: Collector, d: pd.DataFrame, y: str, family: str, hyp: str, ou
             if est != "did2s":
                 kw["weights"] = weights
             else:
+                kw["nboot"] = max(int(nboot_cluster), 50) if nboot_cluster else 50
                 # did2s : un effet fixe année × classe de densité n'est pas estimable quand une classe est entièrement traitée
                 # certaines années (niveau absent du premier étage, estimé sur les seules observations non traitées)
                 kw["extra_fe"] = None
             t = fn(d, y, unit, "year", "cohort", **kw)
             rn = (reg_note + " ; cellules −8 et +8 bornées" + (f" ; covariables invariantes retirées du premier étage : {', '.join(t['dropped_covariates'])}" if t.get("dropped_covariates") else "")
-                  + (f" ; sans les effets fixes {extra_fe} (non estimables dans did2s)" if est == "did2s" and extra_fe else ""))
+                  + (f" ; sans les effets fixes {extra_fe} (non estimables dans did2s)" if est == "did2s" and extra_fe else "")
+                  + (f" ; did2s en deux étapes implémenté directement (pyfixest.did2s dépasse la mémoire au-delà de 5 000 unités), écarts-types par bootstrap "
+                     f"par grappes ({t['n_boot_ok']} tirages, grappe = {cluster or unit})" if t.get("manual") else ""))
             col.add(family, hyp, outcome, sample, t["event"], nu, no, rn, exploratory, **dict(base_extra, aggregation="event"))
             col.add(family, hyp, outcome, sample, t["post_avg"], nu, no, reg_note + " ; écart-type avec covariance complète (w'Vw)", exploratory,
                     **dict(base_extra, aggregation="post_avg"))

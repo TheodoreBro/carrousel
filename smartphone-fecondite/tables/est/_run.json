@@ -1,0 +1,49 @@
+{
+  "generated": "2026-10-04 10:50:06",
+  "commit": "331362e",
+  "python": "3.11.15",
+  "packages": {
+    "differences": "0.3.0",
+    "pyfixest": "0.60.0",
+    "pandas": "3.0.6",
+    "numpy": "2.4.6"
+  },
+  "parts": {
+    "h2": {
+      "rows": 611,
+      "modified": "2026-10-04 10:06:24"
+    },
+    "h3": {
+      "rows": 646,
+      "modified": "2026-10-04 10:10:52"
+    },
+    "iv": {
+      "rows": 11,
+      "modified": "2026-10-04 10:12:26"
+    }
+  },
+  "args": {
+    "part": [
+      "summary"
+    ],
+    "boot": 999,
+    "nboot": 200,
+    "nboot_commune": 50,
+    "fast": false,
+    "sample": null
+  },
+  "n_rows": 1268,
+  "n_key_rows": 283,
+  "inputs": {
+    "fr_check_births_vs_official.parquet": "2026-10-04 09:51:24",
+    "fr_covariates_commune.parquet": "2026-10-04 09:55:21",
+    "fr_femploy_dep.parquet": "2026-10-04 09:59:01",
+    "fr_firststage_panel.parquet": "2026-10-04 09:46:58",
+    "fr_outcomes_commune.parquet": "2026-10-04 09:44:04",
+    "fr_outcomes_dep.parquet": "2026-10-04 09:51:24",
+    "fr_outcomes_dep_age.parquet": "2026-10-04 09:51:24",
+    "fr_treatment_commune.parquet": "2026-10-02 12:10:20",
+    "fr_treatment_commune_static.parquet": "2026-10-02 12:10:20",
+    "fr_treatment_dep.parquet": "2026-10-02 12:10:21"
+  }
+}
