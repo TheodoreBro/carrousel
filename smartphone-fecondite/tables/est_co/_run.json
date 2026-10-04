@@ -1,0 +1,26 @@
+{
+  "generated": "2026-10-04 14:07:25",
+  "commit": "1af9826",
+  "args": {
+    "part": [
+      "h1",
+      "h2",
+      "h3",
+      "h5",
+      "h6",
+      "robust",
+      "summary"
+    ],
+    "boot": 999,
+    "nboot": 50,
+    "fast": false
+  },
+  "n_rows": 1536,
+  "inputs": {
+    "co_births_agg_cache.parquet": "2026-10-04 13:37:26",
+    "co_outcomes_mun.parquet": "2026-10-04 13:51:29",
+    "co_outcomes_mun_age.parquet": "2026-10-04 13:51:29",
+    "co_treatment.parquet": "2026-10-04 13:18:25",
+    "co_treatment_static.parquet": "2026-10-04 13:18:25"
+  }
+}

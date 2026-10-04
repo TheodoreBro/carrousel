@@ -1,0 +1,35 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Colombie — placebos (H5)}\label{tab:co_placebo}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & primaire : municipios avec covariables & cs & Wald pré (-8..-2) & 9.44 & p = 0.223 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & tous municipios, sans covariables & cs & Wald pré (-8..-2) & 14.27 & p = 0.047 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & covariables, contrôle = jamais traités & cs & Wald pré (-8..-2) & 10.95 & p = 0.141 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & naissances / 1 000 f. 15-49 (taux brut) & municipios avec covariables & cs & Wald pré (-8..-2) & 10.23 & p = 0.176 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & asinh(taux) & municipios avec covariables & cs & Wald pré (-8..-2) & 10.18 & p = 0.179 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & cs & Wald pré (-8..-2) & 6.02 & p = 0.537 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios, sans covariables & cs & Wald pré (-8..-2) & 11.88 & p = 0.105 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & naissances / 1 000 f. 25-39 (taux brut) & municipios avec covariables, bascule 4G $\geq$ 50 \% & cs & Wald pré (-8..-2) & 7.91 & p = 0.341 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & asinh(naissances / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & cs & Wald pré (-8..-2) & 6.57 & p = 0.475 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & municipio, bascule fictive $-$3 ans, années pré-traitement seules & cs & ATT[1,2] & -0.0370 & (0.0255) & 2 ($\leq$ 2024) & 932 & 20\,291 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & municipio, bascule fictive $-$3 ans, années pré-traitement seules & cs & Wald pré (-8..-2) & 8.16 & p = 0.319 & 2 ($\leq$ 2024) & 932 & 20\,291 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & municipio, bascule fictive $-$3 ans, années pré-traitement seules & twfe & ATT[1,2] & -0.0560*** & (0.0137) &  & 932 & 20\,291 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & municipio, bascule fictive $-$3 ans, années pré-traitement seules & twfe & Wald pré (-8..$-$2) & 12.65 & p = 0.081 &  & 932 & 20\,291 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & municipio, bascule fictive $-$3 ans, années pré-traitement seules & twfe & ATT & -0.0609*** & (0.0154) &  & 932 & 20\,291 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-49) & primaire : municipios avec covariables & cs & ATT[1,5] & -0.0129 & (0.0397) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-49) & primaire : municipios avec covariables & cs & Wald pré (-8..-2) & 9.44 & p = 0.223 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-49) & municipios avec covariables sans la tendance 2010-2014 & cs & ATT[1,5] & -0.0120 & (0.0404) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-49) & municipios avec covariables sans la tendance 2010-2014 & cs & Wald pré (-8..-2) & 14.18 & p = 0.048 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H5c & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables (H2b) & cs & ATT[1,5] & -0.0139 & (0.0391) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H5c & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables (H2b) & cs & Wald pré (-8..-2) & 6.02 & p = 0.537 & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/11\_co\_estimate.py. H5b (décès) non construit (A4). H5c : test de Wald joint des coefficients $-8$ à $-2$. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

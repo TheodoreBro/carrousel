@@ -1,0 +1,31 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Colombie — hétérogénéité (H6), municipios}\label{tab:co_h6}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & part de population en cabecera 2015 (densité) : tercile 1 & cs & ATT[1,5] & 0.1584** & (0.0680) & 5 ($\leq$ 2024) & 301 & 8\,127 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & part de population en cabecera 2015 (densité) : tercile 2 & cs & ATT[1,5] & 0.0399 & (0.0258) & 5 ($\leq$ 2024) & 302 & 8\,154 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & part de population en cabecera 2015 (densité) : tercile 3 & cs & ATT[1,5] & 0.2013*** & (0.0545) & 5 ($\leq$ 2024) & 304 & 8\,208 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2015 : tercile 1 & cs & ATT[1,5] & -0.0161 & (0.0465) & 5 ($\leq$ 2024) & 305 & 8\,235 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2015 : tercile 2 & cs & ATT[1,5] & 0.0656** & (0.0292) & 5 ($\leq$ 2024) & 297 & 8\,019 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2015 : tercile 3 & cs & ATT[1,5] & -0.0539*** & (0.0174) & 5 ($\leq$ 2024) & 305 & 8\,235 \\
+H6 & log(naissances de rang 1+0,5 / 1 000 f. 15-49) & rang 1 & cs & ATT[1,5] & 0.0491 & (0.0325) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H6 & log(naissances de rang 2++0,5 / 1 000 f. 15-49) & rang 2 et plus & cs & ATT[1,5] & -0.0502 & (0.0472) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — part de population en cabecera 2015 (densité) : tercile 1 & municipios avec covariables & cs & ATT[1,5] (Holm) & 0.1584** & (0.0680) & 5 ($\leq$ 2024) & 311 & 8\,361 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — part de population en cabecera 2015 (densité) : tercile 2 & municipios avec covariables & cs & ATT[1,5] (Holm) & 0.0399 & (0.0258) & 5 ($\leq$ 2024) & 310 & 8\,342 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — part de population en cabecera 2015 (densité) : tercile 3 & municipios avec covariables & cs & ATT[1,5] (Holm) & 0.2013*** & (0.0545) & 5 ($\leq$ 2024) & 311 & 8\,384 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2015 : tercile 1 & municipios avec covariables & cs & ATT[1,5] (Holm) & -0.0161 & (0.0465) & 5 ($\leq$ 2024) & 311 & 8\,386 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2015 : tercile 2 & municipios avec covariables & cs & ATT[1,5] (Holm) & 0.0656** & (0.0292) & 5 ($\leq$ 2024) & 310 & 8\,332 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2015 : tercile 3 & municipios avec covariables & cs & ATT[1,5] (Holm) & -0.0539*** & (0.0174) & 5 ($\leq$ 2024) & 311 & 8\,369 \\
+H6 & log(naissances de rang 1+0,5 / 1 000 f. 15-49) — rang 1 & municipios avec covariables & cs & ATT[1,5] (Holm) & 0.0491 & (0.0325) & 5 ($\leq$ 2024) & 932 & 25\,087 \\
+H6 & log(naissances de rang 2++0,5 / 1 000 f. 15-49) — rang 2 et plus & municipios avec covariables & cs & ATT[1,5] (Holm) & -0.0502 & (0.0472) & 5 ($\leq$ 2024) & 932 & 25\,087 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/11\_co\_estimate.py. p Holm dans la colonne notes de est\_co\_all.csv. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

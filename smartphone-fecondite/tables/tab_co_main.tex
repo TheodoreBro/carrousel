@@ -1,0 +1,48 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Colombie — effet de la bascule 4G ($\geq$ 50 \% de la population) sur les naissances : effet total (H1) et 25-39 ans (H2b), municipios}\label{tab:co_main}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & primaire : municipios avec covariables & cs & ATT[1,5] & -0.0129 & (0.0397) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & primaire : municipios avec covariables & cs & ATT[1,5] & -0.0129 & (0.0419) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & primaire : municipios avec covariables ; agrégation à composition constante (cohortes 2016-2019 observées jusqu'à +5) & cs & ATT[1,5] & -0.0290 & (0.0521) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & municipios avec covariables, comparaisons & sunab & ATT[1,5] & -0.0247 & (0.0207) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & municipios avec covariables, comparaisons & did2s & ATT[1,5] & -0.1047*** & (0.0305) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & municipios avec covariables, comparaisons & twfe & ATT[1,5] & -0.0984*** & (0.0212) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & municipios avec covariables, comparaisons & twfe & ATT & -0.0708*** & (0.0175) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & municipios avec covariables, comparaisons & twfe\_poisson & ATT (log du taux contrefactuel) & -0.0266 & (0.0202) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & municipios avec covariables, comparaisons & twfe\_poisson & ATT en \% du taux contrefactuel & -2.6224 & (1.9680) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & tous municipios, sans covariables & cs & ATT[1,5] & -0.0334** & (0.0168) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & tous municipios, sans covariables & sunab & ATT[1,5] & -0.0247 & (0.0207) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & tous municipios, sans covariables & did2s & ATT[1,5] & -0.1047*** & (0.0305) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & tous municipios, sans covariables & twfe & ATT[1,5] & -0.0984*** & (0.0212) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & tous municipios, sans covariables & twfe & ATT & -0.0708*** & (0.0175) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & tous municipios, sans covariables & twfe\_poisson & ATT (log du taux contrefactuel) & -0.0266 & (0.0202) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & tous municipios, sans covariables & twfe\_poisson & ATT en \% du taux contrefactuel & -2.6224 & (1.9680) &  & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & covariables, contrôle = jamais traités & cs & ATT[1,5] & -0.0162 & (0.0549) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & naissances / 1 000 f. 15-49 (taux brut) & municipios avec covariables & cs & ATT[1,5] & -0.8623 & (1.4217) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & asinh(taux) & municipios avec covariables & cs & ATT[1,5] & -0.0089 & (0.0420) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & cs & ATT[1,5] & -0.0139 & (0.0391) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & cs & ATT[1,5] & -0.0139 & (0.0462) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% ; agrégation à composition constante (cohortes 2016-2019 observées jusqu'à +5) & cs & ATT[1,5] & -0.0383 & (0.0522) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & sunab & ATT[1,5] & -0.0299 & (0.0224) &  & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & did2s & ATT[1,5] & -0.0942*** & (0.0285) &  & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & twfe & ATT[1,5] & -0.0931*** & (0.0212) &  & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & twfe & ATT & -0.0645*** & (0.0169) &  & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & twfe\_poisson & ATT (log du taux contrefactuel) & -0.0234 & (0.0207) &  & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & twfe\_poisson & ATT en \% du taux contrefactuel & -2.3150 & (2.0258) &  & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios, sans covariables & cs & ATT[1,5] & -0.0379* & (0.0198) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios, sans covariables & twfe & ATT[1,5] & -0.0931*** & (0.0212) &  & 907 & 24\,489 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & municipios, sans covariables & twfe & ATT & -0.0645*** & (0.0169) &  & 907 & 24\,489 \\
+H2b & naissances / 1 000 f. 25-39 (taux brut) & municipios avec covariables, bascule 4G $\geq$ 50 \% & cs & ATT[1,5] & -1.0339 & (2.0158) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H2b & asinh(naissances / 1 000 f. 25-39) & municipios avec covariables, bascule 4G $\geq$ 50 \% & cs & ATT[1,5] & -0.0041 & (0.0445) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/11\_co\_estimate.py. cs = Callaway \& Sant'Anna (écart-type avec covariance complète des coefficients). ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

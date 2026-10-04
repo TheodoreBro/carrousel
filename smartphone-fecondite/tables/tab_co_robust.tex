@@ -1,0 +1,25 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Colombie — robustesse}\label{tab:co_robust}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & fenêtre 2008-2024 & cs & ATT[1,5] & -0.0099 & (0.0363) & 5 ($\leq$ 2024) & 932 & 15\,844 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & fenêtre 1998-2023 (sans l'année provisoire 2024) & cs & ATT[1,5] & -0.0238 & (0.0543) & 5 ($\leq$ 2023) & 907 & 23\,582 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & fenêtre 1998-2019 (hors COVID) ; cohortes 2020-2023 = contrôle & cs & ATT[1,3] & 0.0174 & (0.0266) & 3 ($\leq$ 2019) & 907 & 19\,954 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & sans 2020-2021 & cs & ATT[1,5] & 0.0100 & (0.0267) & 5 ($\leq$ 2024) & 907 & 22\,675 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & grappes = departamento & cs & ATT[1,5] & -0.0129 & (0.0475) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & traitement = 4G $\geq$ 90 \% de la population & cs & ATT[1,5] & -0.0098 & (0.0156) & 5 ($\leq$ 2024) & 1\,025 & 27\,675 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & traitement = 4G à la cabecera & cs & ATT[1,5] & 0.0266 & (0.0992) & 5 ($\leq$ 2024) & 907 & 24\,489 \\
+3G & log(naissances+0,5 / 1 000 f. 15-49) & traitement = 3G $\geq$ 50 \% (robustesse) & cs & ATT[1,5] & -0.0166 & (0.0339) & 5 ($\leq$ 2024) & 454 & 12\,258 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & sans 2020-2021 & cs & ATT[1,5] & 0.0108 & (0.0290) & 5 ($\leq$ 2024) & 907 & 22\,675 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & fenêtre 2008-2024 & cs & ATT[1,5] & -0.0128 & (0.0361) & 5 ($\leq$ 2024) & 932 & 15\,844 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/11\_co\_estimate.py. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
