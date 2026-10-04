@@ -919,8 +919,11 @@ def part_robust(args) -> None:
     # DOM au département (préreg. §4.1)
     ddom = dep_age_panel(metro_only=False)
     adom = aggregate_ages(ddom, G2539, "25-39")
+    y0 = int(adom[~adom.metro].year.min())             # fichiers détail des DOM disponibles depuis 2010 seulement : fenêtre commune à tous
+    adom = adom[adom.year >= y0]
     n_dd = adom[~adom.metro].dep.nunique()
-    run_block(col, adom, y, "robustesse", "H2b", Y_2539, f"département, DOM inclus ({n_dd} départements d'outre-mer)", "unit", cluster="dep", estimators=("cs",))
+    run_block(col, adom, y, "robustesse", "H2b", Y_2539, f"département, DOM inclus ({n_dd} départements d'outre-mer), {y0}-2024", "unit", cluster="dep", estimators=("cs",),
+              notes=f"les DOM ne sont observés qu'à partir de {y0} : fenêtre {y0}-2024 pour tous les départements (panel équilibré)")
     col.save()
 
 

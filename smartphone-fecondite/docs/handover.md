@@ -1,4 +1,4 @@
-# Passation — état du projet au 2 octobre 2026 (nuit)
+# Passation — état du projet au 4 octobre 2026
 
 Ce fichier permet à une nouvelle session (ou à un nouvel agent) de reprendre le travail sans la
 conversation d'origine. Il est mis à jour à chaque étape.
@@ -15,7 +15,8 @@ Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prim
   à la relecture du code d'estimation, avant son exécution complète).
 - Étape 2 France livrée (données, traitement, résultats, échantillons, MDE, first stage) : voir §1 bis et les
   tables `t_treatment_fr.md`, `t_outcomes_fr.md`, `t_sample_fr.md`, `t_mde_fr.md`, `t_firststage_fr.md`.
-- **Étape 3 France : estimations exécutées** (`scripts/05_estimate.py`, commit indiqué dans `tables/est/_run.json`).
+- **Étape 3 France : estimations exécutées le 04/10/2026** (`scripts/05_estimate.py`, commit indiqué dans `tables/est/_run.json` ;
+  parties département 10:00-10:12, parties commune 11:18-12:05, robustesse relancée ensuite pour la variante DOM département).
   - Sorties : `tables/est/<partie>.csv` (h1, h2, h3, h5, h6, robust, iv), `tables/est_fr_all.csv` (toutes les lignes,
     event studies comprises), `tables/t_estimates_fr.md` (synthèse lisible), `tables/est/_run.json` (manifeste :
     commit, versions des paquets, dates des entrées), `figures/fig_event_*.pdf|png`, `figures/fig_h2_age.*`,
@@ -73,8 +74,15 @@ l'emploi 25-54, compléments exploratoires).
   panel départemental complet avec bootstraps réduits (`--fast`), ATT H1 sur des sous-échantillons aléatoires de
   3 000 et 5 000 communes, et, à l'Étape 2, un ATT TWFE statique 25-29 affiché une fois lors du débogage. Aucune
   décision d'A2 n'a été prise à partir d'eux ; A2 a été commité avant le lancement complet (commit `c297ba9`).
-- Deux relectures adversariales du code (workflows multi-agents, 40 puis N constats vérifiés contradictoirement)
-  ont précédé l'exécution ; leurs corrections sont listées dans A2 et dans les messages de commit.
+- Deux relectures adversariales du code (workflows multi-agents : 40 constats le 02/10, puis 24 constats dont 14 vérifiés
+  contradictoirement le 04/10 — les autres n'ont pu être vérifiés faute de quota et ont été triés à la main) ont précédé
+  l'exécution complète ; leurs corrections sont dans A2, A2.5 et les messages de commit. Entre les deux, une exécution
+  partielle (02/10, commit `c297ba9`) avait produit les parties département (vues) et le test primaire H1 (vu) avant que la
+  partie commune soit tuée (mémoire) ; A2.5 a été écrit avec ces chiffres connus, ce qui est dit.
+- Chiffres instables à connaître : le sous-groupe H6 « ZDP » donne un ATT doublement robuste de 1,7·10⁷ (écart-type du
+  même ordre) — l'estimateur IPW s'effondre sur ce sous-groupe ; la ligne « régression de résultat seule » du même
+  sous-groupe est la lecture utilisable ; p Holm = 1 pour toute la famille H6. Le conditionnement au département (6
+  covariables agrégées, 96 unités) est instable et marqué non interprétable (A2.5).
 - Les sorties de tests de fonctionnement sont confinées à `tables/est_smoke/` et `figures/smoke/` (non versionnés).
 
 ## 4. Prochaines étapes, dans l'ordre
@@ -115,9 +123,14 @@ produit par un script nommé.
   fixe n'existe pas parmi les non-traités (année × densité : estimé sans) ; le wild bootstrap refuse les MCP (modèle
   non pondéré pour les p) et exige des grappes entières ; `wildboottest` n'a pas été vérifié avec plusieurs effets
   fixes interagis (non calculé pour le modèle IV poolé).
-- `05_estimate.py` : un CS sur 31 000 communes avec covariables prend ≈ 40 s ; le bootstrap par grappes de la
-  spécification primaire (50 tirages) ≈ 45 min ; les parties sont indépendantes et peuvent tourner en parallèle
-  (deux flux sur cette machine à 4 cœurs), puis `--part summary`.
+- `05_estimate.py` : un CS sur 31 000 communes avec covariables prend ≈ 25-40 s ; le bootstrap par grappes de la
+  spécification primaire (50 tirages) ≈ 35 min ; `pyfixest.did2s` **dépasse 15 Go de mémoire** au niveau commune (matrice
+  dense n × unités dans sa covariance) → `did.did2s_manual` (mêmes deux étapes, bootstrap par grappes, 3 Go, 7 min) est
+  utilisé automatiquement au-delà de 5 000 unités ; Sun & Abraham sur 31 000 communes ≈ 6 Go. Exécuter les flux
+  **l'un après l'autre** (le flux commune a été tué deux fois par l'OOM du cgroup à 15 Go quand autre chose tournait) ;
+  durée totale ≈ 1 h 05 (département 12 min, commune 47 min), puis `--part summary`.
+- `kill $(pgrep -f motif)` et `pkill -f motif` tuent le shell appelant si sa ligne de commande contient le motif : tuer par
+  PID lu dans `ps`.
 
 ## 7. Message de démarrage suggéré pour une nouvelle session
 
