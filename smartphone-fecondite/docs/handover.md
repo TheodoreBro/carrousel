@@ -162,6 +162,12 @@ construit, H6 par densité/taille/rang).
 - Espagne : un test de fonctionnement `--fast` de toutes les parties a été vu (15:30-15:33) après le commit de A6 et des tables
   d'échantillon/MDE ; il a révélé l'instabilité décrite en §1 quater ; aucune décision de mesure n'a été changée ensuite (la seule
   modification de code est le saut de la ligne « contrôle = jamais traités » quand il n'y a aucune unité jamais traitée).
+- Brésil : un test de fonctionnement `--fast` (parties h1 et début de h2, 16:05-16:08) a été vu avant l'exécution complète, après le commit de A5
+  et des tables d'échantillon/MDE ; il a révélé des lignes dupliquées (deux URL pour un même fichier de mariages dans le manifeste), corrigées
+  dans `download.py` sans changement de mesure. Les mariages 2017-2024 n'ont pas pu être téléchargés (API IBGE muette au-delà de 300 s) :
+  H3a « non estimé », à relancer (`data_log.md`).
+- Synthèse : `18_meta.py` a été exécuté une fois sur France + Colombie + Espagne (test du script, 15:40) avant que le Brésil existe ; A7
+  avait été commité avant ; aucune règle n'a été modifiée ensuite.
 - Colombie : avant l'exécution complète, un test de fonctionnement `--fast` (bootstraps 49 / 3) de toutes les parties a été vu sur le panel
   complet (04/10, 13:54-13:56), après le commit de A4 et des tables d'échantillon/MDE ; aucune décision de mesure n'a été prise après.
   Les sorties de ce test sont dans `tables/est_co_smoke/` (non versionné).
