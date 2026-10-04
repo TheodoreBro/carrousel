@@ -255,3 +255,19 @@ identifiée seulement.
 | Placebo H5b | décès par municipio non téléchargés | H5b non construit (dit) ; H5a et H5c estimés |
 | Hétérogénéité H6 | population 2013 ; rang (NUMHV) | H6 : terciles de population 2013 ; rang 1 vs 2+ |
 | COVID | 2020-2021 | robustesse « sans 2020-2021 » |
+
+## A7 — Synthèse entre pays : règles de mise en œuvre (04/10/2026, avant toute méta-analyse)
+
+Quatre pays inclus (France, Colombie, Brésil, Espagne) ; §4.3 exige ≥ 3. Écrit après les estimations nationales (France, Colombie, Espagne
+exécutées ; Brésil en cours) et **avant** le premier calcul poolé. Ce que §5 fixe : méta-analyse à effets aléatoires (REML) des ATT par
+groupe d'âge en % du taux contrefactuel, intervalle de prédiction, I² ; test primaire = estimation poolée 25-39 ans.
+
+| Point | Décision |
+|---|---|
+| Lignes retenues par pays | l'ATT[1,k] primaire de chaque pays (`post_avg`, Callaway & Sant'Anna, spécification primaire : France département D3 ≥ 50 % ; Colombie, Brésil, Espagne municipios avec covariables), pour H2b (25-39) et pour chaque groupe d'âge (H2a, H2c) ; k est celui identifié dans le pays (4 en France, 5 en Colombie, 1 en Espagne), **dit** dans le tableau |
+| Conversion en % | 100 × (exp(ATT) − 1) ; écart-type par la méthode delta (100 × exp(ATT) × es) |
+| Écart-type | primaire : écart-type par covariance des fonctions d'influence (celui de §5) ; secondaire : écart-type du bootstrap par grappes quand il existe (`post_avg_boot`) |
+| Méthode | REML itéré (`statsmodels.combine_effects`), IC 95 %, intervalle de prédiction à 95 % (t à K − 2 degrés de liberté), I², τ² |
+| Pays dont le pré-test (H5c) est rejeté | **primaire = tous les pays inclus, sans exclusion** (§5 ne prévoit pas de filtre) ; **sensibilité, décidée ici** : poolé sans les pays dont le test de Wald pré de la spécification primaire H2b rejette à 5 % — au moment d'écrire, c'est le cas de la France (p = 0,004) et de l'Espagne (p < 0,001) ; cette sensibilité est exploratoire et n'entre pas dans la règle §6 |
+| Règle §6 | appliquée telle quelle : H2b rejetée (p < 0,05) de même signe dans ≥ 2 pays de niveau 1 et poolé significatif, et H5a-c non rejetés dans ces pays ; le script imprime chaque condition pays par pays |
+| Sorties | `scripts/18_meta.py` → `tables/t_meta.md`, `tables/t_meta.csv`, `figures/fig_meta.pdf` (forêt par groupe d'âge) |
