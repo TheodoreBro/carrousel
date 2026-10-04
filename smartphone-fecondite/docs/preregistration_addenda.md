@@ -185,3 +185,73 @@ Décision : **Colombie incluse** dans la partie causale.
 | Placebo H5b | Décès par municipio : DANE EEVV « defunciones » non téléchargées à ce stade | H5b non construit (dit) ; H5a et H5c estimés |
 | Hétérogénéité H6 | densité (part cabecera, terciles), population (terciles), **rang de naissance** (`N_HIJOSV` disponible toute la période : rang 1 vs 2+) | H6 : densité, taille, rang 1 vs 2+ ; pas de revenu ni de ZDP |
 | COVID | 2020-2021 | robustesse « sans 2020-2021 » comme en France |
+
+## A5 — Brésil : addendum de mesure et décision d'inclusion (04/10/2026, avant toute estimation)
+
+Rédigé fichiers en main (check-list dans `docs/data_log.md` ; sources `br_anatel_municipios_atendidos`, `br_ibge_nascidos_vivos`,
+`br_ibge_censo_mulheres`, `br_ibge_populacao_estimada`, `br_ibge_casamentos`). Aucune estimation n'a été lancée sur le Brésil avant ce commit.
+
+### Critères d'inclusion (§4.3)
+
+| Critère | Constat | Verdict |
+|---|---|---|
+| (1) traitement infranational daté, ≥ 3 ans de pré-période pour ≥ 30 % des unités | Anatel, « Municípios atendidos por SMP » : présence de chaque technologie par opérateur et município, instantanés de décembre 2013-2016 puis mensuels 2017 → 2026-08 ; 5 570 municípios. Au 2013-12 la 4G est « NÃO » partout (y compris São Paulo, où elle est commercialisée depuis avril 2013) : première observation utilisable 2014-12. Première année de présence 4G (≥ 1 opérateur) : 2014 : 189, 2015 : 298, 2016 : 551, 2017 : 2 739, 2018 : 680, 2019 : 399, 2020 : 424, 2021 : 170, 2022 : 60, 2023 : 60. Naissances depuis 2003 → ≥ 11 ans de pré-période pour toutes les unités | rempli |
+| (2) naissances par âge au niveau de l'unité, annuelles, couvrant la pré-période | IBGE, Estatísticas do Registro Civil (table 2609, API) : nés vivants enregistrés dans l'année, par município de **résidence de la mère**, année de naissance et groupe d'âge de la mère, 2003-2024. DATASUS/SINASC (microdonnées) inaccessible depuis l'environnement (FTP et TabNet réinitialisés par le proxy, PCDaS avec compte) | rempli |
+| (3) téléchargement scriptable, licence | fichiers zip Anatel (dados abertos) et API IBGE sans identification | rempli |
+| (4) dénominateurs par sexe et âge | IBGE, recensements 2000 (groupes quinquennaux), 2010 et 2022 (âges simples) par município, et estimations annuelles de population totale (table 6579) ; pas de projection municipale annuelle par âge accessible (DATASUS bloqué) → interpolation entre recensements (ci-dessous) | rempli |
+
+Décision : **Brésil inclus** dans la partie causale.
+
+### Décisions de mesure (§4.2 ; catégories §10)
+
+| Point | Ce que disent les fichiers | Décision |
+|---|---|---|
+| Unité | município (code IBGE à 7 chiffres) ; 5 565 municípios en 2000, 5 570 depuis 2013 | município ; les 5 municípios créés après 2000 et leurs municípios d'origine sont exclus (géographie la plus récente non reconstituable en 2000, §10) ; grappes = município |
+| Traitement (§4.2 : « première année où la couverture 4G de la population atteint 50 % ») | pas de part de population couverte avant 2021-11 ; présence binaire de la 4G par opérateur et município | **présence de la 4G par au moins un opérateur** dans le município (instantané de décembre 2014-2016, premier mois de présence 2017 →) ; cohorte = année de première présence ; le régulateur ne publiant pas la part de population couverte, c'est le seul indicateur municipal daté (§10). La cohorte 2014 (189 municípios) contient des municípios peut-être couverts dès 2013 (première observation utilisable 2014-12) : gardée en primaire, **exclue en robustesse** ; variante « ≥ 2 opérateurs » ; 3G en robustesse (présence 3G, instantanés dès 2013-12, municípios déjà couverts au 2013-12 exclus comme censurés) |
+| Années | naissances 2003-2024 (2024 : enregistrements tardifs de 2025 non disponibles → provisoire) ; traitement 2014-2023 | fenêtre d'estimation **2003-2024**, robustesse 2003-2023 ; cohortes 2014-2023 ; « jamais traités » = municípios sans 4G au 2024-12 (aucun : tous couverts en 2023 → contrôle = pas encore traités, dernière cohorte 2023) |
+| Naissances par année d'occurrence | la table 2609 donne les naissances **enregistrées** dans l'année t par année de naissance | naissances de l'année t = enregistrées en t et nées en t + enregistrées en t+1 et nées en t ; cellules « - » (secret/absence) = manquantes, comptées |
+| Groupes d'âge | groupes quinquennaux 15-19 … 45-49, < 15, ≥ 50, ignoré | 15-19, 20-24, 25-29, 30-34, 35-39, 40-49 ; < 15 et ≥ 50 hors périmètre ; âge ignoré exclu et compté |
+| Dénominateurs | femmes par âge aux recensements 2000, 2010, 2022 ; population totale annuelle 2001-2021, 2024 (estimations IBGE) | femmes du groupe d'âge en t = part du groupe dans la population totale du município, interpolée linéairement entre recensements (constante après 2022) × population totale de l'année (estimation IBGE ; 2007, 2022 et 2023 interpolés/recensement) ; **dit : dénominateurs lissés, le taux ne capte que les variations du numérateur entre recensements** |
+| Canal (H3) | mariages homme-femme par município et groupe d'âge de l'épouse 2013-2024 (table 4412) ; pas d'état civil de la mère dans la table 2609 | **H3a** sur la fenêtre 2013-2024 (mariages de femmes pour 1 000 femmes du groupe d'âge ; pré-période courte, dite) ; H3b et H3c non testables (dit) |
+| Forme du résultat | nombreuses petites unités (médiane ≈ 11 000 habitants) | log(naissances + 0,5 pour 1 000 femmes) comme en Colombie ; Poisson à effets fixes en comparaison ; taux brut / asinh en sensibilité |
+| Contrôles de pré-période (§4.1) | recensement 2010, naissances 2003-2013 | log de la population 2010, part des femmes 15-49 dans la population 2010, niveau moyen 2008-2013 et tendance 2008-2013 du log du taux 15-49 ; liste écrite ici, avant estimation |
+| Placebo H5b | décès par município non téléchargés | H5b non construit (dit) ; H5a et H5c estimés |
+| Hétérogénéité H6 | population 2010 ; grande région (5) ; pas de rang de naissance ni de densité | H6 : terciles de population 2010 et grandes régions |
+| COVID | 2020-2021 | robustesse « sans 2020-2021 » |
+
+## A6 — Espagne : addendum de mesure et décision d'inclusion (04/10/2026, avant toute estimation)
+
+Rédigé fichiers en main (check-list dans `docs/data_log.md` ; sources `es_cobertura_municipios_2013_2020`, `es_cobertura_municipios_2021_2025`,
+`es_ine_nacimientos_microdatos`, `es_ine_matrimonios_microdatos`, `es_ine_padron_municipios_edad`). Aucune estimation n'a été lancée sur
+l'Espagne avant ce commit.
+
+### Critères d'inclusion (§4.3)
+
+| Critère | Constat | Verdict |
+|---|---|---|
+| (1) traitement infranational daté, ≥ 3 ans de pré-période pour ≥ 30 % des unités | MINECO/SETELECO, couverture LTE en % de la population par municipio (8 131) : déc. 2013, déc. 2014, déc. 2015, juin 2016 → juin 2020 ; municipios ≥ 50 % : 210, 1 051, 2 795, 3 713, 5 313, 7 274, 7 735, 7 948. Parmi les 753 municipios de plus de 10 000 habitants (seuls identifiables dans les naissances, critère 2) : 179 (déc. 2013), 580 (déc. 2014), 749 (déc. 2015), 753 (juin 2016). Naissances par municipio depuis 2007 → ≥ 6 ans de pré-période pour les 574 municipios (76 %) basculés après 2013 | rempli |
+| (2) naissances par âge au niveau de l'unité | INE, microdonnées des naissances : municipio de résidence de la mère codé **seulement si > 10 000 habitants** (81,7 % des naissances en 2019), âge de la mère, état civil, rang | rempli pour les municipios > 10 000 habitants (l'unité est donc ce sous-ensemble ; les tables agrégées INE par municipio ne couvrent que 155 villes) |
+| (3) téléchargement scriptable, licence | xlsx sur digital.gob.es (datos.gob.es bloqué par le proxy), zip INE ; réutilisation libre avec mention | rempli |
+| (4) dénominateurs par sexe et âge | INE, Padrón continuo par municipio, sexe et âge quinquennal, 1er janvier 2003-2022 (série arrêtée en 2022) | rempli |
+
+Décision : **Espagne incluse** dans la partie causale, avec une **limite d'identification dite avant estimation** : parmi les municipios
+> 10 000 habitants, la bascule ≥ 50 % est concentrée sur 2013-2015 et aucun n'est « jamais traité » ; Callaway & Sant'Anna identifie les ATT(g,t)
+contre les cohortes pas encore traitées, donc pour 2014 (contrôle = cohortes 2015-2016) et 2015 (contrôle = cohorte 2016, 4 municipios) : les
+effets au-delà de +1 ne sont pas identifiés sur la spécification primaire ; les comparaisons (TWFE, Sun & Abraham, did2s) sur la fenêtre
+identifiée seulement.
+
+### Décisions de mesure (§4.2 ; catégories §10)
+
+| Point | Ce que disent les fichiers | Décision |
+|---|---|---|
+| Unité | municipio (code INE à 5 chiffres = province + municipio) codé si > 10 000 habitants l'année de la naissance | municipios codés **toutes les années de la fenêtre** (panel équilibré) ; grappes = municipio ; les municipios ayant changé de code (fusions) sont exclus s'ils ne sont pas identifiables sur toute la fenêtre |
+| Traitement | % de population couverte en LTE, instantanés de décembre (2013-2015) puis de juin (2016-2020) | cohorte = année du premier instantané avec part ≥ 50 % (variante 90 %) ; déc. 2013 → 2013 (4G commercialisée depuis mi-2013 : cohorte 2013 gardée en primaire, **exclue en robustesse** comme première observation) ; juin t → t ; municipios < 50 % en juin 2020 = jamais traités sur la fenêtre (4 parmi les > 10 000) |
+| Années | microdonnées 2007-2024 (dessins d'enregistrement 2007-2015 et 2016+) ; Padrón par âge 2003-2022 | fenêtre d'estimation **2007-2022** (les naissances 2023-2024 n'ont pas de dénominateur municipal par âge : dit) ; robustesse « sans 2020-2021 » |
+| Groupes d'âge | âge de la mère en années (EDADM) | 15-19, 20-24, 25-29, 30-34, 35-39, 40-49 ; < 15 et ≥ 50 hors périmètre, comptés |
+| Dénominateurs | Padrón au 1er janvier par groupe quinquennal | femmes du groupe au 1er janvier de l'année (pas d'interpolation ; moyenne 1er janvier t / t+1 non retenue pour rester comparable aux autres pays) |
+| Canal (H3) | mariages (microdonnées 2008-2024, municipio de résidence du couple codé si > 10 000, sexe et âge des conjoints) ; état civil de la mère à la naissance (célibataire, mariée, veuve, divorcée/séparée ; l'union libre n'est pas distinguée) | **H3a** = mariages de femmes (couples homme-femme, âge de l'épouse) pour 1 000 femmes du groupe, fenêtre 2008-2022 ; **H3b** = naissances de mères **mariées** pour 1 000 femmes (dénominateur : toutes les femmes, dit) ; H3c non testable |
+| Forme du résultat | municipios > 10 000 habitants : peu de cellules nulles par groupe d'âge | log(naissances + 0,5 pour 1 000 femmes) comme en Colombie et au Brésil ; Poisson à effets fixes en comparaison |
+| Contrôles de pré-période (§4.1) | Padrón, naissances 2007-2012 | log de la population 2013, part des femmes 15-49 en 2013, part des naissances de mères nées à l'étranger 2010-2012, tendance 2008-2012 du log du taux 15-49 ; liste écrite ici |
+| Placebo H5b | décès par municipio non téléchargés | H5b non construit (dit) ; H5a et H5c estimés |
+| Hétérogénéité H6 | population 2013 ; rang (NUMHV) | H6 : terciles de population 2013 ; rang 1 vs 2+ |
+| COVID | 2020-2021 | robustesse « sans 2020-2021 » |
