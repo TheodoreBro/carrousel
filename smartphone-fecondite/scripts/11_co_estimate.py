@@ -281,6 +281,7 @@ def part_robust(args) -> None:
     a = with_covs(aggregate(d, GROUPS, "15-49"), cov).dropna(subset=COVS)
     kw = dict(covs=COVS, estimators=("cs",))
     e5.run_block(col, a[a.year >= 2008], "y_log", "robustesse", "H1", Y_ALL, "fenêtre 2008-2024", "unit", **kw)
+    e5.run_block(col, a[a.year <= 2023], "y_log", "robustesse", "H1", Y_ALL, "fenêtre 1998-2023 (sans l'année provisoire 2024)", "unit", **kw)
     e5.run_block(col, a[a.year <= 2019], "y_log", "robustesse", "H1", Y_ALL, "fenêtre 1998-2019 (hors COVID) ; cohortes 2020-2023 = contrôle", "unit", **kw)
     e5.run_block(col, a[~a.year.isin([2020, 2021])], "y_log", "robustesse", "H1", Y_ALL, "sans 2020-2021", "unit", **kw)
     e5.run_block(col, a, "y_log", "robustesse", "H1", Y_ALL, "grappes = departamento", "unit", cluster="dep", covs=COVS, estimators=("cs", "twfe"))
