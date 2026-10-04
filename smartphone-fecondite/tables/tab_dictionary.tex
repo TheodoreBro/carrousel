@@ -1,0 +1,27 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Dictionnaire des variables}\label{tab:dictionary}
+\small
+\begin{tabular}{lp{9.5cm}l}
+\toprule
+Variable & Définition & Script \\
+\midrule
+\texttt{cohort} & année de bascule de l'unité (0 = jamais sur la fenêtre) & 02, 09, 13, 16 \\
+\texttt{y\_log} & log(naissances + 0,5 pour 1 000 femmes du groupe d'âge) ; France : log(naissances pour 1 000 femmes) au département & 03, 10, 14, 17 \\
+\texttt{y\_rate, y\_asinh} & taux brut pour 1 000 femmes ; asinh du taux & 05, 11, 15 \\
+\texttt{y\_marr} & log(mariages de femmes + 0,5 pour 1 000 femmes du groupe) & 03, 14, 17 \\
+\texttt{y\_union, y\_married} & log(naissances de mères en union (Colombie) ou mariées (Espagne) + 0,5 pour 1 000 femmes) & 10, 17 \\
+\texttt{y\_rank1, y\_rank2} & idem pour les naissances de rang 1 et de rang 2 et plus & 10, 17 \\
+\texttt{women} & femmes du groupe d'âge : RP/estimations INSEE (France), projections DANE (Colombie), interpolation entre recensements IBGE (Brésil), Padrón au 1er janvier (Espagne) & 03, 10, 14, 17 \\
+\texttt{covariables} & France : 5 covariables de pré-période (A2) ; Colombie : part cabecera, log population, part de mères diplômées, tendance 2010-2014 ; Brésil : log population 2010, part des femmes 15-49, niveau et tendance 2008-2013 ; Espagne : log population 2013, part des femmes 15-49, part de mères nées à l'étranger 2010-2012, tendance 2008-2012 & 05, 11, 15 \\
+\texttt{ATT[1,k]} & moyenne des effets +1 à +k (k = dernière période identifiée $\leq$ 5), covariance complète des coefficients & common/did.py \\
+\texttt{post\_avg\_balanced} & même agrégat à composition constante (cohortes observées jusqu'à +k) & common/did.py \\
+\texttt{pre\_test} & test de Wald joint des coefficients $-8$ à $-2$ (covariance des fonctions d'influence) & common/did.py \\
+\texttt{p\_holm} & p corrigée de Holm dans la famille indiquée & 05, 11, 15 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Les définitions complètes sont dans les en-têtes des scripts cités et dans docs/preregistration\_addenda.md.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

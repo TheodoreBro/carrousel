@@ -1,0 +1,19 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Dessin par pays : unité, traitement, fenêtre et échantillon de la spécification H1}\label{tab:design}
+\small
+\begin{tabular}{lp{2.6cm}p{4.6cm}lrlr}
+\toprule
+Pays & Unité & Traitement & Fenêtre & Unités & Cohortes & Jamais traitées \\
+\midrule
+France (commune) & commune & D1 : premier émetteur 4G en service (ANFR) & 2008-2024 & 34\,704 & 2013-2027 & 13\,312 \\
+Colombie & municipio × âge & part de population couverte en 4G $\geq$ 50 \% (MinTIC), censure 2015-T4 & 1998-2024 & 932 & 2016-2023 & 67 \\
+Brésil & município × âge & présence 4G d'au moins un opérateur (Anatel) & 2003-2024 & 5\,558 & 2014-2023 & 0 \\
+Espagne & municipio ($>$ 10 000 hab.) × âge & part de population couverte en LTE $\geq$ 50 \% (MINECO) & 2007-2022 & 722 & 2013-2016 & 0 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : tables/t\_sample\_*.csv (scripts 04, 11, 15) ; addenda A1-A6.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
