@@ -47,6 +47,74 @@ class Source:
     latest: int = 0                                 # datagouv : ne garder que les n derniers fichiers
 
 
+# ----------------------------------------------------------------------------- Brésil : API IBGE (agregados v3)
+IBGE_API = "https://servicodados.ibge.gov.br/api/v3/agregados"
+# table 2609, classification 232 « ano de nascimento » : identifiants de catégorie par année (métadonnées lues le 04/10/2026)
+IBGE_2609_YEAR_IDS = {2002: 102883, 2003: 104320, 2004: 107161, 2005: 109555, 2006: 111751, 2007: 118095, 2008: 119202, 2009: 7996,
+                      2010: 12029, 2011: 15773, 2012: 31660, 2013: 33044, 2014: 39331, 2015: 40289, 2016: 40523, 2017: 46256,
+                      2018: 47550, 2019: 48972, 2020: 56680, 2021: 58297, 2022: 71500, 2023: 77792, 2024: 82135}
+# classification 240 « idade da mãe » : total, < 15, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50+, ignorée
+IBGE_2609_AGE_IDS = "0,5370,5414,5376,5382,5388,5394,5400,5406,5412,5413"
+# recensements : classification 287 « idade », âges simples 15 à 49 ans (mêmes identifiants dans les tables 1378 et 9514)
+IBGE_SINGLE_AGES_15_49 = ("6572,6573,6574,6575,6576,6577,6578,6579,6580,6581,6582,6656,6657,6658,6659,6583,6584,6585,6586,6587,6588,6589,"
+                          "6590,6591,6592,6593,6594,6595,6596,6597,6598,6599,6600,6601,6602")
+# table 4412 (mariages), classification 667 « grupo de idade do segundo cônjuge » (= l'épouse dans les mariages homme-femme :
+# vérifié le 04/10/2026 sur les totaux nationaux 2015, 122 518 seconds conjoints de 15-19 ans contre 31 892 premiers conjoints)
+IBGE_4412_WIFE_AGE_IDS = "0,33006,33007,33013,33019,33025,33031,33037,33038,33039,33040,33041,33042"
+
+
+def _ibge_births_urls() -> str:
+    # l'API refuse (HTTP 500) au-delà d'environ 6 combinaisons de catégories × 5 570 municípios : 4 requêtes par année
+    groups = ["5414,5376,5382", "5388,5394,5400", "5406,5412,5413", "0,5370"]
+    items = []
+    for y in range(2003, 2025):
+        ids = f"{IBGE_2609_YEAR_IDS[y]},{IBGE_2609_YEAR_IDS[y - 1]}"    # nés dans l'année et dans l'année précédente (enregistrement tardif)
+        for k, g in enumerate(groups):
+            items.append(f"{IBGE_API}/2609/periodos/{y}/variaveis/217?localidades=N6[all]&classificacao=232[{ids}]%7C240[{g}]%7C2[0]"
+                         f"@@ibge2609_nascidos_{y}_{k}.json")
+    return "|".join(items)
+
+
+def _chunks(ids: str, n: int) -> list[str]:
+    parts = ids.split(",")
+    return [",".join(parts[i:i + n]) for i in range(0, len(parts), n)]
+
+
+def _ibge_census_urls() -> str:
+    items = [f"{IBGE_API}/200/periodos/2000/variaveis/93?localidades=N6[all]&classificacao=2[5]%7C1[0]%7C58[{g}]@@ibge200_censo2000_mulheres_{k}.json"
+             for k, g in enumerate(_chunks("1143,1144,1145,1146,1147,1148,1149", 4))]
+    items += [f"{IBGE_API}/1378/periodos/2010/variaveis/93?localidades=N6[all]&classificacao=1[0]%7C2[5]%7C287[{g}]%7C455[0]@@ibge1378_censo2010_mulheres_{k}.json"
+              for k, g in enumerate(_chunks(IBGE_SINGLE_AGES_15_49, 5))]
+    items += [f"{IBGE_API}/9514/periodos/2022/variaveis/93?localidades=N6[all]&classificacao=2[5]%7C287[{g}]%7C286[0]@@ibge9514_censo2022_mulheres_{k}.json"
+              for k, g in enumerate(_chunks(IBGE_SINGLE_AGES_15_49, 5))]
+    return "|".join(items)
+
+
+def _ibge_estimates_urls() -> str:
+    years = [2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2024]
+    return "|".join(f"{IBGE_API}/6579/periodos/{y}/variaveis/9324?localidades=N6[all]@@ibge6579_populacao_{y}.json" for y in years)
+
+
+def _ibge_marriages_urls() -> str:
+    return "|".join(f"{IBGE_API}/4412/periodos/{y}/variaveis/221?localidades=N6[all]&classificacao=244[0]%7C664[0]%7C665[0]%7C666[0]%7C667[{g}]"
+                    f"@@ibge4412_casamentos_{y}_{k}.json" for y in range(2013, 2025) for k, g in enumerate(_chunks(IBGE_4412_WIFE_AGE_IDS, 4)))
+
+
+# ----------------------------------------------------------------------------- Espagne : microdonnées INE (MNP)
+def _ine_births_urls() -> str:
+    items = [f"https://www.ine.es/ftp/microdatos/mnp_nacim/datos%20nacimientos{y:02d}.zip@@datos_nacimientos20{y:02d}.zip" for y in range(7, 11)]
+    items += [f"https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos{y:02d}.zip@@datos_nacimientos20{y:02d}.zip" for y in range(11, 25)]
+    items.append("https://www.ine.es/ftp/microdatos/mnp_nacim/disreg_nacimientos.zip")
+    items.append("https://www.ine.es/ftp/microdatos/mnp_nacim/dr_MNPnacim_Desde2016.xlsx")
+    return "|".join(items)
+
+
+def _ine_marriages_urls() -> str:
+    items = [f"https://www.ine.es/ftp/microdatos/mnp_matri/datos_{y}.zip@@datos_matrimonios{y}.zip" for y in range(2008, 2025)]
+    items.append("https://www.ine.es/ftp/microdatos/mnp_matri/dr_MNPmatrim_Desde2016.xlsx")
+    return "|".join(items)
+
+
 # Pages annuelles INSEE des fichiers détail (constatées le 02/10/2026 sur insee.fr).
 # 1998-2013 : un seul sommaire (2117120) avec 48 sous-pages « Les naissances / Les mariages / Les décès ».
 INSEE_ETAT_CIVIL_SOMMAIRES = {
@@ -253,14 +321,30 @@ SOURCES: list[Source] = [
            "https://datahub.itu.int/data/?i=100095", "ITU (conditions à vérifier)", years="≈2010-2023", granularity="pays",
            notes="datahub.itu.int bloqué au 02/10/2026."),
     # ================================================================== Pays de niveau 1 (addendum requis avant estimation)
-    Source("es_cobertura_2013_2021", "ES", "traitement",
-           "MINECO/SETID — Base de datos histórica 2013-2021 de cobertura de banda ancha fija y móvil (LTE par entidad singular)",
-           "manual", "https://datos.gob.es/en/catalogo/e05068901-base-de-datos-historica-desde-2013-a2020-de-cobertura-banda-ancha-fija-y-movil",
-           "datos.gob.es (licence du jeu à vérifier)", years="2013-2021", granularity="entidad singular de población",
-           notes="datos.gob.es bloqué au 02/10/2026."),
-    Source("es_ine_nacimientos", "ES", "resultat", "INE — Estadística de nacimientos, microdonnées", "manual",
-           "https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736177007&menu=resultados&secc=1254736195443&idp=1254735573002",
-           "INE (réutilisation libre avec mention)", granularity="naissance, commune de résidence (seuil de taille)"),
+    Source("es_cobertura_municipios_2013_2020", "ES", "traitement",
+           "MINECO/SETELECO — Cobertura de banda ancha en España 2013-2020 por municipio (LTE, HSPA, fixe ; % population couverte)",
+           "direct",
+           "https://digital.gob.es/content/dam/portal-mtdfp/avance-digital/telecomunicacion-e-infraestructuras-digitales/areas_interes/banda-ancha/cobertura/documents/cobertura_ba_espana_2013-2020_esp_mun_prov_ccaa_nacional_datosgob.xlsx",
+           "digital.gob.es (jeu publié sur datos.gob.es ; réutilisation des données publiques, Ley 37/2007)", years="déc. 2013, déc. 2014, déc. 2015, juin 2016-2020",
+           granularity="municipio (8 131) ; feuille ES par entidad singular",
+           notes="datos.gob.es refuse le proxy (Incapsula) ; le fichier est servi par digital.gob.es, page « Información de cobertura »."),
+    Source("es_cobertura_municipios_2021_2025", "ES", "traitement",
+           "MINECO/SETELECO — Cobertura de banda ancha en España 2021-2025 por municipio (4G, 5G ; % foyers couverts)", "direct",
+           "https://digital.gob.es/content/dam/portal-mtdfp/avance-digital/telecomunicacion-e-infraestructuras-digitales/areas_interes/banda-ancha/cobertura/documents/Cobertura_BA_Espa%C3%B1a_2021-2025_MUN_PROV_CCAA_Nacional_datosgob_DEF.xlsx@@Cobertura_BA_Espana_2021-2025_MUN_PROV_CCAA_Nacional_datosgob_DEF.xlsx",
+           "digital.gob.es (idem)", years="juin 2023-2025 (4G)", granularity="municipio"),
+    Source("es_ine_nacimientos_microdatos", "ES", "resultat",
+           "INE — Estadística de nacimientos (MNP), microdonnées anonymisées 2007-2024 et dessins d'enregistrement", "direct", _ine_births_urls(),
+           "INE (réutilisation libre avec mention de la source)", years="2007-2024",
+           granularity="naissance : municipio de résidence de la mère (codé si > 10 000 habitants), âge, état civil, rang",
+           notes="Fichiers 2007-2010 à largeur fixe (« datos nacimientosYY.zip », dessin 07_15), 2011-2015 idem, 2016+ multi-formats (parquet)."),
+    Source("es_ine_matrimonios_microdatos", "ES", "resultat",
+           "INE — Estadística de matrimonios (MNP), microdonnées anonymisées 2008-2024 et dessin d'enregistrement", "direct", _ine_marriages_urls(),
+           "INE (réutilisation libre avec mention de la source)", years="2008-2024",
+           granularity="mariage : municipio de résidence (codé si > 10 000 habitants), âge des conjoints"),
+    Source("es_ine_padron_municipios_edad", "ES", "resultat",
+           "INE — Padrón continuo : población por sexo, municipios y edad (grupos quinquenales), 1 janvier 2003-2022 (table 33570, PC-Axis)",
+           "direct", "https://www.ine.es/jaxiT3/files/t/es/px/33570.px@@ine_padron_33570.px",
+           "INE (réutilisation libre avec mention de la source)", years="2003-2022", granularity="municipio × sexe × âge quinquennal"),
     Source("se_pts_tackning", "SE", "traitement",
            "PTS — Mobiltäcknings- och bredbandskartläggning : tabellbilaga historiska uppgifter teknik (fast bredband via LTE, par kommun, "
            "2015-2022) et tabellbilaga mobiltäckning (2020-2024 ; 2025)",
@@ -284,6 +368,24 @@ SOURCES: list[Source] = [
            "manual", "https://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0101/BE0101L/CivilstandTypPar", "SCB (CC0)", years="2000-2024",
            granularity="kommun × groupe d'âge quinquennal × sexe", notes="Métadonnées vérifiées le 04/10/2026. Non téléchargé : pays exclu (A3)."),
     # Colombie (vérifié le 04/10/2026 ; addendum A4)
+    Source("br_anatel_municipios_atendidos", "BR", "traitement",
+           "Anatel — Municípios atendidos por SMP (présence de 2G/3G/4G/5G par opérateur et município ; déc. 2013-2016 annuel, 2017+ mensuel)",
+           "direct", "https://www.anatel.gov.br/dadosabertos/paineis_de_dados/infraestrutura/smp_mun_atendidos.zip",
+           "Anatel dados abertos (Licença de dados abertos — ODbL / CC BY, cf. portal)", years="2013-12 → 2026-08", granularity="município × opérateur × technologie",
+           notes="Au 2013-12 toutes les lignes 4G sont « NÃO » (y compris São Paulo) : première observation utilisable 2014-12."),
+    Source("br_ibge_nascidos_vivos", "BR", "resultat",
+           "IBGE — Estatísticas do Registro Civil, table 2609 : nascidos vivos par município de résidence de la mère, année de naissance et âge de la mère (API agregados)",
+           "direct", _ibge_births_urls(), "IBGE (données ouvertes)", years="2003-2024",
+           granularity="município × groupe d'âge de la mère ; naissances enregistrées dans l'année, nées dans l'année ou l'année précédente"),
+    Source("br_ibge_censo_mulheres", "BR", "resultat",
+           "IBGE — Recensements 2000 (table 200, échantillon), 2010 (table 1378) et 2022 (table 9514) : femmes par âge et município (API agregados)",
+           "direct", _ibge_census_urls(), "IBGE (données ouvertes)", years="2000, 2010, 2022", granularity="município × âge (quinquennal en 2000, simple en 2010 et 2022)"),
+    Source("br_ibge_populacao_estimada", "BR", "resultat",
+           "IBGE — Estimativas da população residente por município (table 6579, API agregados)", "direct", _ibge_estimates_urls(),
+           "IBGE (données ouvertes)", years="2001-2006, 2008-2009, 2011-2021, 2024", granularity="município"),
+    Source("br_ibge_casamentos", "BR", "resultat",
+           "IBGE — Estatísticas do Registro Civil, table 4412 : mariages homme-femme par município et groupe d'âge de l'épouse (API agregados)",
+           "direct", _ibge_marriages_urls(), "IBGE (données ouvertes)", years="2013-2024", granularity="município × groupe d'âge de l'épouse"),
     Source("co_mintic_cobertura", "CO", "traitement",
            "MinTIC — Cobertura móvil por tecnología, departamento y municipio por proveedor (centro poblado × trimestre × opérateur, 2015-T4 →)",
            "socrata", "9mey-c8s8", "datos.gov.co (CC BY-SA 4.0)", years="2015-T4 → 2023-T3", granularity="centro poblado (cabecera / resto)",
@@ -312,16 +414,6 @@ SOURCES: list[Source] = [
            "https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-sexo-edad-proypoblacion-Mun-2005-2017_VP.xlsx|"
            "https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaSexoEdadMun-2018-2042_VP.xlsx",
            "DANE (document public)", years="1995-2042", granularity="municipio × área × sexe × âge simple"),
-    Source("br_anatel_acessos", "BR", "traitement", "Anatel — Acessos SMP por município e tecnologia (mensuel)", "manual",
-           "https://www.anatel.gov.br/dadosabertos/PDA/Acessos/", "Dados abertos (licence à vérifier)", years="2007 →", granularity="município"),
-    Source("br_anatel_cobertura", "BR", "traitement", "Anatel — Cobertura da telefonia móvel por setor censitário", "manual",
-           "https://www.anatel.gov.br/dadosabertos/PDA/Cobertura_Movel/", "Dados abertos", granularity="secteur censitaire → município"),
-    Source("br_sinasc", "BR", "resultat", "DATASUS — SINASC microdonnées (DN{UF}{AAAA}.dbc)", "manual",
-           "ftp://ftp.datasus.gov.br/dissemin/publicos/SINASC/NOV/DNRES/", "DATASUS (ouvert)", years="1996 →", granularity="naissance, município",
-           notes="FTP : ne passe pas par le proxy HTTPS (constaté 02/10/2026) ; repli PCDaS/Fiocruz."),
-    Source("br_sidra_casamentos", "BR", "resultat", "IBGE SIDRA — Tabela 4412, casamentos por idade dos cônjuges, município", "manual",
-           "https://apisidra.ibge.gov.br/values/t/4412/n6/all", "IBGE", granularity="município × âge",
-           notes="apisidra.ibge.gov.br bloqué au 02/10/2026."),
 ]
 
 BY_ID = {s.id: s for s in SOURCES}

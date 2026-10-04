@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RAW = ROOT / "data" / "raw"
 MANIFEST = RAW / "manifest.json"
 DATA_LOG = ROOT / "docs" / "data_log.md"
-UA = "smartphone-fecondite-wp/0.2 (recherche reproductible ; contact via le dépôt GitHub)"
+UA = "smartphone-fecondite-wp/0.2 (recherche reproductible ; contact via le depot GitHub)"
 BACKOFF = (2, 4, 8, 16, 16, 16, 16, 16)      # 9 tentatives : le relais data.gouv.fr coupe souvent
 MELODI = "https://api.insee.fr/melodi"
 
@@ -285,7 +285,8 @@ def _keep(name: str, src: Source) -> bool:
 def resolve(src: Source) -> list[str]:
     """Renvoie la liste des URL de fichiers à télécharger pour une source."""
     if src.resolver == "direct":
-        return src.ref.split("|")
+        # « url@@nom » donne un nom de fichier local explicite (API avec paramètres de requête, URL avec espaces)
+        return [item.split("@@")[0] for item in src.ref.split("|")]
     if src.resolver == "datagouv":
         urls = [res["url"] for res in _datagouv_resources(src.ref) if res.get("url")]
         urls = [u for u in urls if _keep(Path(urlparse(u).path).name, src)]
@@ -359,6 +360,8 @@ def download_source(src: Source, verbose: bool = True) -> list[Path]:
     names = {}
     if src.resolver == "nada":
         names = {f"https://microdatos.dane.gov.co/index.php/catalog/{item.split('=')[0]}": item.split("=")[1] for item in src.ref.split("|")}
+    if src.resolver == "direct":
+        names = {item.split("@@")[0]: item.split("@@")[1] for item in src.ref.split("|") if "@@" in item}
     for url in resolve(src):
         if verbose:
             print(f"  ↓ {url}")

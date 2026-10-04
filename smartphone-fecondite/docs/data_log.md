@@ -68,6 +68,46 @@ cloud.r-project.org.
   rempli. Trois dispositions de fichier différentes (lecteur `scripts/common/co.py`).
 - Non disponibles, dits : mariages par municipio × âge (H3a) ; décès (H5b, non téléchargés) ; revenu communal (H6).
 
+### Brésil (vérifié le 04/10/2026) — inclus (addendum A5, committé avant toute estimation)
+
+- Critère 1, traitement : Anatel, « Municípios atendidos por SMP » (dados abertos, `smp_mun_atendidos.zip`, 250 Mo) : présence de chaque
+  technologie (2G/3G/4G/5G) par opérateur et município, décembre 2013-2016 puis mensuel 2017 → 2026-08, 5 570 municípios. Au 2013-12 toutes
+  les lignes 4G sont « NÃO » (São Paulo compris) : première observation utilisable 2014-12. Première année avec 4G (≥ 1 opérateur) :
+  2014 : 189, 2015 : 298, 2016 : 551, 2017 : 2 739, 2018 : 680, 2019 : 399, 2020 : 424, 2021 : 170, 2022-2023 : 120. Naissances dès 2003 →
+  ≥ 3 ans de pré-période pour toutes les unités — rempli. Vérifiés et non utilisables : « Cobertura móvel » (% d'habitants couverts par
+  município, séries 2021-11 → seulement), « Acessos » par technologie (par UF × code national avant 2019, par município seulement depuis
+  2019), « Estações SMP » (date de premier licenciement de la station, pas de la technologie : 1 493 municípios « 4G » dès 1999).
+- Critère 2, naissances par âge : IBGE, Estatísticas do Registro Civil, table 2609 (API agregados v3) : nés vivants enregistrés dans
+  l'année par município de résidence de la mère, année de naissance et groupe d'âge de la mère, 2003-2024 ; 27-39 municípios « - »
+  (secret ou absence) par cellule — rempli. DATASUS/SINASC inaccessible (ftp.datasus.gov.br et tabnet : connexion réinitialisée par le
+  proxy ; PCDaS exige un compte).
+- Critère 3, scriptable et licence : fichiers zip Anatel et API IBGE sans identification ; dados abertos Anatel et IBGE — rempli.
+  L'API IBGE renvoie HTTP 500 au-delà d'≈ 6 combinaisons de catégories × 5 570 municípios et HTTP 400 si l'en-tête User-Agent contient
+  un caractère non ASCII (corrigé dans `download.py`).
+- Critère 4, dénominateurs : IBGE, recensements 2000 (table 200, groupes quinquennaux), 2010 (table 1378) et 2022 (table 9514, âges
+  simples), femmes par município ; estimations annuelles de population totale (table 6579) pour les années intercensitaires — rempli
+  par interpolation (A5). Les projections municipales par âge du ministère de la Santé (DATASUS) sont inaccessibles.
+- Mariages : IBGE table 4412 (2013-2024, município × groupe d'âge de l'épouse) — H3a sur 2013-2024 seulement (A5).
+
+### Espagne (vérifiée le 04/10/2026) — incluse (addendum A6, committé avant toute estimation)
+
+- Critère 1, traitement : MINECO/SETELECO, « Cobertura de banda ancha en España » (datos.gob.es, fichiers servis par digital.gob.es :
+  datos.gob.es lui-même refuse le proxy, Incapsula) : % de population couverte en LTE par municipio (8 131) en déc. 2013, déc. 2014,
+  déc. 2015, juin 2016-2020, puis 4G (% foyers) juin 2023-2025. Municipios ≥ 50 % : 210 (déc. 2013), 1 051 (2014), 2 795 (2015), 3 713
+  (juin 2016), 5 313 (2017), 7 274 (2018), 7 735 (2019), 7 948 (2020). Parmi les 753 municipios de plus de 10 000 habitants (ceux dont les
+  naissances sont identifiables, critère 2) : 179 (déc. 2013), 580 (2014), 749 (2015), 753 (2016) — variation concentrée sur 2014-2015.
+  Naissances par municipio dès 2007 (1996 possible) → ≥ 3 ans de pré-période pour ≥ 75 % des unités — rempli.
+- Critère 2, naissances par âge : INE, Estadística de nacimientos (MNP), microdonnées annuelles 1975-2024 : municipio de résidence de la
+  mère codé seulement pour les municipios de plus de 10 000 habitants (variable MUNREM, 81,7 % des naissances de 2019), âge de la mère,
+  état civil, rang — rempli pour ces municipios. Les tables agrégées INE par municipio et âge (Indicadores demográficos básicos) ne
+  couvrent que 155 capitales et grandes villes (2014 →).
+- Critère 3, scriptable et licence : fichiers zip INE et xlsx digital.gob.es sans identification ; INE réutilisation libre avec mention ;
+  données publiques du ministère — rempli.
+- Critère 4, dénominateurs : INE, Padrón continuo, population par sexe, municipio et âge quinquennal au 1er janvier 2003-2022 (table
+  PC-Axis 33570, 8 131 municipios) — rempli ; pas de table municipale par âge après 2022 (la série s'arrête au 1er janvier 2022).
+- Mariages : INE, Estadística de matrimonios, microdonnées 2008-2024 (municipio de résidence codé si > 10 000 habitants, âges des
+  conjoints) — H3a possible.
+
 ## Fichiers téléchargés
 
 130 fichiers, 1,964 Mo. Empreintes complètes dans `data/raw/manifest.json`.
@@ -236,3 +276,37 @@ cloud.r-project.org.
 | co_dane_proyecciones | CO | resultat | https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-sexo-edad-proypoblacion-Mun-1995-2004.xlsx | 2026-10-04 13:14 | 42764304 | `728612eeae0dfdc3…` | DANE (document public) | ok |
 | co_dane_proyecciones | CO | resultat | https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/DCD-area-sexo-edad-proypoblacion-Mun-2005-2017_VP.xlsx | 2026-10-04 13:14 | 55969926 | `f804eb4408d2714c…` | DANE (document public) | ok |
 | co_dane_proyecciones | CO | resultat | https://www.dane.gov.co/files/censo2018/proyecciones-de-poblacion/Municipal/PPED-AreaSexoEdadMun-2018-2042_VP.xlsx | 2026-10-04 13:14 | 131609579 | `7e461635315664d4…` | DANE (document public) | ok |
+| br_anatel_municipios_atendidos | BR | traitement | https://www.anatel.gov.br/dadosabertos/paineis_de_dados/infraestrutura/smp_mun_atendidos.zip | 2026-10-04 14:38 | 26491227 | `f63facc2a787b52d…` | Anatel dados abertos (Licença de dados abertos — ODbL / CC BY, cf. portal) | ok |
+| es_cobertura_municipios_2013_2020 | ES | traitement | https://digital.gob.es/content/dam/portal-mtdfp/avance-digital/telecomunicacion-e-infraestructuras-digitales/areas_interes/banda-ancha/cobertura/documents/cobertura_ba_espana_2013-2020_esp_mun_prov_ccaa_nacional_datosgob.xlsx | 2026-10-04 14:38 | 42551810 | `f91f9342832192a8…` | digital.gob.es (jeu publié sur datos.gob.es ; réutilisation des données publiques, Ley 37/2007) | ok |
+| es_cobertura_municipios_2021_2025 | ES | traitement | https://digital.gob.es/content/dam/portal-mtdfp/avance-digital/telecomunicacion-e-infraestructuras-digitales/areas_interes/banda-ancha/cobertura/documents/Cobertura_BA_Espa%C3%B1a_2021-2025_MUN_PROV_CCAA_Nacional_datosgob_DEF.xlsx | 2026-10-04 14:38 | 6546919 | `4fe38973946c77c6…` | digital.gob.es (idem) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos%20nacimientos07.zip | 2026-10-04 14:39 | 15989493 | `0a1d2103f8c36000…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos%20nacimientos08.zip | 2026-10-04 14:39 | 20012275 | `af9f5bfb4c400f52…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos%20nacimientos09.zip | 2026-10-04 14:39 | 17399736 | `075bb9cc81b7dce6…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos%20nacimientos10.zip | 2026-10-04 14:39 | 18173312 | `ce4f7d40c80f6d52…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos11.zip | 2026-10-04 14:39 | 16587658 | `e04e0f568c3ed362…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos12.zip | 2026-10-04 14:40 | 17005785 | `f05268e7183503a6…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos13.zip | 2026-10-04 14:40 | 13493884 | `87fe1970971d6c18…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos14.zip | 2026-10-04 14:40 | 14427458 | `45d8398a57f05485…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos15.zip | 2026-10-04 14:40 | 13315650 | `e6d2ce704e8d3ccd…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos16.zip | 2026-10-04 14:42 | 105928499 | `fc04e52d31c7c507…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos17.zip | 2026-10-04 14:43 | 101371273 | `aa42db1aa5fc4f3f…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos18.zip | 2026-10-04 14:44 | 96817771 | `279f2c88efd53237…` | INE (réutilisation libre avec mention de la source) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos19.zip | 2026-10-04 14:45 | 94024849 | `b68474fcc4d9779e…` | INE (réutilisation libre avec mention de la source) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2003/variaveis/217?localidades=N6[all]&classificacao=232[104320,102883]%7C240[5414,5376,5382]%7C2[0] | 2026-10-04 14:46 | 4038159 | `74db239f7208611f…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2003/variaveis/217?localidades=N6[all]&classificacao=232[104320,102883]%7C240[5388,5394,5400]%7C2[0] | 2026-10-04 14:46 | 4025421 | `a62d959fd4e59069…` | IBGE (données ouvertes) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos20.zip | 2026-10-04 14:46 | 88969171 | `53841f279a5aa5c9…` | INE (réutilisation libre avec mention de la source) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2003/variaveis/217?localidades=N6[all]&classificacao=232[104320,102883]%7C240[5406,5412,5413]%7C2[0] | 2026-10-04 14:46 | 4016598 | `3db72d64ed81854b…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2003/variaveis/217?localidades=N6[all]&classificacao=232[104320,102883]%7C240[0,5370]%7C2[0] | 2026-10-04 14:46 | 2690242 | `ac6d003a867183ed…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2004/variaveis/217?localidades=N6[all]&classificacao=232[107161,104320]%7C240[5414,5376,5382]%7C2[0] | 2026-10-04 14:46 | 4037757 | `ec347a6866900ba4…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2004/variaveis/217?localidades=N6[all]&classificacao=232[107161,104320]%7C240[5388,5394,5400]%7C2[0] | 2026-10-04 14:46 | 4025388 | `3fae442ce03c5c84…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2004/variaveis/217?localidades=N6[all]&classificacao=232[107161,104320]%7C240[5406,5412,5413]%7C2[0] | 2026-10-04 14:47 | 4016576 | `825852795bc5a5b5…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2004/variaveis/217?localidades=N6[all]&classificacao=232[107161,104320]%7C240[0,5370]%7C2[0] | 2026-10-04 14:47 | 2689892 | `1aa6c56d964744bd…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2005/variaveis/217?localidades=N6[all]&classificacao=232[109555,107161]%7C240[5414,5376,5382]%7C2[0] | 2026-10-04 14:47 | 4037931 | `89620e89f140adc7…` | IBGE (données ouvertes) | ok |
+| es_ine_nacimientos_microdatos | ES | resultat | https://www.ine.es/ftp/microdatos/mnp_nacim/datos_nacimientos21.zip | 2026-10-04 14:47 | 88451510 | `7f42de888e6d50b3…` | INE (réutilisation libre avec mention de la source) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2005/variaveis/217?localidades=N6[all]&classificacao=232[109555,107161]%7C240[5388,5394,5400]%7C2[0] | 2026-10-04 14:47 | 4025519 | `2360d735cde81eb8…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2005/variaveis/217?localidades=N6[all]&classificacao=232[109555,107161]%7C240[5406,5412,5413]%7C2[0] | 2026-10-04 14:47 | 4016512 | `c914a0cb5fe82497…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2005/variaveis/217?localidades=N6[all]&classificacao=232[109555,107161]%7C240[0,5370]%7C2[0] | 2026-10-04 14:47 | 2689978 | `bf081369ec8dc4fd…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2006/variaveis/217?localidades=N6[all]&classificacao=232[111751,109555]%7C240[5414,5376,5382]%7C2[0] | 2026-10-04 14:47 | 4036816 | `5bf73c3f3e68bd2b…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2006/variaveis/217?localidades=N6[all]&classificacao=232[111751,109555]%7C240[5388,5394,5400]%7C2[0] | 2026-10-04 14:48 | 4025240 | `1977ecbdf4664077…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2006/variaveis/217?localidades=N6[all]&classificacao=232[111751,109555]%7C240[5406,5412,5413]%7C2[0] | 2026-10-04 14:48 | 4016436 | `5c43aeef8f086ee4…` | IBGE (données ouvertes) | ok |
+| br_ibge_nascidos_vivos | BR | resultat | https://servicodados.ibge.gov.br/api/v3/agregados/2609/periodos/2006/variaveis/217?localidades=N6[all]&classificacao=232[111751,109555]%7C240[0,5370]%7C2[0] | 2026-10-04 14:48 | 2689473 | `d385909cefdfa482…` | IBGE (données ouvertes) | ok |
