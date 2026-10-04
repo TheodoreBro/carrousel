@@ -219,7 +219,11 @@ def part_h1(args) -> None:
     e5.run_block(col, ac, "y_log", "H1", "H1", Y_ALL, "unités avec covariables, comparaisons", "unit", covs=covs, estimators=("sunab", "did2s", "twfe"),
                  poisson=("births", "women"), notes="comparaisons de la spécification primaire")
     e5.run_block(col, a, "y_log", "H1", "H1", Y_ALL, "toutes unités, sans covariables", "unit", boot=args.boot, poisson=("births", "women"))
-    e5.run_block(col, ac, "y_log", "H1", "H1", Y_ALL, "covariables, contrôle = jamais traités", "unit", covs=covs, control="never_treated", estimators=("cs",))
+    if (ac.cohort == 0).any():
+        e5.run_block(col, ac, "y_log", "H1", "H1", Y_ALL, "covariables, contrôle = jamais traités", "unit", covs=covs, control="never_treated", estimators=("cs",))
+    else:
+        col.add_scalar("H1", "H1", Y_ALL, "covariables, contrôle = jamais traités", "cs", "non estimable", np.nan, np.nan, 0, 0,
+                       "aucune unité jamais traitée sur la fenêtre : contrôle = pas encore traités seulement", aggregation="note")
     for y, lab in (("y_rate", "naissances / 1 000 f. 15-49 (taux brut)"), ("y_asinh", "asinh(taux)")):
         e5.run_block(col, ac, y, "H1", "H1", lab, "unités avec covariables", "unit", covs=covs, estimators=("cs",))
     e5.run_block(col, ac, "y_log", "H1", "H1", Y_ALL, "unités avec covariables, référence −2 (anticipation = 1)", "unit", covs=covs, estimators=("cs",),
