@@ -10,9 +10,9 @@ données ouvertes le permettent (`docs/etape0_pays.md`), synthèse par méta-ana
 
 Voir `docs/handover.md` (état, décisions, prochaines étapes). Préregistration gelée :
 `docs/preregistration.md` ; déviations et décisions de mesure : `docs/preregistration_addenda.md`.
-Étape 2 France faite (données brutes consignées dans `docs/data_log.md`, traitement, résultats, échantillons,
-MDE, first stage) ; aucune estimation lancée. Les hôtes refusés par la politique réseau sont listés dans
-`docs/data_log.md` ; rien n'est remplacé par des valeurs de substitution.
+Étapes 2 et 3 faites pour la France ; pays de niveau 1 vérifiés fichiers en main (check-lists dans `docs/data_log.md`) :
+Suède exclue (A3), Colombie (A4), Brésil (A5) et Espagne (A6) inclus, estimés avec le même code (`make co`, `make br`, `make es`).
+Les hôtes refusés par la politique réseau sont listés dans `docs/data_log.md` ; rien n'est remplacé par des valeurs de substitution.
 
 ## Tout régénérer
 
@@ -35,8 +35,10 @@ latexmk`) ; à défaut, `paper/paper.md` est produit par pandoc.
 
     data/raw          bruts, jamais modifiés ; non versionnés ; empreintes SHA-256 dans docs/data_log.md et data/raw/manifest.json
     data/processed    panels construits
-    scripts/          01_download.py 02_treatment.py 03_outcomes.py 04_sample_mde.py 04b_firststage.py 05_estimate.py 06_figures.py 07_tables.py
-    scripts/common/   sources.py (registre), download.py (téléchargement journalisé), did.py (estimateurs)
+    scripts/          France : 01_download.py 02_treatment.py 03_outcomes.py 04_sample_mde.py 04b_firststage.py 05_estimate.py 06_figures.py 07_tables.py
+                      Suède : 08_se_check.py ; Colombie : 09_co_treatment.py 10_co_outcomes.py 11_co_estimate.py ; Brésil : 13_br_treatment.py 14_br_outcomes.py ;
+                      Espagne : 16_es_treatment.py 17_es_outcomes.py ; Brésil et Espagne : 15_estimate_country.py ; figures et tableaux par pays : 12_co_figures_tables.py --country
+    scripts/common/   sources.py (registre), download.py (téléchargement journalisé), did.py (estimateurs), co.py / br.py / es.py (lecteurs)
     tests/            tests sur données synthétiques
     figures/ tables/  sorties des scripts, référencées dans le texte
     paper/            paper.tex, references.bib → paper.pdf, paper.md
