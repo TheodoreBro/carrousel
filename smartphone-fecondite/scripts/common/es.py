@@ -54,7 +54,7 @@ def read_births(path: Path) -> pd.DataFrame:
                 txt = [n for n in z.namelist() if not n.endswith("/")]
             d = _fixed_width(z.read(txt[0]), BIRTH_FIELDS_0715)
     for c in d.columns:
-        d[c] = d[c].astype(str).str.strip()
+        d[c] = d[c].fillna("").astype(str).str.strip()
     out = pd.DataFrame({"year": pd.to_numeric(d.ANOPAR, errors="coerce")})
     mun = d.MUNREM.str.zfill(3).where(d.MUNREM.str.match(r"^\d{1,3}$") & (d.MUNREM != "") & (d.MUNREM != "000"), np.nan)
     out["municipio"] = (d.PROREM.str.zfill(2) + mun).where(mun.notna(), np.nan)
@@ -79,7 +79,7 @@ def read_marriages(path: Path) -> pd.DataFrame:
             txt = [n for n in z.namelist() if not n.endswith("/") and "dise" not in n.lower() and not n.lower().endswith((".xls", ".xlsx", ".doc", ".pdf"))]
             d = _fixed_width(z.read(txt[0]), MARRIAGE_FIELDS_0815)
     for c in d.columns:
-        d[c] = d[c].astype(str).str.strip()
+        d[c] = d[c].fillna("").astype(str).str.strip()
     hetero = ((d.SEXOCA == WOMAN) & (d.SEXOCB == MAN)) | ((d.SEXOCA == MAN) & (d.SEXOCB == WOMAN))
     out = pd.DataFrame({"year": pd.to_numeric(d.ANOCM, errors="coerce")})
     mun = d.CMUMA.str.zfill(3).where(d.CMUMA.str.match(r"^\d{1,3}$") & (d.CMUMA != "") & (d.CMUMA != "000"), np.nan)
