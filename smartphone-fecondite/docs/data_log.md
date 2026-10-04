@@ -53,6 +53,21 @@ cloud.r-project.org.
 - Mariages par âge : SCB CivilstandTypPar (kommun × âge quinquennal × sexe, 2000-2024) — vérifié, non téléchargé.
 - Fichiers PTS consignés ci-dessous (`se_pts_tackning`), comme preuve du constat.
 
+### Colombie (vérifiée le 04/10/2026) — incluse (addendum A4, committé avant toute estimation)
+
+- Critère 1, traitement : MinTIC, couverture mobile par technologie et centro poblado × opérateur × trimestre (datos.gov.co `9mey-c8s8`,
+  CC BY-SA 4.0), 2015-T4 → 2023-T3, 1 121 municipios ; 361 municipios déjà couverts en 4G à la cabecera au 2015-T4 (censurés à gauche,
+  exclus du primaire) ; les autres (≈ 67 %) ont ≥ 3 ans de pré-période sur les naissances 1998 → — rempli. Construction dans
+  `scripts/09_co_treatment.py`, tableau `tables/t_treatment_co.md`.
+- Critère 2, naissances par âge : DANE EEVV, microdonnées des naissances 1998-2024 (22 archives NADA, municipio de résidence de la mère,
+  âge de la mère en groupes quinquennaux, état civil, rang) — rempli. Agrégation dans `scripts/10_co_outcomes.py`, tableau
+  `tables/t_outcomes_co.md` ; fichier 2024 provisoire (dit en A4).
+- Critère 3, scriptable et licence : API Socrata et URL NADA de téléchargement direct ; CC BY-SA 4.0 (datos.gov.co), microdonnées
+  anonymisées d'usage public (DANE) — rempli. Fichiers consignés ci-dessous (`co_*`).
+- Critère 4, dénominateurs : DANE, projections municipales par área × sexe × âge simple, base CNPV 2018 (1995-2004, 2005-2017, 2018-2042) —
+  rempli. Trois dispositions de fichier différentes (lecteur `scripts/common/co.py`).
+- Non disponibles, dits : mariages par municipio × âge (H3a) ; décès (H5b, non téléchargés) ; revenu communal (H6).
+
 ## Fichiers téléchargés
 
 130 fichiers, 1,964 Mo. Empreintes complètes dans `data/raw/manifest.json`.

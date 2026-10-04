@@ -2,7 +2,7 @@
 PY ?= python
 SCRIPTS := scripts
 
-.PHONY: all check download log build estimate figures tables paper test clean
+.PHONY: all check download log build estimate co figures tables paper test clean
 
 all: download build estimate figures tables paper
 
@@ -25,6 +25,13 @@ log:                ## régénère docs/data_log.md depuis data/raw/manifest.jso
 
 estimate:           ## estimations → tables/*.csv
 	$(PY) $(SCRIPTS)/05_estimate.py
+
+co:                 ## Colombie : traitement, résultats, échantillon/MDE, estimations, figures et tableaux (01_download.py --country CO d'abord)
+	$(PY) $(SCRIPTS)/09_co_treatment.py
+	$(PY) $(SCRIPTS)/10_co_outcomes.py
+	$(PY) $(SCRIPTS)/11_co_estimate.py --part sample
+	$(PY) $(SCRIPTS)/11_co_estimate.py
+	$(PY) $(SCRIPTS)/12_co_figures_tables.py
 
 figures:
 	$(PY) $(SCRIPTS)/06_figures.py
