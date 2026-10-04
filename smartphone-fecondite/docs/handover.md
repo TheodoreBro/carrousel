@@ -82,7 +82,19 @@ après équilibrage du panel. MDE par permutation (80 %, 5 %) : H1 5,2 %, H2b 5,
 
 Résultats : lire `tables/t_estimates_co.md` et `tables/est_co_all.csv`, pas la mémoire. Lignes des règles de décision §6 : H2b `post_avg`
 (municipios avec covariables, bascule 4G ≥ 50 %), H5a `post_avg`, H5c `pre_test` ; H3a et H5b n'existent pas en Colombie (A4), la règle §6
-sur le canal ne peut donc pas y être appliquée (dit dans la synthèse).
+sur le canal ne peut donc pas y être appliquée (dit dans la synthèse). Points à connaître avant de lire (exécution du 04/10, 13:59-14:07,
+commit `1af9826` dans `_run.json`) :
+- la spécification primaire (CS doublement robuste avec covariables) a un pré-test plat (Wald p ≈ 0,2) et des ATT[1,5] proches de zéro
+  avec des écarts-types ≈ 0,04, soit au-dessus de la MDE : les intervalles couvrent des effets de ± 8 % ;
+- les comparaisons TWFE, did2s et Sun & Abraham sans covariables de pré-période donnent des effets négatifs croissants (jusqu'à −0,1 à −0,2
+  log-points à +5…+8) **mais leur pré-test rejette** (Wald p ≈ 0,01) : les coefficients pré lointains (−8 à −5) sont positifs, ce qui ressemble
+  à une tendance différentielle, absorbée par la tendance 2010-2014 incluse dans les covariables (voir `fig_event_co_h1_primaire`) ;
+- la bande sup-t s'élargit beaucoup au-delà de +4 (seules les cohortes 2016-2019 y sont observées) ; l'agrégat à composition constante
+  (`post_avg_balanced`) est reporté ;
+- H6 par tercile de part en cabecera donne des ATT positifs aux terciles 1 et 3 et nul au 2 (p Holm 0,00 au tercile 3) : sans
+  monotonie, et avec des groupes de contrôle petits par cohorte, à lire avec la même prudence que les sous-groupes H6 français ;
+  les lignes « régression de résultat seule » (exploratoires) diffèrent de la ligne doublement robuste (+0,05 contre −0,01 pour H1) ;
+- H3b (naissances de mères en union) ≈ 0 ; les compléments hors union / part en union sont exploratoires.
 
 ## 2. Décisions de l'auteur
 
