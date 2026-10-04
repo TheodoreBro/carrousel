@@ -173,6 +173,8 @@ def covariates_commune(cog: Cog) -> pd.DataFrame:
 COVS = ["log_med12", "share_fsup", "unemp_1524", "pretrend_0811", "dens_inter", "dens_rural"]
 COVS_NOPRE = [c for c in COVS if c != "pretrend_0811"]
 COVS_DEP = ["log_med12", "share_fsup", "unemp_1524", "dens_inter", "dens_rural", "pretrend_0811"]
+UNSTABLE_DEP = ("conditionnement numériquement instable à 96 unités (cohortes de 2 à 33 départements, 6 covariables : estimations de plusieurs "
+                "log-points au test de fonctionnement) ; rapporté, non interprétable, hors familles de Holm (A2.5)")
 
 
 def covariates_dep(cog: Cog) -> pd.DataFrame:
@@ -597,22 +599,19 @@ def part_h2(args) -> None:
     # forme préenregistrée (§5) : doublement robuste avec les covariables de pré-période agrégées au département (A2.5)
     cog = Cog(next(iter(raw_files("fr_insee_cog"))))
     sampc = samp + ", covariables de pré-période agrégées"
-    rc = run_block(col, with_dep_covs(a2539, cog), "y_log", "H2", "H2b", Y_2539, sampc, "unit", cluster="dep", covs=COVS_DEP, boot=args.boot,
-                   estimators=("cs",), notes="forme préenregistrée (doublement robuste avec covariables) ; voir A2.5 sur l'ordre d'ajout", balanced_post=True)
-    fam_a, fam_c, fam_ac, fam_cc = [], [], [], []
+    run_block(col, with_dep_covs(a2539, cog), "y_log", "H2", "H2b", Y_2539, sampc, "unit", cluster="dep", covs=COVS_DEP, estimators=("cs",), exploratory=True,
+              notes="forme préenregistrée (doublement robuste) ; " + UNSTABLE_DEP)
+    fam_a, fam_c = [], []
     for g in GROUPS:
         sub = d[d.age_group == g]
         hyp_g = "H2a" if g in G1524 else "H2c"
         rg = run_block(col, sub, "y_log", "H2", hyp_g, f"log(naissances / 1 000 f. {g})", samp, "unit", cluster="dep", poisson=("births", "women"))
         if "cs" in rg:
             (fam_a if g in G1524 else fam_c).append(_member(rg, f"log(naissances / 1 000 f. {g})", sub))
-        rgc = run_block(col, with_dep_covs(sub, cog), "y_log", "H2", hyp_g, f"log(naissances / 1 000 f. {g})", sampc, "unit", cluster="dep", covs=COVS_DEP, estimators=("cs",))
-        if "cs" in rgc:
-            (fam_ac if g in G1524 else fam_cc).append(_member(rgc, f"log(naissances / 1 000 f. {g})", sub))
+        run_block(col, with_dep_covs(sub, cog), "y_log", "H2", hyp_g, f"log(naissances / 1 000 f. {g})", sampc, "unit", cluster="dep", covs=COVS_DEP, estimators=("cs",),
+                  exploratory=True, notes=UNSTABLE_DEP)
     holm_family(col, "H2", "H2c", samp, fam_c, "25-29, 30-34, 35-39, 40-49")
     holm_family(col, "H2", "H2a", samp, fam_a, "15-19, 20-24")
-    holm_family(col, "H2", "H2c", sampc, fam_cc, "25-29, 30-34, 35-39, 40-49 (avec covariables)")
-    holm_family(col, "H2", "H2a", sampc, fam_ac, "15-19, 20-24 (avec covariables)")
     # H2d : égalité 15-24 vs 25-39 — différence des ATT[1,k] avec bootstrap conjoint par département (stratifié par cohorte)
     r1 = run_block(col, a1524, "y_log", "H2", "H2d", "log(naissances / 1 000 f. 15-24)", samp, "unit", cluster="dep", estimators=("cs",))
     if "cs" in r and "cs" in r1:
@@ -675,7 +674,7 @@ def part_h3(args) -> None:
                                         exploratory=(g == "20-34"), notes="test H3a entrant dans la règle §6" if g == "25-39" else ("agrégat 20-34 : complément" if g == "20-34" else ""))
             if g == "25-39":
                 run_block(col, with_dep_covs(sub, cog, "y_mar"), "y_mar", "H3", "H3a", f"log(mariages de femmes / 1 000 f. {g})", samp + ", covariables de pré-période agrégées",
-                          "unit", cluster="dep", covs=COVS_DEP, estimators=("cs",), notes="forme préenregistrée (doublement robuste), A2.5")
+                          "unit", cluster="dep", covs=COVS_DEP, estimators=("cs",), exploratory=True, notes="forme préenregistrée (doublement robuste) ; " + UNSTABLE_DEP)
         else:
             res[f"mar_{g}"] = run_block(col, sub, "y_mar_asinh", "H3", "H3a", f"asinh(mariages de femmes / 1 000 f. {g})", samp, "unit", cluster="dep",
                                         estimators=("cs", "twfe"), poisson=("marriages_f", "women"),
@@ -722,7 +721,7 @@ def part_h3(args) -> None:
         if g == "25-39":
             run_block(col, with_dep_covs(sub, cog, "y_couple"), "y_couple", "H3", "H3b", f"log(naissances / 1 000 f. en couple {g})",
                       samp + ", femmes en couple interpolées, covariables de pré-période agrégées", "unit", cluster="dep", covs=COVS_DEP, estimators=("cs",),
-                      notes="forme préenregistrée (doublement robuste), A2.5")
+                      exploratory=True, notes="forme préenregistrée (doublement robuste) ; " + UNSTABLE_DEP)
         sub["treated_by_2016"] = ((sub.cohort > 0) & (sub.cohort <= 2016)).astype(float)
         sub["exposure_2021"] = np.clip(2021 - sub.cohort + 1, 0, None).where(sub.cohort > 0, 0.0)
         for (y0, y1, x, xl) in ((2011, 2016, "treated_by_2016", "bascule D3 ≥ 50 % ≤ 2016"), (2011, 2021, "exposure_2021", "années d'exposition en 2021")):
