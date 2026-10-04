@@ -320,8 +320,6 @@ SOURCES: list[Source] = [
     Source("wb_mobile", "WORLD", "panel", "Banque mondiale — Abonnements mobiles pour 100 hab. (IT.CEL.SETS.P2)", "worldbank", "IT.CEL.SETS.P2", "CC BY 4.0"),
     Source("wb_internet", "WORLD", "panel", "Banque mondiale — Usagers d'Internet, % (IT.NET.USER.ZS)", "worldbank", "IT.NET.USER.ZS", "CC BY 4.0"),
     Source("wb_gdp", "WORLD", "panel", "Banque mondiale — PIB/hab. PPA constant (NY.GDP.PCAP.PP.KD)", "worldbank", "NY.GDP.PCAP.PP.KD", "CC BY 4.0"),
-    Source("owid_mobile_broadband", "WORLD", "panel", "ITU via OWID — Abonnements haut débit mobile pour 100 hab.", "owid",
-           "mobile-broadband-subscriptions-per-100-people", "CC BY 4.0", notes="ourworldindata.org bloqué au 02/10/2026."),
     Source("un_wpp_asfr", "WORLD", "panel", "UN WPP 2024 — Taux de fécondité par groupe d'âge quinquennal, tous pays", "direct",
            "https://population.un.org/wpp/assets/Excel%20Files/1_Indicator%20(Standard)/CSV_FILES/WPP2024_Fertility_by_Age5.csv.gz",
            "CC BY 3.0 IGO", years="1950-2023", granularity="pays × âge",

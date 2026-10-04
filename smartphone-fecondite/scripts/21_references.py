@@ -37,15 +37,29 @@ REFS = [
     ("gardner2022", "10.48550/arXiv.2207.05943", ("Gardner", 2022), "méthode : comparaison (did2s)"),
     ("dechaisemartin2020", "10.1257/aer.20181169", ("de Chaisemartin", 2020), "méthode : biais du TWFE"),
     ("roth2023", "10.1016/j.jeconom.2023.03.008", ("Roth", 2023), "méthode : synthèse des estimateurs échelonnés"),
-    ("holm1979", "10.2307/4615733", ("Holm", 1979), "méthode : correction de Holm"),
 ]
 
 
 def crossref(doi: str) -> dict | None:
-    r = requests.get(f"https://api.crossref.org/works/{doi}", headers={"User-Agent": UA}, timeout=60)
-    if r.status_code != 200:
-        return None
-    return r.json()["message"]
+    """Registre Crossref ; les DOI arXiv (10.48550) sont enregistrés chez DataCite : lecture au même format minimal."""
+    for _ in range(3):
+        r = requests.get(f"https://api.crossref.org/works/{doi}", headers={"User-Agent": UA}, timeout=60)
+        if r.status_code == 200:
+            return r.json()["message"]
+        if r.status_code != 404:
+            time.sleep(3)
+            continue
+        break
+    if doi.lower().startswith("10.48550/"):
+        r = requests.get(f"https://api.datacite.org/dois/{doi}", headers={"User-Agent": UA}, timeout=60)
+        if r.status_code != 200:
+            return None
+        a = r.json()["data"]["attributes"]
+        return {"DOI": doi, "type": "posted-content", "title": [t["title"] for t in a.get("titles", [])][:1] or [""],
+                "author": [{"family": c.get("familyName", c.get("name", "")), "given": c.get("givenName", "")} for c in a.get("creators", [])],
+                "issued": {"date-parts": [[a.get("publicationYear")]]}, "publisher": a.get("publisher", "arXiv"),
+                "resource": {"primary": {"URL": a.get("url", f"https://arxiv.org/abs/{doi.split('arXiv.')[-1]}")}}}
+    return None
 
 
 def probe(url: str) -> int:
