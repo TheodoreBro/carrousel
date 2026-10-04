@@ -46,11 +46,11 @@ COUNTRIES = {
                h5a="^municipio, bascule fictive −3 ans, années pré-traitement seules$", addendum="A4",
                h6_short={"part de population en cabecera 2015 (densité) : ": "cabecera\n", "population 2015 : ": "population\n"}),
     "BR": dict(tag="br", name="Brésil", unit="municípios", est_script="15_estimate_country.py --country BR", prim="^unités avec covariables, bascule 4G$",
-               h1_all="^toutes unités, sans covariables$", h1_prim="^primaire : unités avec covariables$|^unités avec covariables, comparaisons$",
+               h1_all="^toutes unités, sans covariables$", h1_prim="^primaire : unités avec covariables$|^unités avec covariables, comparaisons",
                h5a="^bascule fictive −3 ans, années pré-traitement seules$", addendum="A5",
                h6_short={"population 2010 : ": "population\n", "grande région : ": ""}),
     "ES": dict(tag="es", name="Espagne", unit="municipios", est_script="15_estimate_country.py --country ES", prim="^unités avec covariables, bascule 4G$",
-               h1_all="^toutes unités, sans covariables$", h1_prim="^primaire : unités avec covariables$|^unités avec covariables, comparaisons$",
+               h1_all="^toutes unités, sans covariables$", h1_prim="^primaire : unités avec covariables$|^unités avec covariables, comparaisons",
                h5a="^bascule fictive −3 ans, années pré-traitement seules$", addendum="A6",
                h6_short={"population 2013 : ": "population\n"}),
 }

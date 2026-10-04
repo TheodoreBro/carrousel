@@ -1,0 +1,25 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Brésil — robustesse}\label{tab:br_robust}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & fenêtre 2008-2024 & cs & ATT[1,5] & -0.0359* & (0.0193) & 5 ($\leq$ 2022) & 5\,558 & 94\,486 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & fenêtre 2003-2023 (sans l'année provisoire 2024) & cs & ATT[1,5] & -0.0359* & (0.0193) & 5 ($\leq$ 2022) & 5\,558 & 116\,718 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & fenêtre 2003-2019 (hors COVID) ; cohortes 2020-2023 = contrôle & cs & ATT[1,5] & -0.0072 & (0.0352) & 5 ($\leq$ 2019) & 5\,558 & 94\,486 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & sans 2020-2021 & cs & ATT[1,5] & -0.0302 & (0.0275) & 5 ($\leq$ 2022) & 5\,558 & 111\,160 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & grappes = UF (27) & cs & ATT[1,5] & -0.0359 & (0.0310) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & traitement = 4G par $\geq$ 2 opérateurs & cs & ATT[1,5] & -0.0266 & (0.0191) & 5 ($\leq$ 2024) & 5\,558 & 122\,276 \\
+3G & log(naissances+0,5 / 1 000 f. 15-49) & traitement = 3G $\geq$ 1 opérateur (censurés au 2013-12 exclus) & cs & ATT[1,5] & -0.0174 & (0.0219) & 5 ($\leq$ 2024) & 2\,056 & 45\,232 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & cohort 2014 exclue (première observation utilisable 2014-12, A5) & cs & ATT[1,5] & -0.0350* & (0.0199) & 5 ($\leq$ 2022) & 5\,371 & 118\,162 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & sans 2020-2021 & cs & ATT[1,5] & -0.0425 & (0.0303) & 5 ($\leq$ 2022) & 5\,558 & 111\,160 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & cohort 2014 exclue (première observation utilisable 2014-12, A5) & cs & ATT[1,5] & -0.0483** & (0.0228) & 5 ($\leq$ 2022) & 5\,371 & 118\,162 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country BR. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

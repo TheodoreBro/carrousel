@@ -1,0 +1,31 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Brésil — hétérogénéité (H6)}\label{tab:br_h6}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2010 : tercile 1 & cs & ATT[1,5] & -0.0512** & (0.0216) & 5 ($\leq$ 2022) & 1\,853 & 40\,766 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2010 : tercile 2 & cs & ATT[1,5] & -0.0532** & (0.0233) & 5 ($\leq$ 2022) & 1\,852 & 40\,744 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & population 2010 : tercile 3 & cs & ATT[1,5] & -0.2317*** & (0.0394) & 5 ($\leq$ 2022) & 1\,853 & 40\,766 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & grande région : Centro-Oeste & cs & ATT[1,5] & -0.1360*** & (0.0391) & 5 ($\leq$ 2022) & 463 & 10\,186 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & grande région : Nordeste & cs & ATT[1,5] & 0.0010 & (0.0116) & 5 ($\leq$ 2022) & 1\,794 & 39\,468 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & grande région : Norte & cs & ATT[1,5] & -0.0654 & (0.0533) & 5 ($\leq$ 2022) & 448 & 9\,856 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & grande région : Sudeste & cs & ATT[1,5] & 0.0719** & (0.0364) & 5 ($\leq$ 2021) & 1\,668 & 36\,696 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) & grande région : Sul & cs & ATT[1,5] & -0.0200 & (0.0465) & 5 ($\leq$ 2022) & 1\,185 & 26\,070 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2010 : tercile 1 & unités avec covariables & cs & ATT[1,5] (Holm) & -0.0512** & (0.0216) & 5 ($\leq$ 2022) & 1\,853 & 40\,766 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2010 : tercile 2 & unités avec covariables & cs & ATT[1,5] (Holm) & -0.0532** & (0.0233) & 5 ($\leq$ 2022) & 1\,852 & 40\,744 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — population 2010 : tercile 3 & unités avec covariables & cs & ATT[1,5] (Holm) & -0.2317*** & (0.0394) & 5 ($\leq$ 2022) & 1\,853 & 40\,766 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — grande région : Centro-Oeste & unités avec covariables & cs & ATT[1,5] (Holm) & -0.1360*** & (0.0391) & 5 ($\leq$ 2022) & 463 & 10\,186 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — grande région : Nordeste & unités avec covariables & cs & ATT[1,5] (Holm) & 0.0010 & (0.0116) & 5 ($\leq$ 2022) & 1\,794 & 39\,468 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — grande région : Norte & unités avec covariables & cs & ATT[1,5] (Holm) & -0.0654 & (0.0533) & 5 ($\leq$ 2022) & 448 & 9\,856 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — grande région : Sudeste & unités avec covariables & cs & ATT[1,5] (Holm) & 0.0719** & (0.0364) & 5 ($\leq$ 2021) & 1\,668 & 36\,696 \\
+H6 & log(naissances+0,5 / 1 000 f. 15-49) — grande région : Sul & unités avec covariables & cs & ATT[1,5] (Holm) & -0.0200 & (0.0465) & 5 ($\leq$ 2022) & 1\,185 & 26\,070 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country BR. p Holm dans la colonne notes du fichier est\_<pays>\_all.csv. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,22 @@
+{
+  "generated": "2026-10-04 17:49:40",
+  "commit": "8be6f77",
+  "args": {
+    "country": "BR",
+    "part": [
+      "h3",
+      "summary"
+    ],
+    "boot": 999,
+    "nboot": 50,
+    "fast": false
+  },
+  "n_rows": 1352,
+  "inputs": {
+    "br_outcomes_mun.parquet": "2026-10-04 17:48:43",
+    "br_outcomes_mun_age.parquet": "2026-10-04 17:48:43",
+    "br_static.parquet": "2026-10-04 17:48:43",
+    "br_treatment.parquet": "2026-10-04 14:52:29",
+    "br_treatment_static.parquet": "2026-10-04 14:52:29"
+  }
+}

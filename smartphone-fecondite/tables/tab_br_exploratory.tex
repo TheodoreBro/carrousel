@@ -1,0 +1,31 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Brésil — analyses complémentaires hors préregistration (addendum A5)}\label{tab:br_exploratory}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, comparaisons ; fenêtre complète & twfe & ATT & 0.0321*** & (0.0051) &  & 5\,558 & 122\,276 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables ; fenêtre complète & twfe & ATT & 0.0321*** & (0.0051) &  & 5\,558 & 122\,276 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, référence $-$2 (anticipation = 1) & cs & ATT[1,5] & -0.0691** & (0.0314) & 5 ($\leq$ 2021) & 5\,558 & 122\,276 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables, régression de résultat seule (est\_method = reg) & cs & ATT[1,5] & -0.0536*** & (0.0155) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0237*** & (0.0055) &  & 5\,558 & 122\,276 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités, sans covariables ; fenêtre complète & twfe & ATT & 0.0237*** & (0.0055) &  & 5\,558 & 122\,276 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G, référence $-$2 (anticipation = 1) & cs & ATT[1,5] & -0.0523* & (0.0282) & 5 ($\leq$ 2021) & 5\,558 & 122\,276 \\
+H2a & log(naissances+0,5 / 1 000 f. 15-19) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0084 & (0.0068) &  & 5\,558 & 122\,276 \\
+H2a & log(naissances+0,5 / 1 000 f. 20-24) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0307*** & (0.0060) &  & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 25-29) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0132** & (0.0062) &  & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 30-34) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0102 & (0.0065) &  & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 35-39) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0519*** & (0.0080) &  & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 40-49) & unités avec covariables, bascule 4G ; fenêtre complète & twfe & ATT & 0.0912*** & (0.0099) &  & 5\,558 & 122\,276 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre complète & twfe & ATT & 0.0503*** & (0.0058) &  & 5\,558 & 80\,200 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & grappes = UF (27) ; fenêtre complète & twfe & ATT & 0.0321*** & (0.0117) &  & 5\,558 & 122\,276 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & pondéré par les femmes 15-49, CS sans covariables & cs & ATT[1,5] & -0.0544*** & (0.0071) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country BR. Analyses marquées « exploratoire » ; aucune n'entre dans les règles de décision. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

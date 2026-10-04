@@ -1,0 +1,23 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Taille d'effet minimale détectable par permutation des cohortes, Brésil}\label{tab:br_mde}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Hypothèse & É.-t. des ATT placebo & MDE (80 \%, 5 \%), \% & Permutations \\
+\midrule
+H1 15-49 & 0.0046 & 1.28 & 200 \\
+H2b 25-39 & 0.0048 & 1.35 & 200 \\
+H2 15-19 & 0.0064 & 1.78 & 200 \\
+H2 20-24 & 0.0055 & 1.54 & 200 \\
+H2 25-29 & 0.0053 & 1.49 & 200 \\
+H2 30-34 & 0.0061 & 1.72 & 200 \\
+H2 35-39 & 0.0076 & 2.14 & 200 \\
+H2 40-49 & 0.0103 & 2.87 & 200 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country BR. ATT statique TWFE sur le log du taux, cohortes permutées entre unités ; MDE = (1,96 + 0,84) $\times$ écart-type placebo.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,5 @@
+part,family,hypothesis,outcome,sample,estimator,term,estimate,se,ci_low,ci_high,p,n_units,n_obs,exploratory,notes,aggregation
+h3,H3,H3a,mariages de femmes / 1 000 f.,município,—,non estimé,,,,,,0,0,False,"mariages absents pour 2017-2024 au moment de l'exécution (API IBGE indisponible, voir data_log.md) ; H3a à relancer",note
+h3,H3,H3b,naissances de mères en couple,município,—,non testable,,,,,,0,0,False,pas d'état civil de la mère dans la source des naissances (A5),note
+h3,H3,H3c,naissances par femme en couple,município,—,non testable,,,,,,0,0,False,pas de femmes en couple par âge au niveau de l'unité (A5),note
+h3,§6 canal,§6,ATT H3a − ATT H3b,município,—,non applicable,,,,,,0,0,False,la règle §6 exige H3a et H3b sur la même fenêtre,note

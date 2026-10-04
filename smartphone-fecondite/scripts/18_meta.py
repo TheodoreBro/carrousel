@@ -74,7 +74,7 @@ def pool(t: pd.DataFrame, g: str, se_col: str = "se_pct", exclude: set | None = 
     half = tcrit * np.sqrt(r["tau2"] + se_pool ** 2)
     z = r["estimate"] / se_pool if se_pool > 0 else np.nan
     return {"groupe": g, "pays": ", ".join(s.pays), "k_pays": k, "poolé %": r["estimate"], "es": se_pool, "IC bas": r["ci_low"], "IC haut": r["ci_upp"],
-            "p": 2 * (1 - stats.norm.cdf(abs(z))), "PI bas": r["estimate"] - half, "PI haut": r["estimate"] + half, "tau2": r["tau2"], "I2": r["i2"], "es_col": se_col}
+            "p": 2 * (1 - stats.norm.cdf(abs(z))), "PI bas": r["estimate"] - half, "PI haut": r["estimate"] + half, "tau2": r["tau2"], "I2": max(0.0, float(r["i2"])), "es_col": se_col}
 
 
 def main() -> int:

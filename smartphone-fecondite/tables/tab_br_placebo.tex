@@ -1,0 +1,34 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Brésil — placebos (H5)}\label{tab:br_placebo}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & primaire : unités avec covariables & cs & Wald pré (-8..-2) & 4.97 & p = 0.664 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H1 & log(naissances+0,5 / 1 000 f. 15-49) & toutes unités, sans covariables & cs & Wald pré (-8..-2) & 26.15 & p = 0.000 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H1 & naissances / 1 000 f. 15-49 (taux brut) & unités avec covariables & cs & Wald pré (-8..-2) & 18.05 & p = 0.012 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H1 & asinh(taux) & unités avec covariables & cs & Wald pré (-8..-2) & 4.96 & p = 0.665 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & Wald pré (-8..-2) & 3.65 & p = 0.819 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités, sans covariables & cs & Wald pré (-8..-2) & 10.95 & p = 0.141 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2b & naissances / 1 000 f. 25-39 (taux brut) & unités avec covariables, bascule 4G & cs & Wald pré (-8..-2) & 12.93 & p = 0.074 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2b & asinh(naissances / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & Wald pré (-8..-2) & 3.62 & p = 0.823 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & bascule fictive $-$3 ans, années pré-traitement seules & cs & ATT[1,2] & -0.1454** & (0.0695) & 2 ($\leq$ 2019) & 5\,558 & 80\,200 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & bascule fictive $-$3 ans, années pré-traitement seules & cs & Wald pré (-8..-2) & 4.85 & p = 0.679 & 2 ($\leq$ 2019) & 5\,558 & 80\,200 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre identifiée ≤ 2019, cohorte 2020 = contrôle & twfe & ATT[1,2] & 0.0540*** & (0.0090) &  & 5\,558 & 80\,200 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre identifiée ≤ 2019, cohorte 2020 = contrôle & twfe & Wald pré (-8..$-$2) & 92.03 & p = 0.000 &  & 5\,558 & 80\,200 \\
+H5a & log(naissances+0,5 / 1 000 f. 15-49) & bascule fictive $-$3 ans, années pré-traitement seules ; fenêtre identifiée ≤ 2019, cohorte 2020 = contrôle & twfe & ATT & 0.0503*** & (0.0058) &  & 5\,558 & 80\,200 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-49) & primaire : unités avec covariables & cs & ATT[1,5] & -0.0359* & (0.0193) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-49) & primaire : unités avec covariables & cs & Wald pré (-8..-2) & 4.97 & p = 0.664 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables sans la tendance de pré-période & cs & ATT[1,5] & -0.0537*** & (0.0158) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H5c & log(naissances+0,5 / 1 000 f. 15-49) & unités avec covariables sans la tendance de pré-période & cs & Wald pré (-8..-2) & 15.97 & p = 0.025 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H5c & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables (H2b) & cs & ATT[1,5] & -0.0478** & (0.0220) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H5c & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables (H2b) & cs & Wald pré (-8..-2) & 3.65 & p = 0.819 & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country BR. H5b (décès) non construit (A5). H5c : test de Wald joint des coefficients $-8$ à $-2$. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

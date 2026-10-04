@@ -1,0 +1,35 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Brésil — effet par groupe d'âge (H2)}\label{tab:br_h2age}
+\small
+\begin{tabular}{llllrrrrrr}
+\toprule
+Hyp. & Résultat & Échantillon & Estimateur & Terme & Estimation & É.-t. & k (années id.) & Unités & Obs. \\
+\midrule
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0478** & (0.0220) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & unités, sans covariables & cs & ATT[1,5] & -0.0735*** & (0.0135) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2b & naissances / 1 000 f. 25-39 (taux brut) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -1.4963 & (1.2089) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2b & asinh(naissances / 1 000 f. 25-39) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0472** & (0.0224) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2a & log(naissances+0,5 / 1 000 f. 15-19) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0958*** & (0.0243) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2a & log(naissances+0,5 / 1 000 f. 20-24) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0488** & (0.0219) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 25-29) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0748*** & (0.0241) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 30-34) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0297 & (0.0323) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 35-39) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0899** & (0.0418) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 40-49) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0097 & (0.0612) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 25-29) & unités avec covariables, bascule 4G & cs & ATT[1,5] (Holm) & -0.0748*** & (0.0241) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 30-34) & unités avec covariables, bascule 4G & cs & ATT[1,5] (Holm) & -0.0297 & (0.0323) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 35-39) & unités avec covariables, bascule 4G & cs & ATT[1,5] (Holm) & -0.0899** & (0.0418) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2c & log(naissances+0,5 / 1 000 f. 40-49) & unités avec covariables, bascule 4G & cs & ATT[1,5] (Holm) & -0.0097 & (0.0612) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2a & log(naissances+0,5 / 1 000 f. 15-19) & unités avec covariables, bascule 4G & cs & ATT[1,5] (Holm) & -0.0958*** & (0.0243) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2a & log(naissances+0,5 / 1 000 f. 20-24) & unités avec covariables, bascule 4G & cs & ATT[1,5] (Holm) & -0.0488** & (0.0219) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2d & log(naissances+0,5 / 1 000 f. 15-24) & unités avec covariables, bascule 4G & cs & ATT[1,5] & -0.0574*** & (0.0204) & 5 ($\leq$ 2022) & 5\,558 & 122\,276 \\
+H2d & ATT 15-24 $-$ ATT 25-39 & unités avec covariables, bascule 4G & cs & différence (bootstrap conjoint) & -0.0095 & (0.0129) &  & 5\,558 & 611\,380 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & sans 2020-2021 & cs & ATT[1,5] & -0.0425 & (0.0303) & 5 ($\leq$ 2022) & 5\,558 & 111\,160 \\
+H2b & log(naissances+0,5 / 1 000 f. 25-39) & cohort 2014 exclue (première observation utilisable 2014-12, A5) & cs & ATT[1,5] & -0.0483** & (0.0228) & 5 ($\leq$ 2022) & 5\,371 & 118\,162 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/15\_estimate\_country.py --country BR. Familles corrigées par Holm : 15-19, 20-24 (H2a) ; 25-29, 30-34, 35-39, 40-49 (H2c) ; p Holm dans est\_<pays>\_all.csv. ATT[1,k] = moyenne des effets +1 à +k (k = dernière période disponible $\leq$ 5 ; colonne k, avec la dernière année où les ATT(g,t) sont identifiés pour Callaway \& Sant'Anna). * p<0,10, ** p<0,05, *** p<0,01 (p d'un test z sur l'écart-type indiqué ; $^{w}$ : p du wild cluster bootstrap ; pour les tests de Wald, la p est donnée à la place de l'écart-type).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

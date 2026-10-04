@@ -277,20 +277,21 @@ def part_h3(args) -> None:
     d, cov, covs, a, ac = _base(args)
     res_a, res_b = {}, {}
     mr = CFG["marriages"]
+    noted = False
     if mr and "marriages" in d:
         have = sorted(d[d.marriages.notna()].year.unique())
         missing = [y for y in range(mr["start"], CFG["years"][1] + 1) if y not in have]
         if missing:
             col.add_scalar("H3", "H3a", "mariages de femmes / 1 000 f.", CFG["unit_name"], "—", "non estimé", np.nan, np.nan, 0, 0,
                            f"mariages absents pour {missing[0]}-{missing[-1]} au moment de l'exécution (API IBGE indisponible, voir data_log.md) ; H3a à relancer", aggregation="note")
-            mr = None
+            mr, noted = None, True
     if mr:
         for g, grp in (("25-39", G2539), ("15-24", G1524)):
             sub = with_covs(aggregate(d[d.year >= mr["start"]], grp, g), cov).dropna(subset=covs)
             sub = sub.dropna(subset=["y_marr"])
             res_a[g] = e5.run_block(col, sub, "y_marr", "H3", "H3a", f"log(mariages de femmes+0,5 / 1 000 f. {g})", SAMP + f", fenêtre {mr['start']}-{CFG['years'][1]}", "unit",
                                     covs=covs, estimators=("cs", "twfe"), boot=args.boot if g == "25-39" else 0, notes=mr["note"])
-    else:
+    elif not noted:
         col.add_scalar("H3", "H3a", "mariages / PACS / parts en couple", CFG["unit_name"], "—", "non testable", np.nan, np.nan, 0, 0,
                        f"aucune série de mariages par unité × âge ({CFG['addendum']})", aggregation="note")
     mb = CFG["married_births"]

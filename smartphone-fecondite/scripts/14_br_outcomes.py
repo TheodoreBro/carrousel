@@ -147,7 +147,8 @@ def main() -> int:
     # cellule absente de la table (município sans naissance dans la cellule) = zéro : la table 2609 ne renvoie pas de « - » pour toutes
     # les combinaisons ; les cellules « ... »/« X » restent manquantes (comptées)
     d["births"] = d.births.fillna(0.0)
-    d.loc[d.year >= 2013, "marriages"] = d.loc[d.year >= 2013, "marriages"].fillna(0.0)
+    years_m = set(m.year.unique())                 # zéro seulement pour les années effectivement lues (2017+ absentes si l'API n'a pas répondu)
+    d.loc[d.year.isin(years_m), "marriages"] = d.loc[d.year.isin(years_m), "marriages"].fillna(0.0)
     oth = b[b.age_group.isin(["<15", "50+", "inconnu"])].groupby(["year", "age_group"]).births.sum().unstack()
     d["births_per_1000"] = 1000 * d.births / d.women
     d["uf"] = d.municipio.str[:2]
