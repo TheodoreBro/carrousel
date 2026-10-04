@@ -53,8 +53,15 @@ Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prim
     tableaux `tab_co_*.tex`). `make co` enchaîne 09 → 12.
   - Sorties : `tables/est_co/<partie>.csv`, `tables/est_co_all.csv`, `tables/t_estimates_co.md`, `tables/t_treatment_co.md`,
     `tables/t_outcomes_co.md`, `tables/t_sample_co.md`, `tables/t_mde_co.md`.
-- Pas encore fait : Brésil, Espagne (datos.gob.es bloqué) ; rédaction (Étape 4) ; panel mondial (hôtes bloqués) ; D2 (SIG) ;
-  références (`references.bib` vide) ; méta-analyse (possible dès un troisième pays inclus).
+- **Espagne : vérifiée le 04/10/2026 et incluse (addendum A6), estimations exécutées le 04/10/2026** (`15_estimate_country.py --country ES`,
+  `tables/est_es/_run.json`) : voir §1 quater. Chaîne : `01_download.py --country ES` (couverture LTE municipale MINECO/SETELECO servie par
+  digital.gob.es, microdonnées INE des naissances 2007-2024 et des mariages 2008-2024, Padrón par âge 2003-2022 en PC-Axis),
+  `16_es_treatment.py`, `17_es_outcomes.py`, `15_estimate_country.py --country ES`, `12_co_figures_tables.py --country ES` ; `make es`.
+- **Brésil : vérifié le 04/10/2026 et inclus (addendum A5)** ; chaîne `01_download.py --country BR` (Anatel « municípios atendidos », API IBGE :
+  naissances table 2609, recensements 2000/2010/2022, estimations de population, mariages table 4412), `13_br_treatment.py`,
+  `14_br_outcomes.py`, `15_estimate_country.py --country BR`, `12_co_figures_tables.py --country BR` ; `make br`. État : voir §1 quinquies.
+- Pas encore fait : rédaction (Étape 4) ; panel mondial (hôtes bloqués) ; D2 (SIG) ; références (`references.bib` vide) ; méta-analyse
+  (≥ 3 pays inclus désormais : France, Colombie, Brésil, Espagne — à écrire, §7 de la préregistration).
 
 ## 1 bis. Chiffres à connaître
 
@@ -96,6 +103,30 @@ commit `1af9826` dans `_run.json`) :
   les lignes « régression de résultat seule » (exploratoires) diffèrent de la ligne doublement robuste (+0,05 contre −0,01 pour H1) ;
 - H3b (naissances de mères en union) ≈ 0 ; les compléments hors union / part en union sont exploratoires.
 
+## 1 quater. Espagne — chiffres à connaître et avertissement
+
+Traitement (`t_treatment_es.md`) : 8 131 municipios, part de population couverte en LTE aux instantanés déc. 2013 → juin 2020 ; parmi les
+753 municipios de plus de 10 000 habitants (seuls identifiables dans les naissances) : ≥ 50 % pour 179 dès déc. 2013, 580 en déc. 2014, 749 en
+déc. 2015, tous en juin 2016. Panel (`t_outcomes_es.md`, `t_sample_es.md`) : 722 municipios codés toutes les années 2007-2022, cohortes
+2013 : 175, 2014 : 388, 2015 : 156, 2016 : 3 ; **aucun jamais traité**. MDE par permutation : H1 2,4 %, H2b 2,4 %.
+
+**Avertissement, à reporter tel quel dans le papier** : le dessin espagnol est dégénéré pour Callaway & Sant'Anna avec contrôle « pas encore
+traités » — ATT(2015, 2015) n'est identifié que contre les 3 municipios de la cohorte 2016, et la dernière cohorte sert de contrôle, donc
+l'agrégat primaire est ATT[1,1] (une seule année post). L'estimateur doublement robuste y est instable : coefficients pré absurdes
+(−8 : +7,8 log-points), tests de Wald pré rejetés partout (p < 0,001), ATT[1,1] par âge entre −2,9 et +1,7 log-points, bootstrap par
+grappes avec écart-type 6 fois l'analytique. Les lignes « sans covariables » (ATT[1,2] ≈ +0,07) et « régression de résultat seule »
+(ATT[1,2] ≈ −0,04, exploratoire) rejettent aussi le pré-test. **Aucun résultat espagnol n'est interprétable comme un effet** ; le pays reste
+inclus (la décision §4.3 n'est pas révisable) et sera présenté comme un cas où l'identification échoue, conformément à ce qu'annonçait A6.
+Pour la méta-analyse (§7), l'ATT espagnol entre avec son écart-type bootstrap (0,13) — ou le papier justifie son exclusion par le pré-test
+rejeté, règle à écrire **avant** de lancer la méta-analyse (addendum à venir).
+
+## 1 quinquies. Brésil — chiffres à connaître
+
+Traitement (`t_treatment_br.md`) : 5 570 municípios ; présence 4G d'au moins un opérateur : 2014 : 189, 2015 : 298, 2016 : 551, 2017 : 2 739,
+2018 : 680, 2019 : 399, 2020 : 424, 2021 : 170, 2022-2023 : 120, jamais : 0 ; la source est annuelle (décembre) jusqu'en 2016 et mensuelle
+ensuite (le saut de 2017 vient en partie de là, dit). Résultats et estimations : voir `t_outcomes_br.md`, `t_sample_br.md`, `t_estimates_br.md`
+quand ils existent (état dans `tables/est_br/_run.json`).
+
 ## 2. Décisions de l'auteur
 
 Prises (messages du 18/09) : « beaucoup plus de pays » (voir `etape0_pays.md`) ; points 1 à 11 de l'Étape 0
@@ -128,6 +159,9 @@ construit, H6 par densité/taille/rang).
   même ordre) — l'estimateur IPW s'effondre sur ce sous-groupe ; la ligne « régression de résultat seule » du même
   sous-groupe est la lecture utilisable ; p Holm = 1 pour toute la famille H6. Le conditionnement au département (6
   covariables agrégées, 96 unités) est instable et marqué non interprétable (A2.5).
+- Espagne : un test de fonctionnement `--fast` de toutes les parties a été vu (15:30-15:33) après le commit de A6 et des tables
+  d'échantillon/MDE ; il a révélé l'instabilité décrite en §1 quater ; aucune décision de mesure n'a été changée ensuite (la seule
+  modification de code est le saut de la ligne « contrôle = jamais traités » quand il n'y a aucune unité jamais traitée).
 - Colombie : avant l'exécution complète, un test de fonctionnement `--fast` (bootstraps 49 / 3) de toutes les parties a été vu sur le panel
   complet (04/10, 13:54-13:56), après le commit de A4 et des tables d'échantillon/MDE ; aucune décision de mesure n'a été prise après.
   Les sorties de ce test sont dans `tables/est_co_smoke/` (non versionné).
@@ -190,6 +224,11 @@ produit par un script nommé.
   (recodage par année dans `common/co.py`) ; les trois fichiers de projections DANE ont trois dispositions (ligne d'en-tête à détecter,
   en-tête sur deux lignes en 2018-2042, colonnes MPIO/DPMP interverties en 1995-2004 : la colonne du code est celle dont ≥ 90 % des valeurs
   ont 5 chiffres). Lecture des 22 archives ≈ 10 min, mise en cache dans `data/processed/co_births_agg_cache.parquet`.
+- API IBGE (agregados v3) : HTTP 500 au-delà d'≈ 6-7 combinaisons de catégories × 5 570 municípios (découper), HTTP 400 si le User-Agent
+  contient un caractère non ASCII, 2 à 4 minutes par réponse sur la table 4412 (délai de lecture porté à 15 min dans `download.py`) ;
+  les identifiants « Total » diffèrent selon les tables (9514 : sexe 6794, forme de déclaration 113635 ; 0 renvoie des valeurs doublées).
+  INE : microdonnées 2007-2015 à largeur fixe (dessins xls dans `disreg_*.zip`), 2016+ avec parquet dans le zip ; les blancs lus par
+  `read_fwf` deviennent NaN (remplis par « »). `pgrep -f` dans une boucle d'attente se voit lui-même : préférer un fichier-témoin.
 - Un `( … ) &` à l'intérieur d'un Bash lancé en arrière-plan peut ne jamais démarrer : lancer les longs travaux par un script `nohup`
   et surveiller le journal avec une boucle `until grep -q EXIT …`.
 - `kill $(pgrep -f motif)` et `pkill -f motif` tuent le shell appelant si sa ligne de commande contient le motif : tuer par
