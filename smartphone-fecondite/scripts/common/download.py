@@ -401,7 +401,12 @@ def rebuild_data_log() -> None:
 def raw_files(src_id: str) -> list[Path]:
     """Fichiers consignés dans le manifeste pour une source (ordre des URL)."""
     m = _load_manifest()
-    return [RAW / v["path"] for k, v in sorted(m.items()) if v["source"] == src_id]
+    paths, seen = [], set()
+    for k, v in sorted(m.items()):
+        if v["source"] == src_id and v["path"] not in seen:        # deux URL (ancienne et nouvelle) peuvent nommer le même fichier
+            seen.add(v["path"])
+            paths.append(RAW / v["path"])
+    return paths
 
 
 def describe(src: Source) -> dict:
