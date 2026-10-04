@@ -28,8 +28,9 @@ le papier).
 robust iv summary` exécutables séparément, en parallèle si besoin, puis `--part summary`). Les sorties sont dans
 `tables/est/<partie>.csv`, `tables/est_fr_all.csv`, `tables/t_estimates_fr.md` et le manifeste `tables/est/_run.json`.
 Les tests de fonctionnement (`--fast`, `--sample N`) écrivent dans `tables/est_smoke/` ; `06_figures.py --smoke` et
-`07_tables.py --smoke` les lisent et écrivent dans `figures/smoke/` et `tables/est_smoke/tex/` (jamais pour le papier). Le PDF demande TeX Live (`apt-get install texlive-latex-extra texlive-lang-french
-latexmk`) ; à défaut, `paper/paper.md` est produit par pandoc.
+`07_tables.py --smoke` les lisent et écrivent dans `figures/smoke/` et `tables/est_smoke/tex/` (jamais pour le papier). Le PDF demande TeX Live (`apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+texlive-lang-french texlive-science lmodern cm-super latexmk`) ; `make paper` compile `paper/paper.pdf` puis écrit `paper/paper.md`
+(`scripts/22_paper_md.py`, pandoc fourni par `pypandoc_binary`, citations résolues, figures en .png).
 
 ## Organisation
 
