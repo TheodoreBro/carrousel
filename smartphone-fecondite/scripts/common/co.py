@@ -57,7 +57,9 @@ def load_projections(paths: list[Path]) -> pd.DataFrame:
             d = raw.iloc[hdr + (2 if two_rows else 1):].copy()
             d.columns = names
             cols = {c.upper(): c for c in d.columns}
-            mp = cols.get("MPIO") or cols.get("COD_MPIO")
+            # le code municipio à 5 chiffres est tantôt dans MPIO (2005+), tantôt dans DPMP (1995-2004, colonnes interverties) :
+            # on prend la colonne dont les valeurs sont des codes à 5 chiffres
+            mp = next((cols[c] for c in ("MPIO", "DPMP", "COD_MPIO") if c in cols and d[cols[c]].astype(str).str.strip().str.match(r"^\d{5}$").mean() > 0.9), None)
             yr = cols.get("AÑO") or cols.get("ANO") or cols.get("AÑO ")
             ar = next((cols[c] for c in cols if "REA" in c), None)
             if not (mp and yr and ar):
