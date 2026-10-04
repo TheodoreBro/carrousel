@@ -87,7 +87,7 @@ commit `1af9826` dans `_run.json`) :
 - la spécification primaire (CS doublement robuste avec covariables) a un pré-test plat (Wald p ≈ 0,2) et des ATT[1,5] proches de zéro
   avec des écarts-types ≈ 0,04, soit au-dessus de la MDE : les intervalles couvrent des effets de ± 8 % ;
 - les comparaisons TWFE, did2s et Sun & Abraham sans covariables de pré-période donnent des effets négatifs croissants (jusqu'à −0,1 à −0,2
-  log-points à +5…+8) **mais leur pré-test rejette** (Wald p ≈ 0,01) : les coefficients pré lointains (−8 à −5) sont positifs, ce qui ressemble
+  log-points à +5…+8) **mais leur pré-test rejette** (Wald p ≤ 0,01) : pour TWFE et Sun & Abraham, les coefficients pré lointains (−8 à −5) sont positifs, ce qui ressemble
   à une tendance différentielle, absorbée par la tendance 2010-2014 incluse dans les covariables (voir `fig_event_co_h1_primaire`) ;
 - la bande sup-t s'élargit beaucoup au-delà de +4 (seules les cohortes 2016-2019 y sont observées) ; l'agrégat à composition constante
   (`post_avg_balanced`) est reporté ;
