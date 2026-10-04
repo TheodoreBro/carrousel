@@ -271,3 +271,17 @@ groupe d'âge en % du taux contrefactuel, intervalle de prédiction, I² ; test 
 | Pays dont le pré-test (H5c) est rejeté | **primaire = tous les pays inclus, sans exclusion** (§5 ne prévoit pas de filtre) ; **sensibilité, décidée ici** : poolé sans les pays dont le test de Wald pré de la spécification primaire H2b rejette à 5 % — au moment d'écrire, c'est le cas de la France (p = 0,004) et de l'Espagne (p < 0,001) ; cette sensibilité est exploratoire et n'entre pas dans la règle §6 |
 | Règle §6 | appliquée telle quelle : H2b rejetée (p < 0,05) de même signe dans ≥ 2 pays de niveau 1 et poolé significatif, et H5a-c non rejetés dans ces pays ; le script imprime chaque condition pays par pays |
 | Sorties | `scripts/18_meta.py` → `tables/t_meta.md`, `tables/t_meta.csv`, `figures/fig_meta.pdf` (forêt par groupe d'âge) |
+
+## A8 — Présentation des pays dont l'identification échoue (04/10/2026, avant la rédaction)
+
+Écrit après les estimations nationales et la première synthèse (A7), avant toute phrase du papier. L'Espagne remplit les critères §4.3 et
+reste incluse (décision non révisable), mais l'estimateur primaire n'y est pas identifié au sens utile : tous les municipios identifiables
+sont traités entre 2013 et 2016, la dernière cohorte compte 3 unités et sert de contrôle, le test de Wald pré rejette à p < 0,001 sur
+toutes les spécifications (`t_estimates_es.md`, passation §1 quater).
+
+| Point | Décision |
+|---|---|
+| Place dans le papier | section 6 : un paragraphe et une ligne du tableau principal avec les diagnostics (nombre d'unités de contrôle par cohorte, p du pré-test), sans interprétation de signe ; tableaux complets en annexe comme pour les autres pays |
+| Règle §6 | appliquée mécaniquement (A7) : l'Espagne y entre avec son signe et sa p, mais la condition « H5a-c non rejetées » n'est pas remplie pour elle ; le texte le dit |
+| Synthèse | primaire = quatre pays (A7) ; la sensibilité « sans pays au pré-test rejeté » (Colombie + Brésil) est présentée comme exploratoire, dans un paragraphe distinct et jamais dans l'abstract |
+| Critère général, écrit maintenant | un pays est dit « identification échouée » quand (i) le pré-test de Wald de la spécification primaire H2b rejette à 1 % **et** (ii) la cohorte qui sert de contrôle à au moins un ATT(g,t) agrégé compte moins de 30 unités ; la France (pré-test p = 0,004, 96 départements, dernière cohorte 2018 de 6 départements) remplit (i) mais pas (ii) pour l'agrégat ATT[1,4] — elle est présentée avec son pré-test rejeté, sans le label |

@@ -326,10 +326,6 @@ SOURCES: list[Source] = [
            "https://population.un.org/wpp/assets/Excel%20Files/1_Indicator%20(Standard)/CSV_FILES/WPP2024_Fertility_by_Age5.csv.gz",
            "CC BY 3.0 IGO", years="1950-2023", granularity="pays × âge",
            notes="Nom de fichier non confirmé ; repli : API dataportalapi, indicateur ASFR5."),
-    Source("itu_coverage", "WORLD", "panel", "ITU DataHub — Population couverte par au moins un réseau 3G / LTE (indicateur 100095)", "manual",
-           "https://datahub.itu.int/data/?i=100095", "ITU (conditions à vérifier)", years="≈2010-2023", granularity="pays",
-           notes="datahub.itu.int bloqué au 02/10/2026."),
-    # ================================================================== Pays de niveau 1 (addendum requis avant estimation)
     Source("es_cobertura_municipios_2013_2020", "ES", "traitement",
            "MINECO/SETELECO — Cobertura de banda ancha en España 2013-2020 por municipio (LTE, HSPA, fixe ; % population couverte)",
            "direct",
