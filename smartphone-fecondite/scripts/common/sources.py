@@ -60,7 +60,7 @@ IBGE_SINGLE_AGES_15_49 = ("6572,6573,6574,6575,6576,6577,6578,6579,6580,6581,658
                           "6590,6591,6592,6593,6594,6595,6596,6597,6598,6599,6600,6601,6602")
 # table 4412 (mariages), classification 667 « grupo de idade do segundo cônjuge » (= l'épouse dans les mariages homme-femme :
 # vérifié le 04/10/2026 sur les totaux nationaux 2015, 122 518 seconds conjoints de 15-19 ans contre 31 892 premiers conjoints)
-IBGE_4412_WIFE_AGE_IDS = "0,33006,33007,33013,33019,33025,33031,33037,33038,33039,33040,33041,33042"
+IBGE_4412_WIFE_AGE_IDS = "33007,33013,33019,33025,33031,33037,33038"        # 15-19 … 45-49 seulement (l'API répond en 3-5 min par requête)
 
 
 def _ibge_births_urls() -> str:
@@ -105,7 +105,7 @@ def _ibge_estimates_urls() -> str:
 
 def _ibge_marriages_urls() -> str:
     return "|".join(f"{IBGE_API}/4412/periodos/{y}/variaveis/221?localidades=N6[all]&classificacao=244[0]%7C664[0]%7C665[0]%7C666[0]%7C667[{g}]"
-                    f"@@ibge4412_casamentos_{y}_{k}.json" for y in range(2013, 2025) for k, g in enumerate(_chunks(IBGE_4412_WIFE_AGE_IDS, 7)))
+                    f"@@ibge4412_casamentos_{y}_w{k}.json" for y in range(2013, 2025) for k, g in enumerate(_chunks(IBGE_4412_WIFE_AGE_IDS, 4)))
 
 
 # ----------------------------------------------------------------------------- Espagne : microdonnées INE (MNP)
