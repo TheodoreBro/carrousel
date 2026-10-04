@@ -40,6 +40,19 @@ population.un.org, api.scb.se, statistik.pts.se, www.ine.es, www.datos.gov.co, m
 www.anatel.gov.br, doi.org, link.springer.com, journals.plos.org, nber.org, ideas.repec.org, pewresearch.org,
 cloud.r-project.org.
 
+## Check-list d'inclusion par pays (préregistration §4.3)
+
+### Suède (vérifiée le 04/10/2026) — exclue, critère 1
+
+- Traitement : PTS ne publie par kommun que des séries 2015+ (accès LTE des ménages : les 290 kommuner ≥ 96 % dès 2015, 282 ≥ 99 %) et des
+  couvertures surfaciques par classe de débit 2016+ ; les rapports 2010-2014 ne sont plus en ligne (pages supprimées, recherche et
+  sitemap vérifiés ; dataportal.se refusé par le proxy). Aucune unité n'a de pré-période → critère 1 non rempli. Détail : `tables/t_se_check.md`,
+  addendum A3.
+- Naissances par âge : SCB FoddaK (kommun × âge simple, 1968-2024, API PxWeb, CC0) — vérifié, non téléchargé.
+- Dénominateurs : SCB BefolkningNy (kommun × état matrimonial × âge × sexe, 1968-2024) — vérifié, non téléchargé.
+- Mariages par âge : SCB CivilstandTypPar (kommun × âge quinquennal × sexe, 2000-2024) — vérifié, non téléchargé.
+- Fichiers PTS consignés ci-dessous (`se_pts_tackning`), comme preuve du constat.
+
 ## Fichiers téléchargés
 
 130 fichiers, 1,964 Mo. Empreintes complètes dans `data/raw/manifest.json`.
@@ -177,3 +190,7 @@ cloud.r-project.org.
 | fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2021_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8201904/base-cc-evol-struct-pop-2021_csv.zip | 2026-10-02 12:02 | 54,747,901 | `8c5d17c16e873bc4…` | Licence Ouverte 2.0 |
 | fr_insee_rp_pop_struct | FR | resultat | base-cc-evol-struct-pop-2022_csv.zip | https://www.insee.fr/fr/statistiques/fichier/8581696/base-cc-evol-struct-pop-2022_csv.zip | 2026-10-02 12:03 | 48,961,124 | `cb4b918862289527…` | Licence Ouverte 2.0 |
 | fr_insee_rp_diplomes_2011 | FR | controle | https://www.insee.fr/fr/statistiques/fichier/2044704/base-cc-diplomes-formation_2011.xls | 2026-10-02 13:58 | 79120896 | `bd93becea3dc03d0…` | Licence Ouverte 2.0 | ok |
+| se_pts_tackning | SE | traitement | https://statistik.pts.se/files/mobiltacknings-och-bredbandskartlaggning/tabellbilaga-historiska-uppgifter-teknik-1-0.xlsx | 2026-10-04 13:02 | 3577050 | `778eb50c456c179e…` | PTS (statistik.pts.se, document public) | ok |
+| se_pts_tackning | SE | traitement | https://statistik.pts.se/files/mobiltacknings-och-bredbandskartlaggning/tabelbilaga-mobilt%C3%A4ckning-1-3.xlsx | 2026-10-04 13:02 | 4050299 | `09536864b1278d5e…` | PTS (statistik.pts.se, document public) | ok |
+| se_pts_tackning | SE | traitement | https://statistik.pts.se/files/mobiltacknings-och-bredbandskartlaggning/mtbbk_25-17220_tabellbilaga_mobilt%C3%A4ckning_v1.0.xlsx | 2026-10-04 13:02 | 348341 | `ff197f8b704facfc…` | PTS (statistik.pts.se, document public) | ok |
+| se_pts_tackning | SE | traitement | https://statistik.pts.se/files/mobiltacknings-och-bredbandskartlaggning/mtbbk_25-17220_tabellbilaga_teknik_v1.0.xlsx | 2026-10-04 13:02 | 713137 | `d3426f740b0b52c4…` | PTS (statistik.pts.se, document public) | ok |

@@ -261,11 +261,28 @@ SOURCES: list[Source] = [
     Source("es_ine_nacimientos", "ES", "resultat", "INE — Estadística de nacimientos, microdonnées", "manual",
            "https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736177007&menu=resultados&secc=1254736195443&idp=1254735573002",
            "INE (réutilisation libre avec mention)", granularity="naissance, commune de résidence (seuil de taille)"),
-    Source("se_pts_tackning", "SE", "traitement", "PTS — Mobiltäcknings- och bredbandskartläggning, par kommun, 2013+", "manual",
-           "https://statistik.pts.se/mobiltacknings-och-bredbandskartlaggning", "PTS", years="2013 →", granularity="kommun"),
+    Source("se_pts_tackning", "SE", "traitement",
+           "PTS — Mobiltäcknings- och bredbandskartläggning : tabellbilaga historiska uppgifter teknik (fast bredband via LTE, par kommun, "
+           "2015-2022) et tabellbilaga mobiltäckning (2020-2024 ; 2025)",
+           "direct",
+           "https://statistik.pts.se/files/mobiltacknings-och-bredbandskartlaggning/tabellbilaga-historiska-uppgifter-teknik-1-0.xlsx|"
+           "https://statistik.pts.se/files/mobiltacknings-och-bredbandskartlaggning/tabelbilaga-mobilt%C3%A4ckning-1-3.xlsx|"
+           "https://statistik.pts.se/files/mobiltacknings-och-bredbandskartlaggning/mtbbk_25-17220_tabellbilaga_mobilt%C3%A4ckning_v1.0.xlsx|"
+           "https://statistik.pts.se/files/mobiltacknings-och-bredbandskartlaggning/mtbbk_25-17220_tabellbilaga_teknik_v1.0.xlsx",
+           "PTS (statistik.pts.se, document public)", years="2015-2025", granularity="kommun",
+           notes="URL constatées le 04/10/2026 sur statistik.pts.se/mobiltacknings-och-bredbandskartlaggning/dokument-rapporter. Aucune "
+                 "donnée par kommun antérieure à 2015 n'est en ligne (les pages des rapports 2010-2014 ont été retirées de pts.se ; "
+                 "recherche du site et sitemap vérifiés) ; dataportal.se refusé par le proxy. Voir addendum A3."),
     Source("se_scb_fodda", "SE", "resultat", "SCB — Födda efter region, moderns ålder och barnets kön (FoddaK), API PxWeb", "manual",
-           "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101H/FoddaK", "SCB (CC0)", years="1968-2024", granularity="kommun × âge",
-           notes="Requête POST PxWeb à écrire."),
+           "https://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0101/BE0101H/FoddaK", "SCB (CC0)", years="1968-2024", granularity="kommun × âge (année simple)",
+           notes="Métadonnées vérifiées le 04/10/2026 (290 kommuner, âges simples 14-49+, 1968-2024 ; limite 110 000 valeurs par requête). "
+                 "Non téléchargé : pays exclu (A3)."),
+    Source("se_scb_befolkning", "SE", "resultat", "SCB — Folkmängd efter region, civilstånd, ålder och kön (BefolkningNy), API PxWeb", "manual",
+           "https://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0101/BE0101A/BefolkningNy", "SCB (CC0)", years="1968-2024",
+           granularity="kommun × état matrimonial × âge × sexe", notes="Métadonnées vérifiées le 04/10/2026. Non téléchargé : pays exclu (A3)."),
+    Source("se_scb_civilstand", "SE", "resultat", "SCB — Nyblivna gifta, skilda och änkor/änklingar efter region, typ av par, ålder och kön (CivilstandTypPar)",
+           "manual", "https://api.scb.se/OV0104/v1/doris/sv/ssd/BE/BE0101/BE0101L/CivilstandTypPar", "SCB (CC0)", years="2000-2024",
+           granularity="kommun × groupe d'âge quinquennal × sexe", notes="Métadonnées vérifiées le 04/10/2026. Non téléchargé : pays exclu (A3)."),
     Source("br_anatel_acessos", "BR", "traitement", "Anatel — Acessos SMP por município e tecnologia (mensuel)", "manual",
            "https://www.anatel.gov.br/dadosabertos/PDA/Acessos/", "Dados abertos (licence à vérifier)", years="2007 →", granularity="município"),
     Source("br_anatel_cobertura", "BR", "traitement", "Anatel — Cobertura da telefonia móvel por setor censitário", "manual",

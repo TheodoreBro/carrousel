@@ -163,7 +163,8 @@ def _check_integrity(path: Path, name: str, url: str) -> None:
             xlrd.open_workbook(path, on_demand=True)
         elif low.endswith(".xlsx"):
             import openpyxl
-            openpyxl.load_workbook(path, read_only=True).close()
+            with open(path, "rb") as fh:            # objet fichier : openpyxl refuse l'extension « .part » du transfert en cours
+                openpyxl.load_workbook(fh, read_only=True).close()
         elif low.endswith(".pdf"):
             import pypdf
             pypdf.PdfReader(path)
