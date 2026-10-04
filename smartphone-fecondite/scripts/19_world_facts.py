@@ -176,10 +176,33 @@ def fig_eu() -> None:
     f6.save(fig, "fig_eu_mobile_internet.pdf")
 
 
+def table_facts() -> None:
+    """Chiffres descriptifs cités dans le texte du papier (§4.1) : abonnements mobiles par groupe de revenu, accès mobile à Internet (Eurostat)."""
+    mob = wb("wb_mobile")
+    lines = ["# Faits stylisés cités dans le texte (généré par scripts/19_world_facts.py)", "", "## Abonnements mobiles pour 100 habitants (Banque mondiale, agrégats par groupe de revenu)", "",
+             "| groupe | dernière année | valeur | première année ≥ 120 | maximum |", "|---|---|---|---|---|"]
+    for code, lab in INCOME.items():
+        s = mob[mob.name == code].sort_values("year")
+        if s.empty:
+            continue
+        first = s[s.value >= 120].year.min()
+        lines.append(f"| {lab} | {int(s.year.iloc[-1])} | {s.value.iloc[-1]:.1f} | {int(first) if first == first else 'jamais'} | {s.value.max():.1f} |")
+    im = eurostat("eu_isoc_ci_im_i")
+    im = im[(im.indic_is == "I_IUMP") & (im.unit == "PC_IND") & (im.ind_type == "IND_TOTAL") & im.geo.isin(["FR", "ES"])]
+    lines += ["", "## Individus ayant accédé à Internet depuis un téléphone mobile (% des individus, Eurostat isoc_ci_im_i, I_IUMP)", "", "| pays | première année | valeur | 2019 | dernière année | valeur |", "|---|---|---|---|---|---|"]
+    for geo, lab in (("FR", "France"), ("ES", "Espagne")):
+        s = im[im.geo == geo].sort_values("year")
+        v19 = s[s.year == 2019].value
+        lines.append(f"| {lab} | {int(s.year.iloc[0])} | {s.value.iloc[0]:.1f} | {v19.iloc[0]:.1f} | {int(s.year.iloc[-1])} | {s.value.iloc[-1]:.1f} |" if not v19.empty else f"| {lab} | | | | | |")
+    (TABLES / "t_world_facts.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("\n".join(lines))
+
+
 def main() -> int:
     fig_tfr_income()
     fig_asfr()
     table_inflection()
+    table_facts()
     fig_eu()
     return 0
 

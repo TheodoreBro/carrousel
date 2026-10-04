@@ -1,0 +1,4 @@
+variante,pays,poolé %,IC 95 %,p,baisse observée moyenne %,part expliquée %,"part expliquée, IC 95 %","statut (§6, A9)"
+"primaire (es analytique, tous pays)","France, Colombie, Brésil, Espagne",9.667873661458096,"[-12.59, +31.93]",0.3945981343328122,-13.856125722340085,-69.7732819057111,"[-230, +91]",indéterminé (IC couvrant une part ≥ 5 %)
+es bootstrap,"France, Colombie, Brésil, Espagne",-0.0413874726016962,"[-9.01, +8.92]",0.9927805829833978,-13.856125722340085,0.29869440730439983,"[-64, +65]",indéterminé (IC couvrant une part ≥ 5 %)
+"sans pays au pré-test rejeté (A7, exploratoire)","Colombie, Brésil",-3.9197761111640537,"[-7.53, -0.31]",0.0334215275338423,-13.856125722340085,28.289120564518548,"[+2, +54]",premier ordre

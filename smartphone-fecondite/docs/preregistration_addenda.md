@@ -285,3 +285,19 @@ toutes les spécifications (`t_estimates_es.md`, passation §1 quater).
 | Règle §6 | appliquée mécaniquement (A7) : l'Espagne y entre avec son signe et sa p, mais la condition « H5a-c non rejetées » n'est pas remplie pour elle ; le texte le dit |
 | Synthèse | primaire = quatre pays (A7) ; la sensibilité « sans pays au pré-test rejeté » (Colombie + Brésil) est présentée comme exploratoire, dans un paragraphe distinct et jamais dans l'abstract |
 | Critère général, écrit maintenant | un pays est dit « identification échouée » quand (i) le pré-test de Wald de la spécification primaire H2b rejette à 1 % **et** (ii) la cohorte qui sert de contrôle à au moins un ATT(g,t) agrégé compte moins de 30 unités ; la France (pré-test p = 0,004, 96 départements, dernière cohorte 2018 de 6 départements) remplit (i) mais pas (ii) pour l'agrégat ATT[1,4] — elle est présentée avec son pré-test rejeté, sans le label |
+
+## A9 — Statut du smartphone (§6 de la préregistration, section 11 du papier) : mise en œuvre du calcul (04/10/2026, avant le calcul)
+
+La préregistration (§6, ligne « Statut du smartphone ») définit le statut par la part de la baisse observée du taux de
+naissances des 25-39 ans, entre l'année de lancement 4G et la dernière année observée, qu'explique l'effet poolé sur
+les 25-39 ans : *premier ordre* ≥ 25 %, *second ordre* 5-25 %, *négligeable* < 5 % « ou non détecté avec puissance
+suffisante », *indéterminé* sinon. Trois points non précisés dans la version gelée sont fixés ici, avant le calcul
+(`scripts/23_status.py`, sortie `tables/t_status.md`) :
+
+| Point | Décision |
+|---|---|
+| Taux observé | naissances des 25-39 ans pour 1 000 femmes de 25-39 ans, agrégées sur les unités du panel de chaque pays (`*_outcomes_*_age.parquet`), par année ; année de lancement = première cohorte de la spécification primaire H2b (`t_sample_<pays>.csv`), dernière année = dernière année du panel |
+| Part expliquée | effet poolé primaire (A7, en % du taux contrefactuel, `t_meta.md`) divisé par la variation observée en % du taux entre les deux années, calculée pays par pays et en moyenne pondérée par les naissances des 25-39 ans à l'année de lancement ; la variante « es bootstrap » est rapportée à titre de sensibilité |
+| « Non détecté avec puissance suffisante » | l'effet poolé n'est pas significatif à 5 % **et** la borne de son intervalle de confiance à 95 % la plus défavorable (celle qui explique le plus de baisse) reste sous 5 % de la baisse observée moyenne ; si l'intervalle couvre une part ≥ 5 %, le statut est *indéterminé* ; si la baisse observée est nulle ou positive, la part n'est pas définie et le statut est *indéterminé* |
+
+Aucun autre élément de la règle n'est modifié ; le calcul n'utilise que les estimations du papier.

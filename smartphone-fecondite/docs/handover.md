@@ -1,4 +1,4 @@
-# Passation — état du projet au 4 octobre 2026 (après-midi)
+# Passation — état du projet au 4 octobre 2026 (soir)
 
 Ce fichier permet à une nouvelle session (ou à un nouvel agent) de reprendre le travail sans la
 conversation d'origine. Il est mis à jour à chaque étape.
@@ -62,8 +62,23 @@ Le texte intégral de la mission de l'auteur est dans `docs/mission.md`. Il prim
   table 2609, recensements 2000/2010/2022, estimations de population, mariages table 4412), `13_br_treatment.py`, `14_br_outcomes.py`,
   `15_estimate_country.py --country BR`, `12_co_figures_tables.py --country BR` ; `make br`. Voir §1 quinquies.
 - **Synthèse entre pays exécutée** (`18_meta.py`, règles A7) : `tables/t_meta.md`, `figures/fig_meta.pdf` ; voir §1 sexies.
-- Pas encore fait : rédaction (Étape 4) ; panel mondial (hôtes bloqués) ; D2 (SIG) ; références (`references.bib` vide) ; méta-analyse
-  (≥ 3 pays inclus désormais : France, Colombie, Brésil, Espagne — à écrire, §7 de la préregistration).
+- **Étape 4 livrée (04/10/2026, soir)** : `paper/paper.tex` (≈ 7 500 mots hors annexes, structure imposée par `docs/mission.md`, abstract EN+FR,
+  sections 1-11, annexes A-D), `paper/paper.pdf` (66 pages, `latexmk`), `paper/paper.md` (`scripts/22_paper_md.py`, pandoc via `pypandoc_binary`,
+  citations résolues, figures .png), `paper/references.bib` (17 références vérifiées par `scripts/21_references.py`, journal `docs/references_check.md`).
+  - Faits stylisés : `scripts/19_world_facts.py` (figures `fig_world_*`, `fig_eu_mobile_internet`, tables `t_world_inflection.md`, `t_world_facts.md`).
+  - Annexes générées : `scripts/20_paper_appendix.py` (`tab_sources`, `tab_countries`, `tab_design`, `tab_dictionary`, `tab_meta`, `tab_meta_national`,
+    `tab_status`). Tableaux larges : `07_tables.py` tourne les tableaux de ≥ 9 colonnes (sidewaystable) et renvoie à la ligne les colonnes de texte.
+  - Statut du smartphone (préregistration §6, section 11) : addendum **A9** (mise en œuvre du calcul, écrit avant le calcul) et `scripts/23_status.py`
+    → `tables/t_status.md` : statut **indéterminé** (le poolé primaire explique une part de la baisse observée des 25-39 ans dont l'IC va de −230 à +91 %).
+  - Relecture chiffre par chiffre faite par quatre relectures indépendantes (France ; Colombie-Brésil ; Espagne-méta-faits stylisés ; préregistration-
+    références-structure) : 73 + 93 + 38 chiffres vérifiés contre les tables générées ; les écarts trouvés ont été corrigés dans le texte
+    (IC colombiens « −9 à +6 % » et non « ±8 % » ; pré-test Sun & Abraham colombien p = 0,012 ; rangs de naissance espagnols de signes opposés ;
+    50 pays classés à l'Étape 0 et non 47 ; Suède « toutes les communes ≥ 96 % des ménages » ; canal (b) au sein des couples ; H1/H2d bilatéraux ;
+    abstract sans la sensibilité exploratoire (A8) ; accords des verbes de citation ; années de volume dans le bib). Trois chiffres du texte qui
+    n'étaient dans aucune table générée le sont désormais (`t_sample_es.md` tailles des cohortes ; `t_world_facts.md`).
+- Pas encore fait : D2 (SIG) ; H3a Brésil (API IBGE) ; pays de niveau 2 ; `docs/etape0_pays.md` l.7 dit « 47 pays » alors que ses listes en comptent 50
+  (le papier dit 50) ; `t_sample_fr.csv` dit 34 704 communes et les notes de `est_fr_all.csv` « 31 194 sur 34 695 » (unités incomplètes exclues :
+  le texte suit `t_sample_fr`).
 
 ## 1 bis. Chiffres à connaître
 
@@ -210,9 +225,13 @@ construit, H6 par densité/taille/rang).
    et `18_meta.py` quand l'API IBGE répond pour les mariages 2017+ (H3a Brésil) ; (b) décider, par addendum, de la règle de présentation
    de l'Espagne (pays inclus mais identification échouée : §1 quater) ; (c) relire une fois `t_estimates_br.md` et `t_estimates_es.md`
    ligne par ligne (les « non estimé / non testable » sont attendus) ; (d) `references.bib` : toute référence vérifiée sur la page éditeur.
-3. Étape 4 : rédaction ; références vérifiées une par une sur la page éditeur (doi.org, Springer, PLOS, NBER, RePEc
-   joignables ; tandfonline.com et pnas.org refusent → vérifier via doi.org / crossref). Sections 6-11 sans résultat
-   externe ; règles §6 appliquées aux lignes nommées en §1 bis.
+3. (fait) Étape 4 : rédaction, compilation, relecture chiffre par chiffre, `paper.md`. Pour une nouvelle version : modifier `paper/paper.tex`
+   (jamais un chiffre à la main : tout vient de `tables/`), `make paper` ; si des estimations sont relancées, régénérer dans l'ordre
+   `07_tables.py`, `12_co_figures_tables.py --country CO|BR|ES`, `18_meta.py`, `23_status.py`, `20_paper_appendix.py`, puis relire les
+   chiffres cités (liste des fichiers de vérité en tête de `paper.tex`).
+3 bis. Relecture par l'auteur : les quatre relectures ont signalé, sans écart chiffré, des points de formulation à son appréciation : (a) §8.1 « H5a
+   rejeté au Brésil » est dit tel quel ; (b) §11 le statut « premier ordre » de la synthèse exploratoire Colombie-Brésil est rapporté mais
+   n'entre pas dans la règle ; (c) le bib donne les années de volume (Guldi & Herbst 2017, Bellou 2015) et non de mise en ligne.
 4. Si l'auteur le veut : D2 (geopandas + contours IGN), THD fixe (ARCEP), décès par âge au département.
 
 ## 5. Règles non négociables (rappel)

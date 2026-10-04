@@ -8,6 +8,7 @@ Usage : python scripts/21_references.py
 """
 from __future__ import annotations
 
+import html
 import json
 import re
 import sys
@@ -51,8 +52,16 @@ def crossref(doi: str) -> dict | None:
             continue
         break
     if doi.lower().startswith("10.48550/"):
-        r = requests.get(f"https://api.datacite.org/dois/{doi}", headers={"User-Agent": UA}, timeout=60)
-        if r.status_code != 200:
+        r = None
+        for _ in range(4):
+            try:
+                r = requests.get(f"https://api.datacite.org/dois/{doi}", headers={"User-Agent": UA}, timeout=60)
+                if r.status_code == 200:
+                    break
+            except requests.RequestException:
+                r = None
+            time.sleep(3)
+        if r is None or r.status_code != 200:
             return None
         a = r.json()["data"]["attributes"]
         return {"DOI": doi, "type": "posted-content", "title": [t["title"] for t in a.get("titles", [])][:1] or [""],
@@ -76,8 +85,9 @@ def tex(s: str) -> str:
 
 def entry(key: str, m: dict) -> str:
     authors = " and ".join(f"{a.get('family', '')}, {a.get('given', '')}".strip(", ") for a in m.get("author", []))
-    year = (m.get("issued") or {}).get("date-parts", [[None]])[0][0] or (m.get("published-print") or {}).get("date-parts", [[None]])[0][0]
-    title = tex(re.sub(r"\s+", " ", m["title"][0]).strip())
+    # année : celle du volume imprimé quand elle existe (Crossref « issued » donne la mise en ligne, ex. Guldi 2016 pour le volume 2017)
+    year = (m.get("published-print") or {}).get("date-parts", [[None]])[0][0] or (m.get("issued") or {}).get("date-parts", [[None]])[0][0]
+    title = tex(re.sub(r"\s+", " ", html.unescape(m["title"][0])).strip())
     container = tex(m["container-title"][0]) if m.get("container-title") else ""
     typ = m.get("type", "")
     fields = [f"  author = {{{tex(authors)}}}", f"  title = {{{{{title}}}}}", f"  year = {{{year}}}", f"  doi = {{{m['DOI']}}}"]

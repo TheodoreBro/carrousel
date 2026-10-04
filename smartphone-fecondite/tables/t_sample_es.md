@@ -14,6 +14,8 @@ Unité = municipio (> 10 000 habitants) ; cohorte = `cohort_lte_50` (cohorte 201
 | H2 municipio 40-49  |      722 | 2007-2022 |           11552 |               722 |                 0 | 2013-2016  |
 | H1 avec covariables |      722 | 2007-2022 |           11552 |               722 |                 0 | 2013-2016  |
 
+Tailles des cohortes (H1 avec covariables, unités par année de bascule ; 0 = jamais traitées) : 2013 : 175 ; 2014 : 388 ; 2015 : 156 ; 2016 : 3.
+
 MDE par permutation des cohortes (80 %, 5 %), TWFE statique sur log(naissances + 0,5 / 1 000 femmes) :
 
 | hypothèse   |   sd placebo |   MDE (80 %, 5 %) en log ≈ % |   permutations |   moyenne placebo |

@@ -49,6 +49,7 @@ es:                 ## Espagne : idem (01_download.py --country ES d'abord)
 
 meta:               ## synthèse entre pays (A7) : tables/t_meta.md, figures/fig_meta.pdf
 	$(PY) $(SCRIPTS)/18_meta.py
+	$(PY) $(SCRIPTS)/23_status.py
 
 figures:
 	$(PY) $(SCRIPTS)/06_figures.py

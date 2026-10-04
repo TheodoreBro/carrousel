@@ -202,6 +202,8 @@ def part_sample(args) -> None:
     lines = [f"# {name} — échantillons et MDE (généré par scripts/15_estimate_country.py --country {args.country} --part sample)", "",
              f"Unité = {CFG['unit_name']} ; cohorte = `{CFG['cohort_col']}` ({CFG['first_year_note']}) ; censurés exclus : {int(static()[CFG['censored_col']].sum())}. "
              "Règle « ≥ 3 ans de pré-période » appliquée.", "", t.to_markdown(index=False), "",
+             "Tailles des cohortes (H1 avec covariables, unités par année de bascule ; 0 = jamais traitées) : "
+             + " ; ".join(f"{int(c)} : {n}" for c, n in ac.groupby("cohort").unit.nunique().items()) + ".", "",
              "MDE par permutation des cohortes (80 %, 5 %), TWFE statique sur log(naissances + 0,5 / 1 000 femmes) :", "", m.to_markdown(index=False, floatfmt=".4f")]
     (TABLES / f"t_sample_{tag}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     (TABLES / f"t_mde_{tag}.md").write_text(m.to_markdown(index=False, floatfmt=".4f") + "\n", encoding="utf-8")

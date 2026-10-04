@@ -147,12 +147,32 @@ def tab_dictionary() -> None:
              "Dictionnaire des variables", "tab:dictionary", "Les définitions complètes sont dans les en-têtes des scripts cités et dans docs/preregistration\\_addenda.md.", align="lp{9.5cm}l")
 
 
+def tab_status() -> None:
+    t = pd.read_csv(TABLES / "t_status.csv")
+    s = pd.read_csv(TABLES / "t_status_pooled.csv")
+    rows = []
+    for _, r in t.iterrows():
+        share = r["part expliquée par l'ATT du pays %"]
+        rows.append([esc(r.pays), f"{int(r['année lancement'])}-{int(r['dernière année'])}", f"{r['taux 25-39 lancement']:.1f}", f"{r['taux 25-39 dernière']:.1f}",
+                     f"{r['variation observée %']:+.1f}", f"{r['ATT pays %']:+.2f}", "" if share != share else f"{share:+.0f}"])
+    rows.append([r"\midrule \emph{Effet poolé 25-39}", "", "", "", "", "", ""])
+    for _, r in s.iterrows():
+        rows.append([esc(r.variante), "", "", "", f"{r['baisse observée moyenne %']:+.1f}", f"{r['poolé %']:+.2f} {esc(r['IC 95 %'])}", f"{r['part expliquée %']:+.0f} {esc(r['part expliquée, IC 95 %'])} : {esc(r['statut (§6, A9)'])}"])
+    t7.write("tab_status.tex", ["Pays / variante", "Années", "Taux au lancement", "Taux dernière année", "Variation (%)", "ATT (%)", "Part expliquée (%)"], rows,
+             "Statut du smartphone comme facteur de la baisse du taux de naissances des 25-39 ans (préregistration §6, addendum A9)", "tab:status",
+             "Source : scripts/23\\_status.py. Taux = naissances des 25-39 ans pour 1\\,000 femmes de 25-39 ans, agrégé sur les unités du panel ; variation entre la première cohorte "
+             "de H2b et la dernière année du panel ; moyenne pondérée par les naissances à l'année de lancement. Part expliquée = ATT / variation observée (définie seulement si la variation est négative). "
+             "Règle : premier ordre $\\geq$ 25 \\%, second ordre 5-25 \\%, négligeable $<$ 5 \\% ou non détecté avec puissance suffisante (A9), indéterminé sinon.",
+             align="p{2.9cm}lrrrp{2.3cm}p{3.2cm}")
+
+
 def main() -> int:
     tab_sources()
     tab_countries()
     tab_meta()
     tab_design()
     tab_dictionary()
+    tab_status()
     return 0
 
 

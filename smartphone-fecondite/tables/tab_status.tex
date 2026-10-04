@@ -1,0 +1,23 @@
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Statut du smartphone comme facteur de la baisse du taux de naissances des 25-39 ans (préregistration §6, addendum A9)}\label{tab:status}
+\footnotesize
+\begin{tabular}{p{2.9cm}lrrrp{2.3cm}p{3.2cm}}
+\toprule
+Pays / variante & Années & Taux au lancement & Taux dernière année & Variation (\%) & ATT (\%) & Part expliquée (\%) \\
+\midrule
+France & 2013-2024 & 105.9 & 86.2 & -18.7 & +1.80 & -10 \\
+Colombie & 2016-2024 & 57.4 & 39.7 & -30.8 & -1.38 & +4 \\
+Brésil & 2014-2024 & 63.3 & 57.1 & -9.8 & -4.67 & +47 \\
+Espagne & 2013-2022 & 66.9 & 62.3 & -7.0 & +44.11 & -634 \\
+\midrule \emph{Effet poolé 25-39} &  &  &  &  &  &  \\
+primaire (es analytique, tous pays) &  &  &  & -13.9 & +9.67 [-12.59, +31.93] & -70 [-230, +91] : indéterminé (IC couvrant une part $\geq$ 5 \%) \\
+es bootstrap &  &  &  & -13.9 & -0.04 [-9.01, +8.92] & +0 [-64, +65] : indéterminé (IC couvrant une part $\geq$ 5 \%) \\
+sans pays au pré-test rejeté (A7, exploratoire) &  &  &  & -13.9 & -3.92 [-7.53, -0.31] & +28 [+2, +54] : premier ordre \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item Source : scripts/23\_status.py. Taux = naissances des 25-39 ans pour 1\,000 femmes de 25-39 ans, agrégé sur les unités du panel ; variation entre la première cohorte de H2b et la dernière année du panel ; moyenne pondérée par les naissances à l'année de lancement. Part expliquée = ATT / variation observée (définie seulement si la variation est négative). Règle : premier ordre $\geq$ 25 \%, second ordre 5-25 \%, négligeable $<$ 5 \% ou non détecté avec puissance suffisante (A9), indéterminé sinon.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
