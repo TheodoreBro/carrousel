@@ -899,7 +899,7 @@ Tout ce qui précède est reproductible : le dépôt contient les scripts de té
 
 <div id="tab:status">
 
-| Pays / variante | Années | Taux au lancement | Taux dernière année | Variation (%) | ATT (%) | Part expliquée (%) |
+| Pays / variante | Années | Taux début | Taux fin | Variation (%) | ATT (%) | Part expliquée (%) |
 |:---|:---|---:|---:|---:|:---|:---|
 | France | 2013-2024 | 105.9 | 86.2 | -18.7 | +1.80 | -10 |
 | Colombie | 2016-2024 | 57.4 | 39.7 | -30.8 | -1.38 | +4 |
@@ -916,7 +916,7 @@ Statut du smartphone comme facteur de la baisse du taux de naissances des 25-39 
 
 <div class="tablenotes">
 
-Source : scripts/23_status.py. Taux = naissances des 25-39 ans pour 1 000 femmes de 25-39 ans, agrégé sur les unités du panel ; variation entre la première cohorte de H2b et la dernière année du panel ; moyenne pondérée par les naissances à l’année de lancement. Part expliquée = ATT / variation observée (définie seulement si la variation est négative). Règle : premier ordre $`\geq`$ 25 %, second ordre 5-25 %, négligeable $`<`$ 5 % ou non détecté avec puissance suffisante (A9), indéterminé sinon.
+Source : scripts/23_status.py. Taux début / fin = naissances des 25-39 ans pour 1 000 femmes de 25-39 ans, agrégé sur les unités du panel, à la première cohorte de H2b et à la dernière année du panel ; moyenne pondérée par les naissances à l’année de lancement. Part expliquée = ATT / variation observée (définie seulement si la variation est négative). Règle : premier ordre $`\geq`$ 25 %, second ordre 5-25 %, négligeable $`<`$ 5 % ou non détecté avec puissance suffisante (A9), indéterminé sinon.
 
 </div>
 
