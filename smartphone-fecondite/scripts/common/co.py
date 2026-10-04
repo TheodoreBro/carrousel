@@ -41,12 +41,21 @@ def load_projections(paths: list[Path]) -> pd.DataFrame:
         x = pd.ExcelFile(p)
         for sh in x.sheet_names:
             raw = pd.read_excel(p, sheet_name=sh, header=None)
+            if raw.shape[1] < 8:
+                continue
             hdr = next((i for i in range(min(40, len(raw))) if str(raw.iloc[i, 0]).strip().upper() in ("DP", "COD_DPTO") or
                         str(raw.iloc[i, 3]).strip().upper() in ("MPIO", "COD_MPIO")), None)
             if hdr is None:
                 continue
-            d = raw.iloc[hdr + 1:].copy()
-            d.columns = [str(c).strip() for c in raw.iloc[hdr]]
+            names = [str(c).strip() for c in raw.iloc[hdr]]
+            second = [str(c).strip() for c in raw.iloc[hdr + 1]] if hdr + 1 < len(raw) else []
+            # fichier 2018-2042 : deuxième ligne d'en-tête (« Hombres 0 años », « Mujeres 0 años ») sous des groupes HOMBRES / MUJERES
+            two_rows = bool(second) and any(re.match(r"(?i)^(hombres|mujeres) \d+", c) for c in second)
+            if two_rows:
+                names = [b if re.match(r"(?i)^(hombres|mujeres) \d+", b) else a for a, b in zip(names, second)]
+                names = [re.sub(r"(?i)^(hombres|mujeres) (\d+).*$", lambda m: f"{m.group(1)}_{m.group(2)}", n) for n in names]
+            d = raw.iloc[hdr + (2 if two_rows else 1):].copy()
+            d.columns = names
             cols = {c.upper(): c for c in d.columns}
             mp = cols.get("MPIO") or cols.get("COD_MPIO")
             yr = cols.get("AÑO") or cols.get("ANO") or cols.get("AÑO ")

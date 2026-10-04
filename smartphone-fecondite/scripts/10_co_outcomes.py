@@ -27,6 +27,10 @@ def log(msg: str) -> None:
 
 
 def births() -> tuple[pd.DataFrame, list[dict]]:
+    cache = PROC / "co_births_agg_cache.parquet"
+    if cache.exists() and (PROC / "co_births_notes_cache.json").exists():
+        import json
+        return pd.read_parquet(cache), json.load(open(PROC / "co_births_notes_cache.json"))
     rows, notes = [], []
     for p in sorted(raw_files("co_dane_eevv_nacimientos")):
         b = read_births(p)
@@ -48,6 +52,9 @@ def births() -> tuple[pd.DataFrame, list[dict]]:
     d = pd.concat(rows, ignore_index=True)
     d["year"] = d.year.astype(int)
     d = d.groupby(["municipio", "year", "age_group"], as_index=False).sum()
+    import json
+    d.to_parquet(cache, index=False)                                      # cache (≈ 10 min de lecture) ; supprimer pour recalculer
+    json.dump(notes, open(PROC / "co_births_notes_cache.json", "w"), ensure_ascii=False, default=int)
     return d, notes
 
 
