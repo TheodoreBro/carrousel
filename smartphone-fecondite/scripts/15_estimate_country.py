@@ -277,6 +277,13 @@ def part_h3(args) -> None:
     d, cov, covs, a, ac = _base(args)
     res_a, res_b = {}, {}
     mr = CFG["marriages"]
+    if mr and "marriages" in d:
+        have = sorted(d[d.marriages.notna()].year.unique())
+        missing = [y for y in range(mr["start"], CFG["years"][1] + 1) if y not in have]
+        if missing:
+            col.add_scalar("H3", "H3a", "mariages de femmes / 1 000 f.", CFG["unit_name"], "—", "non estimé", np.nan, np.nan, 0, 0,
+                           f"mariages absents pour {missing[0]}-{missing[-1]} au moment de l'exécution (API IBGE indisponible, voir data_log.md) ; H3a à relancer", aggregation="note")
+            mr = None
     if mr:
         for g, grp in (("25-39", G2539), ("15-24", G1524)):
             sub = with_covs(aggregate(d[d.year >= mr["start"]], grp, g), cov).dropna(subset=covs)
