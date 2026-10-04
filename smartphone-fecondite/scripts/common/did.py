@@ -647,34 +647,39 @@ def cluster_bootstrap(df: pd.DataFrame, unit: str, stat, n_boot: int = 100, seed
                       strata: str | None = None) -> dict:
     """Bootstrap par grappes (unités ou ``cluster``) d'une statistique ``stat(df) -> float`` (ou vecteur).
 
-    Rééchantillonne les grappes avec remise, **stratifié** par ``strata`` (ex. la cohorte, pour que la
-    composition des cohortes — et donc l'estimand de Callaway & Sant'Anna sans jamais-traités — soit la même
-    dans chaque tirage) ; les grappes tirées plusieurs fois reçoivent un suffixe d'identifiant pour rester
-    distinctes. Renvoie l'écart-type bootstrap et les quantiles 2,5 / 97,5 % (par composante si vecteur)."""
+    Rééchantillonne les grappes avec remise, **stratifié** par ``strata`` (ex. la cohorte, pour que la composition des
+    cohortes — et donc l'estimand de Callaway & Sant'Anna sans jamais-traités — soit la même dans chaque tirage) ; les
+    grappes tirées plusieurs fois reçoivent un suffixe d'identifiant d'unité pour rester distinctes. Implémentation
+    vectorisée (positions de lignes par grappe) pour les panels à dizaines de milliers de grappes. Renvoie l'écart-type
+    bootstrap et les quantiles 2,5 / 97,5 % (par composante si vecteur)."""
     rng = np.random.default_rng(seed)
     key = cluster or unit
-    groups = {k: g for k, g in df.groupby(key, sort=False)}
-    keys = np.array(list(groups))
+    d = df.sort_values(key, kind="stable").reset_index(drop=True)
+    codes, keys = pd.factorize(d[key], sort=True)
+    starts = np.searchsorted(codes, np.arange(len(keys)))
+    ends = np.append(starts[1:], len(d))
     if strata:
-        strat_of = df.groupby(key, sort=False)[strata].first()
-        strata_keys = {s: np.array([k for k in keys if strat_of[k] == s]) for s in strat_of.unique()}
+        strat_of = d.groupby(key, sort=True)[strata].first().reindex(keys).to_numpy()
+        strata_groups = [np.flatnonzero(strat_of == sv) for sv in pd.unique(strat_of)]
+    unit_vals = d[unit].astype(str).to_numpy()
     draws = []
     for b in range(n_boot):
         if strata:
-            pick = np.concatenate([rng.choice(ks, size=len(ks), replace=True) for ks in strata_keys.values()])
+            pick = np.concatenate([rng.choice(g, size=len(g), replace=True) for g in strata_groups])
         else:
-            pick = rng.choice(keys, size=len(keys), replace=True)
-        parts = []
-        counts: dict = {}
-        for k in pick:
-            c = counts.get(k, 0)
-            counts[k] = c + 1
-            g = groups[k]
-            if c:
-                g = g.copy()
-                g[unit] = g[unit].astype(str) + f"__b{c}"
-            parts.append(g)
-        boot = pd.concat(parts, ignore_index=True)
+            pick = rng.choice(len(keys), size=len(keys), replace=True)
+        pick = np.sort(pick)
+        # numéro de copie de chaque grappe tirée (0 pour la première) : la copie c reçoit le suffixe __b{c}
+        new_grp = np.ones(len(pick), bool)
+        new_grp[1:] = pick[1:] != pick[:-1]
+        grp_start = np.maximum.accumulate(np.where(new_grp, np.arange(len(pick)), 0))
+        copy_no = np.arange(len(pick)) - grp_start
+        lengths = ends[pick] - starts[pick]
+        rows = np.concatenate([np.arange(starts[k], ends[k]) for k in pick]) if len(pick) else np.array([], int)
+        boot = d.iloc[rows].copy()
+        suffix = np.repeat(copy_no, lengths)
+        uv = unit_vals[rows]
+        boot[unit] = np.where(suffix > 0, np.char.add(np.char.add(uv.astype(str), "__b"), suffix.astype(str)), uv)
         try:
             draws.append(stat(boot))
         except Exception:  # noqa: BLE001
